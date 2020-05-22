@@ -13,6 +13,7 @@ flask-migrate = "*"
 pyjwt = "*"
 flask-script = "*"
 flask-testing = "*"
+werkzeug = "==0.16.1"
 
 [requires]
 python_version = "3.6"
