@@ -1,4 +1,3 @@
-import uuid
 import datetime
 
 from app.main import db
@@ -19,7 +18,7 @@ def save_new_user(data):
             'status': 'success',
             'message': 'Successfully',
         }
-        return return generate_token(new_user)
+        return generate_token(new_user)
     else:
         response_object = {
             'status': 'fail',
