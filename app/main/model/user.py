@@ -4,9 +4,10 @@ import datetime
 import jwt
 from app.main.model.blacklist import BlacklistToken
 from ..config import key 
+from .. import login_manager
+from flask_login import UserMixin
 
-
-class User(db.Model):
+class User(UserMixin, db.Model):
     """ User Model for storing all user details """
     __tablename__ = "user"
 
@@ -16,6 +17,10 @@ class User(db.Model):
     admin = db.Column(db.Boolean, nullable=False, default=False)
     first_name = db.Column(db.String(50), unique=True)
     password_hash = db.Column(db.String(100))
+
+    @login_manager.user_loader
+    def load_user(id):
+        return User.query.get(int(id))
 
     @property
     def password(self):

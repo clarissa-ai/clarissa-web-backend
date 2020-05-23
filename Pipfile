@@ -14,6 +14,8 @@ pyjwt = "*"
 flask-script = "*"
 flask-testing = "*"
 werkzeug = "==0.16.1"
+flask-wtf = "*"
+flask-login = "*"
 
 [requires]
 python_version = "3.6"

@@ -13,7 +13,7 @@ api = Api(blueprint,
           title='CLARISSA API REFERENCE',
           version='1.0',
           description='Documentation for Clarissa.ai API: a flask restplus web service'
-          )
+        )
 
 api.add_namespace(user_ns, path='/api/user')
 api.add_namespace(auth_ns, path='/api')

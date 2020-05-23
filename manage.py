@@ -11,9 +11,12 @@ from app.main.model import blacklist
 from app.main.model import survey
 
 from app import blueprint as app_blueprint
+from admin import bp as admin_blueprint
 
 app = create_app(os.getenv('BOILERPLATE_ENV') or 'dev')
+
 app.register_blueprint(app_blueprint)
+app.register_blueprint(admin_blueprint)
 
 app.app_context().push
 
