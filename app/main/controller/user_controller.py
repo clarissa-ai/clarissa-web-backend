@@ -2,8 +2,8 @@ from flask import request
 from flask_restplus import Resource
 
 from ..util.dto import UserDTO
-from..service.user_service import save_new_user, get_all_users, get_user_by_id
-
+from ..service.user_service import save_new_user, get_all_users, get_user_by_id
+from ..service.auth_helper import Auth
 from ..util.decorator import token_required, admin_token_required
 
 api = UserDTO.api
