@@ -38,9 +38,12 @@ def login():
         if user is None or not user.check_password(login_form.password.data):
             flash('Invalid username or password')
             return redirect(url_for('admin.login'))
-        login_user(user, remember=login_form.remember_me.data)
-        flash("Successfully logged into admin dashboard!")
-        return redirect(url_for("admin.index"))
+        if user.admin == True:
+            login_user(user, remember=login_form.remember_me.data)
+            flash("Successfully logged into admin dashboard!")
+            return redirect(url_for("admin.index"))
+        else:
+            flash("User does not have administrative privelleges.")
     return render_template('auth/login.html', title="Admin Login", form=login_form)
 
 
@@ -98,3 +101,11 @@ def edit_option(survey_id, question_id):
     edit_option_form = EditOptionForm()
     return render_template('/tools/survey/edit_option.html')
 
+#---------------------------------------------------------------------------------------------#
+#                                                                                             #
+#---------------------------------------------------------------------------------------------#
+
+@bp.route('/development')
+@login_required
+def development_home():
+    return render_template('tools/dev/home.html', title="Survey Dashboard")

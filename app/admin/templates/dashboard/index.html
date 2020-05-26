@@ -4,58 +4,288 @@
 <div class="pusher">
   <div class="main-content">
 
-    <div class="ui grid" style="margin-left:5%; padding-top: 5%;">
+    <div class="ui stackable grid padded">
+
+      <!-- AVAILABLE TOOLS -->
       <div class="four wide column">
 
-        <div class="ui segments stacked">
+        <div class="ui segments stacked raised">
 
           <div class="ui segment">
-            <h2><b>
-              Recent Actions:
-            </b></h2>
+            <h2><b>Available Tools:</b></h2>
           </div>
-          
-          <div class="ui segment">
-            <p>5/24 10:32 AM: COVID-19 Survey released</p>
-          </div>
-        
-          <div class="ui segment">
-            <p>5/22 11:32 AM: Admin user "teo@clarissa.ai" joined.</p>
-          </div>
-          
-          <div class="ui segment warning message">
-            <p>5/22 9:11 AM: Processor usage above 90%!</p>
-          </div>
-          
-          <div class="ui segment">
-            <p>5/21 12:45 PM: Server restarting for resource recycling</p>
+
+          <div class="ui segment black">
+            <h3>Surveys</h3>
+            <div class="ui segments">
+              <div class="ui segment">
+                <a href="{{ url_for('admin.survey_home') }}">Homepage</a>
+              </div>
+              <div class="ui segment">
+                <a href="{{ url_for('admin.create_survey') }}">Create a new survey</a>
+              </div>
+              <div class="ui segment">
+                <a href="">Check status of current surveys</a>
+              </div>
+            </div>
           </div>
 
           <div class="ui segment">
-            <p>5/24 10:32 AM: COVID-19 Survey released</p>
+            <h3>Analytics</h3>
+            <div class="ui segments">
+              <div class="ui segment">
+                <a href="">Homepage</a>
+              </div>
+              <div class="ui segment">
+                <a href="">Usage Statistics</a>
+              </div>
+            </div>
           </div>
-        
+
           <div class="ui segment">
-            <p>5/22 11:32 AM: Admin user "teo@clarissa.ai" joined.</p>
+            <h3>Development</h3>
+            <div class="ui segments">
+              <div class="ui segment">
+                <a href="{{ url_for('admin.development_home') }}">Homepage</a>
+              </div>
+              <div class="ui segment">
+                <a href="">Check Github Status</a>
+              </div>
+              <div class="ui segment">
+                <a href="">Check Server Status</a>
+              </div>
+            </div>
           </div>
-          
-          <div class="ui segment warning message">
-            <p>5/22 9:11 AM: Processor usage above 75%!</p>
-          </div>
-          
+
           <div class="ui segment">
-            <p>5/21 12:45 PM: Server restarting for resource recycling</p>
+            <h3>Administration</h3>
+            <div class="ui segments">
+              <div class="ui segment">
+                <a href="">Homepage</a>
+              </div>
+              <div class="ui segment">
+                <a href="">Manage user permissions</a>
+              </div>
+            </div>
           </div>
 
         </div>
 
       </div>
 
+      <!-- Middle section  -->
       <div class="four wide column">
+        <div class="ui segments stacked raised">
 
+          <div class="ui segment">
+            <h2>Summary</h2>
+          </div>
+          <div class="ui segment black">
+            <h3>Usage Statistics</h3>
+            <div class="ui segments">
+              <div class="ui segment card fluid">
+                <div class="content">
+                  <div class="ui right floated header green">
+                    <i class="icon address card outline"></i>
+                  </div>
+                  <div class="header">
+                    <div class="ui green header">
+                      5627
+                    </div>
+                  </div>
+                  <div class="meta">
+                    monthly active users
+                  </div>
+                </div>
+              </div>
+
+              <div class="ui segment card fluid">
+                <div class="content">
+                  <div class="ui right floated header teal">
+                    <i class="eye icon"></i>
+                  </div>
+                  <div class="header">
+                    <div class="ui teal header">
+                      30,567
+                    </div>
+                  </div>
+                  <div class="meta">
+                    user sessions in the past month
+                  </div>
+                </div>
+              </div>
+
+              <div class="ui segment card fluid">
+                <div class="content">
+                  <div class="ui right floated header blue">
+                    <i class="list alternate outline icon"></i>
+                  </div>
+                  <div class="header">
+                    <div class="ui blue header">
+                      2,438
+                    </div>
+                  </div>
+                  <div class="meta">
+                    responses to active surveys
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ui segment grey">
+            <h3>Server Status</h3>
+
+            <div class="ui segments">
+              <div class="ui segment">
+                <h4>Production server:</h4>
+              </div>
+              <div class="ui segment">
+                <div class="ui tiny olive progress">
+                  <div class="bar" style="width:58%"></div>
+                  <div class="label">Processor</div>
+                </div>
+              </div>
+              <div class="ui segment">
+                <div class="ui tiny teal progress">
+                  <div class="bar" style="width:78%"></div>
+                  <div class="label">RAM Usage</div>
+                </div>
+              </div>
+
+              <div class="ui segment">
+                <div class="ui tiny green progress">
+                  <div class="bar" style="width:72%"></div>
+                  <div class="label">Disk Usage</div>
+                </div>
+              </div>
+
+              <div class="ui segment">
+                <div class="ui tiny orange progress">
+                  <div class="bar" style="width:25%"></div>
+                  <div class="label">Network Usage</div>
+                </div>
+              </div>
+
+              <div class="ui segment grey">
+                <h4>Development server:</h4>
+              </div>
+              <div class="ui segment">
+                <div class="ui tiny olive progress">
+                  <div class="bar" style="width:28%"></div>
+                  <div class="label">Processor</div>
+                </div>
+              </div>
+              <div class="ui segment">
+                <div class="ui tiny teal progress">
+                  <div class="bar" style="width:28%"></div>
+                  <div class="label">RAM Usage</div>
+                </div>
+              </div>
+
+              <div class="ui segment">
+                <div class="ui tiny green progress">
+                  <div class="bar" style="width:22%"></div>
+                  <div class="label">Disk Usage</div>
+                </div>
+              </div>
+
+              <div class="ui segment">
+                <div class="ui tiny orange progress">
+                  <div class="bar" style="width:15%"></div>
+                  <div class="label">Network Usage</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
       </div>
 
-      <div class="four wide column">
+      <!-- RECENT ACTIONS -->
+      <div class="eight wide column">
+
+        <div class="ui segments stacked raised">
+
+          <div class="ui segment">
+            <h2><b>
+                Recent Actions:
+              </b></h2>
+          </div>
+
+          <div class="ui segment black">
+            <p>5/24 10:32 AM: COVID-19 Survey released</p>
+          </div>
+
+          <div class="ui segment">
+            <p>5/22 11:32 AM: Admin user "teo@clarissa.ai" joined.</p>
+          </div>
+
+          <div class="ui segment warning message">
+            <p>5/22 9:11 AM: Processor usage above 90%!</p>
+          </div>
+
+          <div class="ui segment">
+            <p>5/21 12:45 PM: Server restarting for resource recycling</p>
+          </div>
+
+          <div class="ui segment">
+            <p>5/24 10:32 AM: COVID-19 Survey released</p>
+          </div>
+
+          <div class="ui segment">
+            <p>5/22 11:32 AM: Admin user "teo@clarissa.ai" joined.</p>
+          </div>
+
+          <div class="ui segment warning message">
+            <p>5/22 9:11 AM: Processor usage above 75%!</p>
+          </div>
+
+          <div class="ui segment">
+            <p>5/21 12:45 PM: Server restarting for resource recycling</p>
+          </div>
+
+          <div class="ui segment">
+            <p>5/21 12:45 PM: Server restarting for resource recycling</p>
+          </div>
+
+          <div class="ui segment">
+            <p>5/24 10:32 AM: COVID-19 Survey released</p>
+          </div>
+
+          <div class="ui segment">
+            <p>5/22 11:32 AM: Admin user "teo@clarissa.ai" joined.</p>
+          </div>
+
+          <div class="ui segment warning message">
+            <p>5/22 9:11 AM: Processor usage above 75%!</p>
+          </div>
+
+          <div class="ui segment">
+            <p>5/21 12:45 PM: Server restarting for resource recycling</p>
+          </div>
+
+          <div class="ui segment">
+            <p>5/21 12:45 PM: Server restarting for resource recycling</p>
+          </div>
+
+          <div class="ui segment">
+            <p>5/24 10:32 AM: COVID-19 Survey released</p>
+          </div>
+
+          <div class="ui segment">
+            <p>5/22 11:32 AM: Admin user "teo@clarissa.ai" joined.</p>
+          </div>
+
+          <div class="ui segment warning message">
+            <p>5/22 9:11 AM: Processor usage above 75%!</p>
+          </div>
+
+          <div class="ui segment">
+            <p>5/21 12:45 PM: Server restarting for resource recycling</p>
+          </div>
+
+        </div>
 
       </div>
 
