@@ -19,6 +19,7 @@ from flask_login import (
 from .forms import LoginForm
 
 from ..main.model.user import User
+from ..main.model.survey import Survey
 
 @bp.route('/')
 @login_required
@@ -65,7 +66,12 @@ def dashboard():
 @bp.route('/surveys')
 @login_required
 def survey_home():
-    return render_template('tools/survey/survey.html', title="Survey Dashboard")
+    active_surveys = Survey.query.filter_by(active=True).all()
+    recent_surveys = Survey.query.order_by('updated desc').limit(10)
+    return render_template('tools/survey/survey.html', 
+                            title="Survey Dashboard", 
+                            active_surveys=active_surveys, 
+                            recent_surveys=recent_surveys)
 
 @bp.route('/surveys/new')
 @login_required
@@ -102,7 +108,7 @@ def edit_option(survey_id, question_id):
     return render_template('/tools/survey/edit_option.html')
 
 #---------------------------------------------------------------------------------------------#
-#                                                                                             #
+#    DEVELOPMENT ADMINISTRATION ROUTES: get status of git repos and deployments               #
 #---------------------------------------------------------------------------------------------#
 
 @bp.route('/development')
