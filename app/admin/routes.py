@@ -72,6 +72,10 @@ def survey_home():
                             title="Survey Dashboard", 
                             active_surveys=active_surveys, 
                             recent_surveys=recent_surveys)
+@bp.route('/surveys/list')
+@login_required
+def all_surveys():
+    return render_template('tools/survey/list.html')
 
 @bp.route('/surveys/new')
 @login_required

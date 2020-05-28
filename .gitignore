@@ -1,0 +1,3 @@
+# ignore db files
+/app/main/clarissa_dev_main.db
+/app/main/clarissa_test.db

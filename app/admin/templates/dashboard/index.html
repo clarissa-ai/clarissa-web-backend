@@ -19,13 +19,22 @@
             <h3>Surveys</h3>
             <div class="ui segments">
               <div class="ui segment">
-                <a href="{{ url_for('admin.survey_home') }}">Homepage</a>
+                <a href="{{ url_for('admin.survey_home') }}">
+                  <i class="home icon"></i>
+                  Homepage
+                </a>
               </div>
               <div class="ui segment">
-                <a href="{{ url_for('admin.create_survey') }}">Create a new survey</a>
+                <a href="{{ url_for('admin.create_survey') }}">
+                  <i class="pencil alternate icon"></i>
+                  Create a new survey
+                </a>
               </div>
               <div class="ui segment">
-                <a href="">Check status of current surveys</a>
+                <a href="{{ url_for('admin.all_surveys' )}}">
+                  <i class="check circle outline icon"></i>
+                  Check status of all surveys
+                </a>
               </div>
             </div>
           </div>
@@ -34,10 +43,16 @@
             <h3>Analytics</h3>
             <div class="ui segments">
               <div class="ui segment">
-                <a href="">Homepage</a>
+                <a href="">
+                  <i class="home icon"></i>
+                  Homepage
+                </a>
               </div>
               <div class="ui segment">
-                <a href="">Usage Statistics</a>
+                <a href="">
+                  <i class="chart bar outline icon"></i>
+                  Usage Statistics
+                </a>
               </div>
             </div>
           </div>
@@ -46,13 +61,22 @@
             <h3>Development</h3>
             <div class="ui segments">
               <div class="ui segment">
-                <a href="{{ url_for('admin.development_home') }}">Homepage</a>
+                <a href="{{ url_for('admin.development_home') }}">
+                  <i class="home icon"></i>
+                  Homepage
+                </a>
               </div>
               <div class="ui segment">
-                <a href="">Check Github Status</a>
+                <a href="">
+                  <i class="terminal icon"></i>  
+                  Check Github Status
+                </a>
               </div>
               <div class="ui segment">
-                <a href="">Check Server Status</a>
+                <a href="">
+                  <i class="microchip icon"></i>
+                  Check Server Status
+                </a>
               </div>
             </div>
           </div>
@@ -61,10 +85,16 @@
             <h3>Administration</h3>
             <div class="ui segments">
               <div class="ui segment">
-                <a href="">Homepage</a>
+                <a href="">
+                  <i class="home icon"></i>
+                  Homepage
+                </a>
               </div>
               <div class="ui segment">
-                <a href="">Manage user permissions</a>
+                <a href="">
+                  <i class="users icon"></i>
+                  Manage user permissions
+                </a>
               </div>
             </div>
           </div>
