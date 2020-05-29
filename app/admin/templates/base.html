@@ -11,6 +11,8 @@
         integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous" />
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Calendar field -->
+    <link rel="stylesheet" href="{{ url_for('admin.static', filename='css/calendar.min.css') }}"/>
 </head>
 
 <body>
@@ -63,9 +65,8 @@
                 display: none !important;
             }
         }
-
-        /*# sourceMappingURL=style.css.map */
     </style>
+
     {% block sidebar %}
     {% if not current_user.is_anonymous %}
     <!-- sidebar -->
@@ -209,9 +210,9 @@
                 <div class="ui dropdown item">
                     <i class="user cirlce icon"></i>
                     <div class="menu">
-                        <a href="#" class="item">
+                        <a href="{{ url_for('admin.profile') }}" class="item">
                             <i class="info circle icon"></i> Profile</a>
-                        <a href="#" class="item">
+                        <a href="{{ url_for('admin.edit_profile') }}" class="item">
                             <i class="wrench icon"></i>
                             Settings</a>
                         <a href="{{ url_for('admin.logout') }}" class="item">
@@ -226,11 +227,11 @@
         {% endif %}
         {% endblock %}
 
-        <div class="container padded">
+        <div class="container padded" style="margin-bottom:0px;">
             {% with messages = get_flashed_messages() %}
             {% if messages %}
                 {% for message in messages %}
-                <div class="ui message transition container" style="margin-top:1%; padding-bottom:5px;">
+                <div class="ui message transition container" style="margin-top:5vh; padding-bottom:5px; margin-bottom:0px;">
                     <p>{{ message }}</p>
                     <i class="close icon"></i>
                 </div>
@@ -247,6 +248,7 @@
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"
         integrity="sha256-t8GepnyPmw9t+foMh3mKNvcorqNHamSKtKRxxpUEgFI=" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="{{ url_for('admin.static', filename='js/calendar.min.js') }}"></script>
     <script>
         $(document).ready(function () {
             $('.ui.dropdown').dropdown();
@@ -266,6 +268,8 @@
             $(this).closest('.message').transition('fade');
         });    
     </script>
+    {% block post_script %}
+    {% endblock %}
 </body>
 
 </html>

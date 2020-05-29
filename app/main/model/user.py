@@ -17,6 +17,7 @@ class User(UserMixin, db.Model):
     admin = db.Column(db.Boolean, nullable=False, default=False)
     first_name = db.Column(db.String(50))
     password_hash = db.Column(db.String(100))
+    surveys = db.relationship('Survey', backref='user')
 
     @login_manager.user_loader
     def load_user(id):

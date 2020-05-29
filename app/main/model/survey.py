@@ -10,10 +10,15 @@ class Survey(db.Model):
     active = db.Column(db.Boolean, default=False, nullable=False)
     created_on = db.Column(db.DateTime, nullable=False)
     expiration_date = db.Column(db.DateTime, nullable=False)
+
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    author = db.relationship('User', foreign_keys='Survey.author_id')
+
     title = db.Column(db.String(120), nullable=False)
     description = db.Column(db.String(400), nullable=False)
-    root_id = db.Column(db.Integer, db.ForeignKey('question.id'))
+
+    root = db.relationship('Question', uselist=False, backref='parent')
+
     questions = db.relationship('Question', backref='survey')
 
     def get_json(self):
@@ -36,6 +41,8 @@ class Question(db.Model):
     description = db.Column(db.String(400))
     type = db.Column(db.String(100), nullable=False)
     options = db.relationship('Option', backref='question')
+
+    survey_id = db.Column(db.Integer, db.ForeignKey('survey.id'))
 
     def get_json(self):
         return {

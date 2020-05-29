@@ -40,7 +40,8 @@
             Create a new survey. Add questions and options. Configure survey options including release and expiration
             dates.
 
-            <h3><a class="ui button primary fluid">
+            <h3><a class="ui button primary fluid" href="{{ url_for('admin.create_survey')}}">
+              <i class="pencil icon"></i>
               Create a survey
             </a></h3>
           </div>
@@ -64,7 +65,11 @@
           </div>
 
           <div class="ui segment">
-            <h3>New User Survey</h3>
+            <h3>New User Survey<a class="ui button primary inverted right floated">View</a><a class="ui button orange inverted right floated">Edit</a></h3>
+            <b>Questions:</b> 9 <br/>
+            <b>Total responses:</b> 189 <br/>
+            <b>Created on:</b> 5/20/2020 11:02AM <br/>
+            <b>Expiration date:</b> 6/15/2020 12:00AM <br/>
           </div>
 
         </div>

@@ -2,4 +2,84 @@
 
 {% block content %}
 
+<div class="pusher">
+  <div class="main-content">
+    <div class="ui aligned centered grid stackable padded">
+
+      <div class="five wide column">
+        
+        {% if form.errors %}
+          <div class="ui message red">
+            <i class="close icon"></i>
+            <b>Form errors:</b>
+            <ul>  
+              {% for err in form.errors %}
+                <li><b>Target: </b>{{err}},<b> Message: </b>{{ form.errors[err][0] }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+        
+        <form class="ui large form" method="post" novalidate>
+          {{ form.hidden_tag() }}
+
+          <div class="ui segments stackable">
+
+            <div class="ui segment">
+              <h2>Create a new survey</h2>
+            </div>
+
+            <div class="ui segment">
+              <div class="required field">
+                {{ form.title.label }}
+                {{ form.title(size=32, placeholder="New Survey Title") }}
+
+              </div>
+            </div>
+
+            <div class="ui segment">
+              <div class="required field">
+                {{ form.description.label }}
+                {{ form.description }}
+              </div>
+            </div>
+
+            <div class="ui segment field required">
+              {{ form.expiration_date.label}}
+              <div class="ui calendar" id="example1">
+                <div class="ui input left icon">
+                  <i class="calendar icon"></i>
+                  {{ form.expiration_date(placeholder="Date/Time") }}
+                </div>
+              </div>
+            </div>
+
+            <div class="ui segment center aligned">
+              <div class="inline required field center aligned">
+                {{ form.active(class="form-check-input") }}
+                <div class="ui left pointing label">
+                  Active survey (published)
+              </div>
+              </div>
+            </div>
+
+            <div class="ui segment center aligned">
+              {{ form.submit(class_="ui fluid large teal submit button") }}
+            </div>
+
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
+{% block post_script%}
+<script>
+  $('#example1').calendar();
+</script>
 {% endblock %}

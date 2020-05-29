@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="pusher">
+  <div class="main-content">
+    <div class="ui grid stackable centered aligned">
+      <div class="five wide column">
+
+        {% if form.errors %}
+        <div class="ui message red">
+          <i class="close icon"></i>
+          <b>Form errors:</b>
+          <ul>
+            {% for err in form.errors %}
+            <li><b>Target: </b>{{err}},<b> Message: </b>{{ form.errors[err][0] }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+
+        <form class="ui large form" method="post" novalidate>
+          {{ form.hidden_tag() }}
+
+          <div class="ui segments stackable">
+
+            <div class="ui segment center aligned">
+              <h3>Add a question to "{{ survey.title }}"</h3>
+            </div>
+
+            <div class="ui segment">
+              <div class="required field">
+                {{ form.title.label }}
+                {{ form.title(size=32, placeholder="New Question Title") }}
+              </div>
+            </div>
+
+            <div class="ui segment">
+              <div class="required field">
+                {{ form.description.label }}
+                {{ form.description }}
+              </div>
+            </div>
+
+            <div class="ui segment">
+              <div class="required field">
+                {{ form.type.label }}
+                {{ form.type }}
+              </div>
+            </div>
+
+            <div class="ui segment center aligned">
+              <div class="inline required field center aligned">
+                {% if root %}
+                {{ form.root(class="form-check-input", checked=True) }}
+                {% else %}
+                {{ form.root(class="form-check-input") }}
+                {% endif %}
+                <div class="ui left pointing label">
+                Root question
+              </div>
+              </div>
+            </div>
+
+            <div class="ui segment center aligned">
+              {{ form.submit(class_="ui fluid large teal submit button") }}
+            </div>
+
+          </div>
+        </form>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
