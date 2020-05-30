@@ -22,7 +22,8 @@ from .forms import (
     LoginForm, 
     CreateSurveyForm,
     EditSurveyForm,
-    AddQuestionForm
+    AddQuestionForm,
+    EditQuestionForm
 )
 
 from ..main import db

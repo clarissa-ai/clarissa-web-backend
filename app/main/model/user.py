@@ -18,6 +18,9 @@ class User(UserMixin, db.Model):
     first_name = db.Column(db.String(50))
     password_hash = db.Column(db.String(100))
     surveys = db.relationship('Survey', backref='user')
+    
+    reports = db.relationship('Report', backref = 'user')
+    symptoms = db.relationship('Symptom', backref = 'user')
 
     @login_manager.user_loader
     def load_user(id):

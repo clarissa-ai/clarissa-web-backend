@@ -44,7 +44,9 @@
         <div class="ui segments stacked">
 
           <div class="ui segment center aligned">
-            <h4>Root Question Info</h4>
+            <h4>
+              Root Question Info
+            </h4>
           </div>
 
           {% if survey.root %}
@@ -61,6 +63,11 @@
             {% endif %}
           </div>
           <div class="ui horizontal segments">
+            <div class="ui segment">
+              <a class="ui primary button small">
+                View Question
+              </a>
+            </div>
             <div class="ui segment">
               <a href="{{ url_for('admin.edit_question', survey_id=survey.id, question_id=survey.root.id) }}" class="ui button fluid yellow">
                 Edit Question
@@ -92,7 +99,8 @@
 
           {% if survey.questions %}
           {% for question in survey.questions %}
-          <div class="ui segment">
+          <div class="ui horizontal segments">
+            <div class="ui segment">
             <b>Title: </b>{{ question.title }}<br />
             <b>Description: </b>{{ question.description }}<br />
             <b>Type: </b>{{ question.type }}
@@ -103,6 +111,7 @@
               {% endfor %}
             </div>
             {% endif %}
+            </div>
           </div>
           {% endfor %}
           {% else %}
