@@ -52,8 +52,12 @@ class CreateLinkForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
     link = StringField('Link URL', validators=[DataRequired()])
-    image_upload = FileField('Link Image', validators=[
-        FileRequired(),
-        FileAllowed(['jpg', 'png'], 'Images only!')
-    ])
+    image_upload = FileField('Link Image', validators=[FileAllowed(['jpg', 'png'], 'Images only!')])
     submit = SubmitField('Add Link to Survey')
+
+class EditLinkForm(FlaskForm):
+    title = StringField('Title', validators=[])
+    description = TextAreaField('Description', validators=[])
+    link = StringField('Link URL', validators=[])
+    image_upload = FileField('Link Image', validators=[FileAllowed(['jpg', 'png'], 'Images only!')])
+    submit = SubmitField('Confirm Changes')

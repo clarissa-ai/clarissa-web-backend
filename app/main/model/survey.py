@@ -24,12 +24,16 @@ class Survey(db.Model):
     questions = db.relationship('Question', backref='survey')
     responses = db.relationship('Response', backref='survey')
     links = db.relationship('Link', backref='survey')
+    summaries = db.relationship('Summary', backref='survey')
 
     def get_json(self):
+        r_id = -1
+        if self.root:
+            r_id = str(self.root.id) 
         return {
             'title': self.title,
             'description': self.description,
-            'root_id': str(self.root.id) if self.root.id else "None",
+            'root_id': str(r_id),
             'image_url': '',
             'links': [l.get_json() for l in self.links],
             'questions': [q.get_json() for q in self.questions]
@@ -77,6 +81,8 @@ class Question(db.Model):
 
     survey_id = db.Column(db.Integer, db.ForeignKey('survey.id'))
 
+
+
     def get_json(self):
         return {
             'id': str(self.id),
@@ -95,6 +101,7 @@ class Option(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     next_id = db.Column(db.Integer, db.ForeignKey('question.id'))
+    next_type = db.Column(db.String(100))
     title = db.Column(db.String(200), nullable=False)
 
     def get_json(self):
@@ -105,6 +112,32 @@ class Option(db.Model):
 
     def __repr__(self):
         return "<Option '{}'>".format(self.title)
+
+class Summary(db.Model):
+    """Summary model for representing final summaries of surveys"""
+    __tablename__ = "summary"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    title = db.Column(db.String(150), nullable=False)
+    description = db.Column(db.String(500))
+    info_groups = db.relationship('SummaryInfoGroup', backref='summary')
+
+class SummaryInfoGroup(db.Model):
+    """Group model for representing lists of info in final summaries"""
+    __tablename__ = "summaryinfogroup"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    title = db.Column(db.String(100), nullable=False)
+    details = db.relationship('SummaryDetail', backref='summary')
+    summary_id = db.Column(db.Integer, db.ForeignKey('summary.id'))
+
+class SummaryDetail(db.Model):
+    """Detail model for representing details in a summary info group"""
+    __tablename__ = "summarydetail"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    text = db.Column(db.String(500), nullable=False)
+    infogroup_id = db.Column(db.Integer, db.ForeignKey('summaryinfogroup.id'))
 
 class Response(db.Model):
     """Response model for representing survey responses"""

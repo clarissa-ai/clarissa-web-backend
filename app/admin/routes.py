@@ -25,12 +25,13 @@ from .forms import (
     EditSurveyForm,
     AddQuestionForm,
     EditQuestionForm,
-    CreateLinkForm
+    CreateLinkForm,
+    EditLinkForm
 )
 
 from ..main import db
 from ..main.model.user import User
-from ..main.model.survey import Survey, Question
+from ..main.model.survey import Survey, Question, Link
 
 @bp.route('/')
 @login_required
@@ -129,7 +130,7 @@ def create_survey():
         return redirect(url_for('admin.survey_view', id=s.id))
     return render_template('tools/survey/new.html', title="New Survey", form=create_survey_form)
 
-@bp.route('/survey/<survey_id>/link/new')
+@bp.route('/survey/<survey_id>/link/new', methods=['GET','POST'])
 @login_required
 def create_link(survey_id):
     s = Survey.query.filter_by(id=survey_id).first()
@@ -138,9 +139,47 @@ def create_link(survey_id):
         return redirect(url_for('admin.survey_home'))
     create_link_form = CreateLinkForm()
     if create_link_form.validate_on_submit():
-        print()
+        link = Link(
+            title = create_link_form.title.data,
+            description = create_link_form.description.data,
+            link = create_link_form.link.data,
+            survey_id = s.id
+        )
+        db.session.add(link)
+        db.session.commit()
+        return redirect(url_for('admin.survey_view', id=s.id))
     return render_template('tools/survey/new_link.html', title="Create a new link", form=create_link_form, survey=s)
 
+
+@bp.route('/survey/<survey_id>/link/edit/<link_id>', methods=['GET','POST'])
+@login_required
+def edit_link(survey_id, link_id):
+    s = Survey.query.filter_by(id=survey_id).first()
+    l = Link.query.filter_by(id=link_id).first()
+    if not s or not l:
+        flash("Requested item doesn't exist.")
+        return redirect(url_for('admin.survey_home'))
+    edit_link_form = EditLinkForm()
+    if edit_link_form.validate_on_submit():
+        l.title = edit_link_form.title.data
+        l.description = edit_link_form.description.data
+        l.link = edit_link_form.link.data
+        # deal with image upload
+        db.session.add(l)
+        db.session.commit()
+        return redirect(url_for('admin.survey_view', id=s.id))
+    return render_template('tools/survey/edit_link.html', title="Editing link", form=edit_link_form, survey=s, link=l)
+
+@login_required
+@bp.route('/survey/<survey_id>/link/<link_id>/delete')
+def delete_link(survey_id, link_id):
+    l = Link.query.filter_by(id=link_id).first()
+    if not l:
+        flash("Requested link doesn't exist.")
+        return redirect(url_for('admin.survey_view', id=survey_id))
+    db.session.delete(l)
+    db.session.commit()
+    return redirect(url_for('admin.survey_view', id=survey_id))
 
 @bp.route('/survey/<id>')
 @login_required

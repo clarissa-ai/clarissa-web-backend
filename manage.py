@@ -8,6 +8,8 @@ from flask_script import Manager
 # Import application factory and database
 from app.main import create_app, db
 
+from flask_cors import CORS
+
 # Import necessary models
 from app.main.model import user
 from app.main.model import blacklist
@@ -26,6 +28,8 @@ app = create_app(ENVIRONMENT_VAR)
 # Register API and Admin blueprints to Flask app instance
 app.register_blueprint(app_blueprint)
 app.register_blueprint(admin_blueprint)
+
+CORS(app)
 
 app.app_context().push
 
