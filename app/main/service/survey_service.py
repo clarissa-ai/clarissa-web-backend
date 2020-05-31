@@ -7,6 +7,11 @@ def save_model(data):
     db.session.add(data)
     db.session.commit(data)
 
+def get_main_survey():
+    return {
+        
+    }
+
 def get_active_surveys():
     surveys = []
     for s in Survey.query.all():
@@ -14,7 +19,7 @@ def get_active_surveys():
             s.active == False
             save_model(s)
         elif s.active == True:
-            surveys.add({
+            surveys.append({
                 'id': str(s.id),
                 'title': s.title
             })
@@ -39,4 +44,5 @@ def get_survey(id):
             'message': 'Successfully retrieved survey.',
             'survey': s.get_json()
         }
+        return response_object, 200
 

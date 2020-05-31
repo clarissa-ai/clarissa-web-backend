@@ -4,91 +4,158 @@
 
 <div class="pusher">
   <div class="main-content">
+    
     <div class="ui grid stackable padded centered aligned">
 
-      <div class="five wide column">
-        <div class="ui segments stacked">
+      <div class="seven wide column">
 
-          <div class="ui segment center center aligned">
+        <div class="ui segments raised">
+      
+          <div class="ui segment center aligned inverted blue">
             <h2>{{ survey.title }}</h2>
           </div>
 
-          <div class="ui segment" style="text-align:left;">
-            <b>Description:</b> {{ survey.description }}<br />
-            <b>Survey author:</b> {{ survey.author.first_name }} ({{ survey.author.email }})<br />
-            <b>Expiration date:</b> {{ survey.expiration_date }}<br />
-            <b>Active:</b> {{ survey.active }}
-          </div>
-
-          <div class="ui horizontal segments">
-            <div class="ui segment">
-              <a class="ui button fluid yellow" href="{{ url_for('admin.edit_survey', survey_id=survey.id) }}">Edit
-                Survey</a>
-            </div>
-
-            {% if survey.active %}
-            <div class="ui segment">
-              <a class="ui button fluid red" href="{{ url_for('admin.deactivate_survey', id=survey.id) }}">Deactivate
-                Survey</a>
-            </div>
-            {% else %}
-            <div class="ui segment">
-              <a class="ui button fluid green" href="{{ url_for('admin.activate_survey', id=survey.id) }}">Activate
-                Survey</a>
-            </div>
-            {% endif %}
-          </div>
+          <table class="ui segment celled table" style="min-width:100%">
+            <tbody>
+              <tr>
+                <td class="three wide"><b>Description</b></td>
+                <td>{{ survey.description }}</td>
+              </tr>
+              <tr>
+                <td><b>Created on</td>
+                <td>{{ survey.created_on.strftime("%b %d, %Y %I:%M %p") }}</td>
+              </tr>
+              <tr>
+                <td><b>Expiration Date</b></td>
+                <td>{{ survey.expiration_date.strftime("%b %d, %Y %I:%M %p") }}</td>
+              </tr>
+              <tr>
+                <td><b>Questions</b></td>
+                <td>{{ survey.questions|length }}</td>
+              </tr>
+              <tr>
+                <td><b>Total Responses</b></td>
+                <td>{{ survey.responses|length }}</td>
+              </tr>
+              <tr>
+                <td><b>Active</b></td>
+                <td {% if survey.active %} class="positive center aligned">
+                  <i class="check icon"></i>
+                  {% else %}
+                  class="negative center aligned"
+                  >
+                  <i class="x icon"></i>
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <td><b>Main</b></td>
+                <td {% if survey.main %} class="positive center aligned">
+                  <i class="check icon"></i>
+                  {% else %}
+                  class="negative center aligned"
+                  >
+                  <i class="x icon"></i>
+                  {% endif %}
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
         </div>
 
-        <div class="ui segments stacked">
+        <div class="ui grid">
+          <!-- ROOT QUESTION SEGMENT START -->
+          <div class="eight wide column">
+            <div class="ui segments stacked">
 
-          <div class="ui segment center aligned">
-            <h4>
-              Root Question Info
-            </h4>
-          </div>
+              <div class="ui segment center aligned">
+                <h4>
+                  Root Question Info
+                </h4>
+              </div>
 
-          {% if survey.root %}
-          <div class="ui segment">
-            <b>Title: </b>{{ survey.root.title }}<br />
-            <b>Description: </b>{{ survey.root.description }}<br />
-            <b>Type: </b>{{ survey.root.type }}
-            {% if survey.root.options %}
-            <div class="ui segments">
-              {% for option in survey.root.options %}
-              <div class="ui segment"></div>
-              {% endfor %}
+              {% if survey.root %}
+              <div class="ui segment">
+                <b>Title: </b>{{ survey.root.title }}<br />
+                <b>Description: </b>{{ survey.root.description }}<br />
+                <b>Type: </b>{{ survey.root.type }}
+                {% if survey.root.options %}
+                <div class="ui segments">
+                  {% for option in survey.root.options %}
+                  <div class="ui segment"></div>
+                  {% endfor %}
+                </div>
+                {% endif %}
+              </div>
+              <div class="ui horizontal segments">
+                <div class="ui segment">
+                  <a class="ui primary button fluid" href="{{ url_for('admin.question_view', survey_id=survey.id, question_id=survey.root.id)}}">
+                    <i class="eye icon"></i>
+                    View
+                  </a>
+                </div>
+                <div class="ui segment">
+                  <a href="{{ url_for('admin.edit_question', survey_id=survey.id, question_id=survey.root.id) }}"
+                    class="ui button fluid yellow">
+                    <i class="pencil alternate icon"></i>
+                    Edit
+                  </a>
+                </div>
+                <div class="ui segment">
+                  <a href="{{ url_for('admin.delete_question', survey_id=survey.id, question_id=survey.root.id) }}"
+                    class="ui button fluid red">
+                    <i class="trash alternate icon"></i>
+                    Delete
+                  </a>
+                </div>
+              </div>
+              {% else %}
+              <div class="ui segment">
+                No root question has been added. Add a new question and set it as the root, or edit an existing question
+                to be root. The root question will always appear first to the user.<br />
+              </div>
+              <div class="ui segment">
+                <a class="ui button green labeled icon" href="{{ url_for('admin.add_question', survey_id=survey.id, root=True) }}">
+                  <i class="circle plus icon"></i>
+                  Add a Root Question</a>
+              </div>
+              {% endif %}
             </div>
-            {% endif %}
           </div>
-          <div class="ui horizontal segments">
-            <div class="ui segment">
-              <a class="ui primary button small">
-                View Question
-              </a>
+          <!-- ROOT QUESTION SEGMENT END -->
+
+          <!-- INTRO RESOURCES START -->
+          <div class="eight wide column">
+            <div class="ui segments stacked">
+
+              <div class="ui segment center aligned">
+                <h4>Title Links</h4>
+              </div>
+
+              {% if survey.links %}
+                {% for link in survey.links %}
+                <div class="ui segment">
+                  
+                </div>
+                {% endfor %}
+              {% else %}
+              <div class="ui segment">
+                This survey currently doesn't have any links. Links appear on the title page of the survey, providing the user some additional resources they can reference before taking the survey.
+              </div>
+              {% endif %}
+
+              <div class="ui segment">
+                <a class="ui button teal labeled icon" href="{{ url_for('admin.create_link', survey_id=survey.id) }}">
+                  <i class="circle plus icon"></i>
+                  Add a Link
+                </a>
+              </div>
+
             </div>
-            <div class="ui segment">
-              <a href="{{ url_for('admin.edit_question', survey_id=survey.id, question_id=survey.root.id) }}" class="ui button fluid yellow">
-                Edit Question
-              </a>
-            </div>
-            <div class="ui segment">
-              <a href="{{ url_for('admin.delete_question', survey_id=survey.id, question_id=survey.root.id) }}" class="ui button fluid red">
-                Delete Question
-              </a>
-            </div>
           </div>
-          {% else %}
-          <div class="ui segment">
-            No root question has been added. Add a new question and set it as the root, or edit an existing question to
-            be root.<br />
-          </div>
-          <div class="ui segment">
-            <a class="ui button green" href="{{ url_for('admin.add_question', survey_id=survey.id, root=True) }}">Add a
-              Root Question</a>
-          </div>
-          {% endif %}
+          <!-- END OF INTRO -->
+
         </div>
 
         <div class="ui segments stacked">
@@ -101,16 +168,16 @@
           {% for question in survey.questions %}
           <div class="ui horizontal segments">
             <div class="ui segment">
-            <b>Title: </b>{{ question.title }}<br />
-            <b>Description: </b>{{ question.description }}<br />
-            <b>Type: </b>{{ question.type }}
-            {% if question.options %}
-            <div class="ui segments">
-              {% for option in question.options %}
-              <div class="ui segment"></div>
-              {% endfor %}
-            </div>
-            {% endif %}
+              <b>Title: </b>{{ question.title }}<br />
+              <b>Description: </b>{{ question.description }}<br />
+              <b>Type: </b>{{ question.type }}
+              {% if question.options %}
+              <div class="ui segments">
+                {% for option in question.options %}
+                <div class="ui segment"></div>
+                {% endfor %}
+              </div>
+              {% endif %}
             </div>
           </div>
           {% endfor %}
@@ -124,6 +191,103 @@
               Question</a>
           </div>
 
+
+        </div>
+
+      </div>
+
+
+      <div class="five wide column">
+
+        <div class="three ui large buttons">
+          <a class="ui labeled icon button" href="{{ url_for('admin.survey_home') }}">
+            <i class="home icon"></i>  
+            Survey Home
+          </a>
+          <a class="ui labeled icon button" href="{{ url_for('admin.all_surveys') }}">
+            <i class="list alternate icon"></i>
+            All Surveys
+          </a>
+          <a class="ui labeled icon button" href="{{ url_for('admin.all_responses') }}">
+            <i class="clipboard list icon"></i>
+            Responses
+          </a>
+        </div>
+
+        <div class="ui segments raised">
+
+          <div class="ui segment">
+            <h2>Configurations</h2>
+          </div>
+
+          <div class="ui segment">
+            <b>Survey Design</b><br/>
+            Surveys must be designed as DAGs (Directed Acyclic Graphs). There must be a root (initial) question that is
+            presented to the user, and every option must have a "next question", there the user will be directed to
+            after selecting that option. <br />
+
+          </div>
+
+          <div class="ui horizontal segments">
+
+            <div class="ui segment center aligned">
+              <a class="ui fluid labeled icon button yellow" href="{{ url_for('admin.edit_survey', survey_id=survey.id) }}">
+                <i class="pencil icon"></i>
+                Edit Survey
+              </a>
+            </div>
+
+            {% if survey.active %}
+            <div class="ui segment center aligned">
+              <a class="ui fluid labeled icon button red" href="{{ url_for('admin.deactivate_survey', id=survey.id) }}">
+                <i class="chevron circle down icon"></i>
+                Deactivate Survey
+              </a>
+            </div>
+            {% else %}
+            <div class="ui segment center aligned">
+              <a class="ui fluid labeled icon button green" href="{{ url_for('admin.activate_survey', id=survey.id) }}">
+                <i class="chevron circle up icon"></i>
+                Activate Survey
+              </a>
+            </div>
+            {% endif %}
+            {% if not survey.main  %}
+            <div class="ui segment center aligned">
+              <a class="ui fluid labeled icon button teal" href="{{ url_for('admin.pub_main_survey', id=survey.id) }}">
+                <i class="star icon"></i>
+                Publish as Main Survey
+              </a>
+            </div>
+            {% else %}
+            <div class="ui segment center aligned">
+              <a class="ui fluid labeled icon button blue" href="{{ url_for('admin.depub_main_survey', id=survey.id) }}">
+                <i class="star outline icon"></i>
+                Remove as Main Survey
+              </a>
+            </div>
+            {% endif %}
+
+          </div>
+        </div>
+
+        <div class="ui segments stacked">
+
+          <div class="ui segment">
+            <h2>Final Summaries</h2>
+          </div>
+
+          {% if summaries %}
+          {% for summary in summaries %}
+          <div class="ui segment">
+
+          </div>
+          {% endfor %}
+          {% else %}
+          <div class="ui segment">
+
+          </div>
+          {% endif %}
 
         </div>
 

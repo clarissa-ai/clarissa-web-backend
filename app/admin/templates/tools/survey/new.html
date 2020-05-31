@@ -46,7 +46,7 @@
 
             <div class="ui segment field required">
               {{ form.expiration_date.label}}
-              <div class="ui calendar" id="example1">
+              <div class="ui calendar" id="expiration_date">
                 <div class="ui input left icon">
                   <i class="calendar icon"></i>
                   {{ form.expiration_date(placeholder="Date/Time") }}
@@ -54,13 +54,26 @@
               </div>
             </div>
 
-            <div class="ui segment center aligned">
-              <div class="inline required field center aligned">
-                {{ form.active(class="form-check-input") }}
-                <div class="ui left pointing label">
-                  Active survey (published)
+            <div class="ui horizontal segments">
+              
+              <div class="ui segment center aligned">
+                <div class="inline required field center aligned">
+                  {{ form.main(class="form-check-input") }}
+                  <div class="ui left pointing label">
+                    Main survey
+                </div>
+                </div>
               </div>
+
+              <div class="ui segment center aligned">
+                <div class="inline required field center aligned">
+                  {{ form.active(class="form-check-input") }}
+                  <div class="ui left pointing label">
+                    Active survey (published)
+                </div>
+                </div>
               </div>
+              
             </div>
 
             <div class="ui segment center aligned">
@@ -80,6 +93,22 @@
 {% endblock %}
 {% block post_script%}
 <script>
-  $('#example1').calendar();
+  $('#expiration_date').calendar({
+    popupOptions: {
+      position: 'bottom right',
+      lastResort: 'bottom right',
+      prefer: 'opposite',
+      hideOnScroll: false
+    },
+    text: {
+      days: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
+      months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      today: 'Today',
+      now: 'Now',
+      am: 'AM',
+      pm: 'PM'
+    },
+  });
 </script>
 {% endblock %}

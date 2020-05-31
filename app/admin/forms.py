@@ -1,11 +1,12 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed, FileRequired
 from wtforms import (
     StringField, 
     PasswordField, 
     BooleanField, 
     SubmitField, 
     TextAreaField,
-    SelectField
+    SelectField,
 )
 from wtforms.validators import DataRequired
 
@@ -22,6 +23,7 @@ class CreateSurveyForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
     active = BooleanField('Active')
+    main = BooleanField('Main')
     expiration_date = StringField('Expiration date', validators=[DataRequired()])
     submit = SubmitField("Create Survey")
 
@@ -45,3 +47,13 @@ class EditQuestionForm(FlaskForm):
     type = SelectField('Type', validators=[DataRequired()], choices=[('multiple_choice', 'Multiple Choice'),])
     root = BooleanField('Root')
     submit = SubmitField("Add Question to Survey")
+
+class CreateLinkForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    description = TextAreaField('Description', validators=[DataRequired()])
+    link = StringField('Link URL', validators=[DataRequired()])
+    image_upload = FileField('Link Image', validators=[
+        FileRequired(),
+        FileAllowed(['jpg', 'png'], 'Images only!')
+    ])
+    submit = SubmitField('Add Link to Survey')

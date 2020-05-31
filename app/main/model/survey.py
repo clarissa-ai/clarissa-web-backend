@@ -8,33 +8,66 @@ class Survey(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     active = db.Column(db.Boolean, default=False, nullable=False)
+    main = db.Column(db.Boolean, default=False, nullable=False)
     created_on = db.Column(db.DateTime, nullable=False)
     expiration_date = db.Column(db.DateTime, nullable=False)
+    image_link = db.Column(db.String(300))
 
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     author = db.relationship('User', foreign_keys='Survey.author_id')
 
     title = db.Column(db.String(120), nullable=False)
-    description = db.Column(db.String(400), nullable=False)
+    description = db.Column(db.String(1000), nullable=False)
 
     root = db.relationship('Question', uselist=False, backref='parent')
 
     questions = db.relationship('Question', backref='survey')
+    responses = db.relationship('Response', backref='survey')
+    links = db.relationship('Link', backref='survey')
 
     def get_json(self):
         return {
             'title': self.title,
             'description': self.description,
-            'root': self.root_id,
-            'questions': [q.get_json() for q in this.questions]
+            'root_id': str(self.root.id) if self.root.id else "None",
+            'image_url': '',
+            'links': [l.get_json() for l in self.links],
+            'questions': [q.get_json() for q in self.questions]
         }
 
     def __repr__(self):
         return "<Survey '{}'>".format(self.title)
 
+    @staticmethod
+    def get_active_surveys():
+        return Survey.query.filter_by(active=True).all()
+
+    @staticmethod
+    def get_main_survey():
+        return Survey.query.filter_by(active=True, main=True).first()
+
+class Link(db.Model):
+    """Link model for Survey title page"""
+    __tablename__ = "link"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    title = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.String(1000), nullable=False)
+    link = db.Column(db.String(200), nullable=False)
+    image_link = db.Column(db.String(300))
+    survey_id = db.Column(db.Integer, db.ForeignKey('survey.id'))
+
+    def get_json(self):
+        return {
+            'title': self.title,
+            'description': self.description,
+            'link': self.link,
+            'image_url': ''
+        }
+
 class Question(db.Model):
     """Question model for representing survey questions"""
-    ___tablename__ = "question"
+    __tablename__ = "question"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(120), nullable=False)

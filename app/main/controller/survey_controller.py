@@ -22,7 +22,7 @@ class Survey(Resource):
     @api.doc('get a survey by an id')
     @api.response(200, 'Survey data retrieved')
     @api.expect(_get_survey, validate=True)
-    def get(self):
+    def post(self):
         """Get a survey by id"""
         data = request.json
-        return get_survey(data[id])
+        return get_survey(data['id'])

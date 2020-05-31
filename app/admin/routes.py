@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 import datetime
+from sqlalchemy import desc
 
 from flask import (
     render_template, 
@@ -23,7 +24,8 @@ from .forms import (
     CreateSurveyForm,
     EditSurveyForm,
     AddQuestionForm,
-    EditQuestionForm
+    EditQuestionForm,
+    CreateLinkForm
 )
 
 from ..main import db
@@ -84,16 +86,23 @@ def edit_profile():
 @bp.route('/surveys')
 @login_required
 def survey_home():
-    active_surveys = Survey.query.filter_by(active=True).all()
-    recent_surveys = Survey.query.order_by('updated desc').limit(10)
+    active_surveys = filter(lambda s: s.main != True, Survey.query.filter_by(active=True).all())
+    main_survey = Survey.query.filter_by(main=True).first()
+    recent_surveys = Survey.query.order_by(desc('created_on')).limit(10)
     return render_template('tools/survey/survey.html', 
                             title="Survey Dashboard", 
                             active_surveys=active_surveys, 
-                            recent_surveys=recent_surveys)
+                            recent_surveys=recent_surveys,
+                            main_survey=main_survey)
 @bp.route('/surveys/list')
 @login_required
 def all_surveys():
     return render_template('tools/survey/list.html')
+
+@bp.route('/surveys/list/responses')
+@login_required
+def all_responses():
+    return render_template('tools/survey/list_responses.html')
 
 @bp.route('/surveys/new', methods=['GET','POST'])
 @login_required
@@ -109,10 +118,29 @@ def create_survey():
             active = create_survey_form.active.data,
             expiration_date = expiration_date_datetime
         )
+        if create_survey_form.main.data:
+            main_s = Survey.query.filter_by(main=True).first()
+            if main_s:
+                flash("Failed to publish main survey: Main survey \"{}\" already exists.".format(s.title))
+            else:
+                s.main = True
         db.session.add(s)
         db.session.commit()
         return redirect(url_for('admin.survey_view', id=s.id))
     return render_template('tools/survey/new.html', title="New Survey", form=create_survey_form)
+
+@bp.route('/survey/<survey_id>/link/new')
+@login_required
+def create_link(survey_id):
+    s = Survey.query.filter_by(id=survey_id).first()
+    if not s:
+        flash("Requested survey doesn't exist.")
+        return redirect(url_for('admin.survey_home'))
+    create_link_form = CreateLinkForm()
+    if create_link_form.validate_on_submit():
+        print()
+    return render_template('tools/survey/new_link.html', title="Create a new link", form=create_link_form, survey=s)
+
 
 @bp.route('/survey/<id>')
 @login_required
@@ -121,7 +149,8 @@ def survey_view(id):
     if not s:
         flash("Requested survey doesn't exist.")
         return redirect(url_for('admin.survey_home'))
-    return render_template('tools/survey/view.html', title="Survey: {}".format(s.title), survey=s)
+    summaries = Question.query.filter_by(type='summary', survey_id=s.id).all()
+    return render_template('tools/survey/view.html', title="Survey: {}".format(s.title), survey=s, summaries=summaries)
 
 @bp.route('/survey/<id>/deactivate')
 @login_required
@@ -130,6 +159,8 @@ def deactivate_survey(id):
     if not s:
         flash("Requested survey doesn't exist.")
         return redirect(url_for('admin.survey_home'))
+    if s.main:
+        s.main = False
     s.active = False
     db.session.add(s)
     db.session.commit()
@@ -143,6 +174,34 @@ def activate_survey(id):
         flash("Requested survey doesn't exist.")
         return redirect(url_for('admin.survey_home'))
     s.active = True
+    db.session.add(s)
+    db.session.commit()
+    return redirect(url_for('admin.survey_view', id=s.id))
+
+@bp.route('/survey/<id>/pub_main_survey')
+@login_required
+def pub_main_survey(id):
+    s = Survey.query.filter_by(id=id).first()
+    if not s:
+        flash("Requested survey doesn't exist.")
+        return redirect(url_for('admin.survey_home'))
+    main_survey = Survey.query.filter_by(main=True).first()
+    if main_survey:
+        main_survey.main = False
+    s.main = True
+    s.active = True
+    db.session.add(s)
+    db.session.commit()
+    return redirect(url_for('admin.survey_view', id=s.id))
+
+@bp.route('/survey/<id>/depub_main_survey')
+@login_required
+def depub_main_survey(id):
+    s = Survey.query.filter_by(id=id).first()
+    if not s:
+        flash("Requested survey doesn't exist.")
+        return redirect(url_for('admin.survey_home'))
+    s.main = False
     db.session.add(s)
     db.session.commit()
     return redirect(url_for('admin.survey_view', id=s.id))

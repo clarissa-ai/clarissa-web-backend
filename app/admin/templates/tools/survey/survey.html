@@ -10,16 +10,16 @@
       <div class="four wide column">
         <div class="ui segments raised ">
 
-          <div class="ui segment">
+          <div class="ui segment blue inverted">
             <h2>Survey Options</h2>
           </div>
 
           <div class="ui segment">
             <h3>Surveys list</h3>
             View list of all surveys, active and expired.
-            <h3><a class="ui button primary fluid">
-              View all surveys
-            </a></h3>
+            <h3><a class="ui button primary fluid" href="{{ url_for('admin.all_surveys') }}">
+                View all surveys
+              </a></h3>
           </div>
 
 
@@ -29,7 +29,7 @@
             View recent responses for all surveys. Filter by survey and download CSV or JSON representations of
             responses.
 
-            <h3><a class="ui button primary fluid">
+            <h3><a class="ui button primary fluid" href="{{ url_for('admin.all_responses') }}">
                 View all responses
               </a></h3>
           </div>
@@ -41,9 +41,9 @@
             dates.
 
             <h3><a class="ui button primary fluid" href="{{ url_for('admin.create_survey')}}">
-              <i class="pencil icon"></i>
-              Create a survey
-            </a></h3>
+                <i class="pencil icon"></i>
+                Create a survey
+              </a></h3>
           </div>
 
         </div>
@@ -52,25 +52,99 @@
       <div class="six wide column">
         <div class="ui segments raised">
 
-          <div class="ui segment">
+          <div class="ui segment green inverted">
             <h2>Active Surveys</h2>
           </div>
 
           <div class="ui segment">
-            <h3>COVID-19 Survey <a class="ui button primary inverted right floated">View</a><a class="ui button orange inverted right floated">Edit</a></h3>
-            <b>Questions:</b> 9 <br/>
-            <b>Total responses:</b> 189 <br/>
-            <b>Created on:</b> 5/20/2020 11:02AM <br/>
-            <b>Expiration date:</b> 6/15/2020 12:00AM <br/>
+            <h3>Main Survey:</h3>
           </div>
 
+          {% if main_survey %}
+
+            <table class="ui segment grey celled table">
+              <thead>
+                <tr>
+                  <th colspan="2" class="center aligned">
+                    <a class="ui large button" href="{{url_for('admin.survey_view', id=main_survey.id)}}">
+                    {{main_survey.title}}
+                    </a>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="two wide"><b>Description</b></td>
+                  <td class="ten wide">{{ main_survey.description }}</td>
+                </tr>
+                <tr>
+                  <td><b>Created on</td>
+                  <td>{{ main_survey.created_on.strftime("%b %d, %Y %I:%M %p") }}</td>
+                </tr>
+                <tr>
+                  <td><b>Expiration Date</b></td>
+                  <td>{{ main_survey.expiration_date.strftime("%b %d, %Y %I:%M %p") }}</td>
+                </tr>
+                <tr>
+                  <td><b>Questions</b></td>
+                  <td>{{ main_survey.questions|length }}</td>
+                </tr>
+                <tr>
+                  <td><b>Total Responses</b></td>
+                  <td>{{ main_survey.responses|length }}</td>
+                </tr>
+              </tbody>
+            </table>
+          {% else %}
           <div class="ui segment">
-            <h3>New User Survey<a class="ui button primary inverted right floated">View</a><a class="ui button orange inverted right floated">Edit</a></h3>
-            <b>Questions:</b> 9 <br/>
-            <b>Total responses:</b> 189 <br/>
-            <b>Created on:</b> 5/20/2020 11:02AM <br/>
-            <b>Expiration date:</b> 6/15/2020 12:00AM <br/>
+            No survey has been selected as the main survey.
           </div>
+          {% endif %}
+
+          <div class="ui segment black">
+            <h3>Remaining Active Surveys:</h3>
+          </div>
+          {% if active_surveys or main_survey %}
+          {% for s in active_surveys %}
+          <table class="ui segment grey celled table">
+            <thead>
+              <tr>
+                <th colspan="2" class="center aligned">
+                  <a class="ui large button" href="{{url_for('admin.survey_view', id=s.id)}}">
+                  {{s.title}}
+                  </a>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>Description</b></td>
+                <td>{{ s.description }}</td>
+              </tr>
+              <tr>
+                <td><b>Created on</td>
+                <td>{{ s.created_on.strftime("%b %d, %Y %I:%M %p") }}</td>
+              </tr>
+              <tr>
+                <td><b>Expiration Date</b></td>
+                <td>{{ s.expiration_date.strftime("%b %d, %Y %I:%M %p") }}</td>
+              </tr>
+              <tr>
+                <td><b>Questions</b></td>
+                <td>{{ s.questions|length }}</td>
+              </tr>
+              <tr>
+                <td><b>Total Responses</b></td>
+                <td>{{ s.responses|length }}</td>
+              </tr>
+            </tbody>
+          </table>
+          {% endfor %}
+          {% else %}
+          <div class="ui segment">
+            There are currently no other active surveys.
+          </div>
+          {% endif %}
 
         </div>
       </div>
@@ -78,11 +152,24 @@
       <div class="six wide column">
         <div class="ui segments raised">
 
-          <div class="ui segment">
+          <div class="ui segment teal inverted">
             <h2>Recent Surveys</h2>
           </div>
 
-
+          {% for s in recent_surveys %}
+          <div class="ui segment">
+            <b><u>{{ s.title }}</u>
+              <a class="ui button primary inverted right floated"
+                href="{{ url_for('admin.survey_view', id=s.id) }}">View</a>
+              <a class="ui button orange inverted right floated"
+                href="{{ url_for('admin.edit_survey', survey_id=s.id) }}">Edit</a>
+            </b><br />
+            <b>Questions:</b> {{ s.questions|length }} <br />
+            <b>Total responses:</b> {{ s.responses|length }} <br />
+            <b>Created on:</b> {{ s.created_on.strftime("%b %d, %Y %I:%M %p") }} <br />
+            <b>Expiration date:</b> {{ s.expiration_date.strftime("%b %d, %Y %I:%M %p") }} <br />
+          </div>
+          {% endfor %}
 
         </div>
       </div>
