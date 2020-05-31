@@ -305,7 +305,7 @@ def edit_survey(survey_id):
         return redirect(url_for('admin.survey_view', id=s.id))
     return render_template('tools/survey/edit.html', title="Edit Survey", form=edit_survey_form, survey=s)
 
-@bp.route('/surveys/edit/<survey_id>/question/<question_id>')
+@bp.route('/surveys/edit/<survey_id>/question/<question_id>', methods=['GET', 'POST'])
 @login_required
 def edit_question(survey_id, question_id):
     edit_question_form = EditQuestionForm()
@@ -322,10 +322,31 @@ def delete_question(survey_id, question_id):
     db.session.commit()
     return redirect(url_for('admin.survey_view', id=survey_id))
 
-@bp.route('/surveys/edit/<survey_id>/question/<question_id>/option')
+@bp.route('/surveys/edit/<survey_id>/question/<question_id>/option', methods=['GET', 'POST'])
+@login_required
 def edit_option(survey_id, question_id):
     edit_option_form = EditOptionForm()
     return render_template('/tools/survey/edit_option.html')
+
+@bp.route('/surveys/<survey_id>/create_summary', methods=['GET', 'POST'])
+@login_required
+def create_summary(survey_id):
+    return render_template('/tools/survey/new_summary.html')
+
+@bp.route('/surveys/<survey_id>/view_summary/<summary_id>', methods=['GET', 'POST'])
+@login_required
+def view_summary(survey_id, summary_id):
+    return render_template('/tools/survey/new_summary.html')
+
+@bp.route('/surveys/<survey_id>/edit_summary/<summary_id>', methods=['GET', 'POST'])
+@login_required
+def edit_summary(survey_id, summary_id):
+    return render_template('/tools/survey/new_summary.html')
+
+@bp.route('/surveys/<survey_id>/delete_summary/<summary_id>', methods=['GET', 'POST'])
+@login_required
+def delete_summary(survey_id, summary_id):
+    return render_template('/tools/survey/new_summary.html')
 
 #---------------------------------------------------------------------------------------------#
 #    DEVELOPMENT ADMINISTRATION ROUTES: get status of git repos and deployments               #

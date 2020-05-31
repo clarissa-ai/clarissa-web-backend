@@ -8,9 +8,19 @@ def save_model(data):
     db.session.commit(data)
 
 def get_main_survey():
-    return {
-        
+    s = Survey.get_main_survey()
+    response_object = {}
+    if not s:
+        response_object = {
+            'status': 'failure',
+            'message': 'Failed to retreive main survey, main survey not published.'
+        }
+    response_object = {
+        'status': 'success',
+        'message': 'Successfully retrieved main published survey.',
+        'survey': s.get_json()
     }
+    return response_object
 
 def get_active_surveys():
     surveys = []

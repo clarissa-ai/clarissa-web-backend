@@ -8,6 +8,7 @@ from flask_script import Manager
 # Import application factory and database
 from app.main import create_app, db
 
+# Import library to manage CORS
 from flask_cors import CORS
 
 # Import necessary models
@@ -29,6 +30,7 @@ app = create_app(ENVIRONMENT_VAR)
 app.register_blueprint(app_blueprint)
 app.register_blueprint(admin_blueprint)
 
+# Register CORS manager with app instance
 CORS(app)
 
 app.app_context().push

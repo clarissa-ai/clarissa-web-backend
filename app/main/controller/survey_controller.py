@@ -2,7 +2,12 @@ from flask import request
 from flask_restplus import Resource
 
 from ..util.dto import SurveyDTO
-from..service.survey_service import save_model, get_active_surveys, get_survey
+from..service.survey_service import (
+    save_model,
+    get_active_surveys, 
+    get_survey,
+    get_main_survey
+)
 
 from ..util.decorator import token_required, admin_token_required
 
@@ -26,3 +31,11 @@ class Survey(Resource):
         """Get a survey by id"""
         data = request.json
         return get_survey(data['id'])
+
+@api.route('/get_main_survey')
+class MainSurvey(Resource):
+    @api.doc('get information about the main survey')
+    @api.response(200, 'Main survey retrieved')
+    def get(self):
+        """Get info about the main published survey"""
+        return get_main_survey()

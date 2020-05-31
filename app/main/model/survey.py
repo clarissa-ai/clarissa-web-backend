@@ -36,7 +36,8 @@ class Survey(db.Model):
             'root_id': str(r_id),
             'image_url': '',
             'links': [l.get_json() for l in self.links],
-            'questions': [q.get_json() for q in self.questions]
+            'questions': [q.get_json() for q in self.questions],
+            'summaries': [s.get_json() for s in self.summaries]
         }
 
     def __repr__(self):
@@ -121,6 +122,18 @@ class Summary(db.Model):
     title = db.Column(db.String(150), nullable=False)
     description = db.Column(db.String(500))
     info_groups = db.relationship('SummaryInfoGroup', backref='summary')
+    survey_id = db.Column(db.Integer, db.ForeignKey('survey.id'))
+
+    def __repr__(self):
+        return "<Summary '{}'>".format(self.title)
+
+    def get_json(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'description': self.description,
+            'info_groups': [g.get_json for g in self.info_groups]
+        }
 
 class SummaryInfoGroup(db.Model):
     """Group model for representing lists of info in final summaries"""
@@ -131,6 +144,15 @@ class SummaryInfoGroup(db.Model):
     details = db.relationship('SummaryDetail', backref='summary')
     summary_id = db.Column(db.Integer, db.ForeignKey('summary.id'))
 
+    def __repr__(self):
+        return "<SummaryInfoGroup '{}'>".format(self.title)
+
+    def get_json(self):
+        return {
+            'title': self.title,
+            'details': [d.get_json() for d in self.details]
+        }
+
 class SummaryDetail(db.Model):
     """Detail model for representing details in a summary info group"""
     __tablename__ = "summarydetail"
@@ -138,6 +160,13 @@ class SummaryDetail(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     text = db.Column(db.String(500), nullable=False)
     infogroup_id = db.Column(db.Integer, db.ForeignKey('summaryinfogroup.id'))
+
+    def __repr__(self):
+        return "<SummaryDetail '{}'>".format(self.text)
+
+    def get_json(self):
+        return self.text
+
 
 class Response(db.Model):
     """Response model for representing survey responses"""

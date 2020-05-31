@@ -192,7 +192,7 @@
 
             {% if survey.active %}
             <div class="ui segment center aligned">
-              <a class="ui fluid labeled icon button red" href="{{ url_for('admin.deactivate_survey', id=survey.id) }}">
+              <a class="ui fluid labeled icon button orange" href="{{ url_for('admin.deactivate_survey', id=survey.id) }}">
                 <i class="chevron circle down icon"></i>
                 Deactivate Survey
               </a>
@@ -214,7 +214,7 @@
             </div>
             {% else %}
             <div class="ui segment center aligned">
-              <a class="ui fluid labeled icon button blue" href="{{ url_for('admin.depub_main_survey', id=survey.id) }}">
+              <a class="ui fluid labeled icon button purple" href="{{ url_for('admin.depub_main_survey', id=survey.id) }}">
                 <i class="star outline icon"></i>
                 Remove as Main Survey
               </a>
@@ -291,14 +291,36 @@
           {% if summaries %}
           {% for summary in summaries %}
           <div class="ui segment">
-
+            <b>Title: </b> {{ summary.title }}<br/>
+            <b>Description: </b> {{ summary.description }}<br/>
+            <div class="ui buttons small">
+              <a class="ui button primary" href="{{ url_for('admin.view_summary', survey_id=survey.id, summary_id=summary.id) }}">
+                <i class="eye icon"></i> 
+                View Summary               
+              </a>
+              <a class="ui button teal" href="{{ url_for('admin.edit_summary', survey_id=survey.id, summary_id=summary.id) }}">
+                <i class="pencil icon"></i>
+                Edit Summary                
+              </a>
+              <a class="ui button teal" href="{{ url_for('admin.delete_summary', survey_id=survey.id, summary_id=summary.id) }}">
+                <i class="trash alternate icon"></i>            
+                Delete Summary    
+              </a>
+            </div>
           </div>
           {% endfor %}
           {% else %}
           <div class="ui segment">
-
+            No summaries have been added to this survey yet. Summaries are the final page that a user sees after completing the survey. Add a summary with the button below.
           </div>
           {% endif %}
+
+          <div class="ui segment">
+            <a class="ui button labeled icon teal" href="{{ url_for('admin.create_summary', survey_id=survey.id) }}">
+              <i class="circle plus icon"></i>
+              Add a Summary
+            </a>
+          </div>
 
         </div>
 
