@@ -46,6 +46,17 @@
               </a></h3>
           </div>
 
+          <div class="ui segment">
+            <h3>Survey Design Guide</h3>
+
+            View a guide describing all the functionality provided by the admin survey design tool.
+
+            <h3><a class="ui button primary fluid" href="{{ url_for('admin.survey_design_guide', survey_id=0, survey_title="None") }}">
+              <!-- <i class="eye icon"></i> -->
+              View Guide
+            </a></h3>
+          </div>
+
         </div>
       </div>
 
@@ -158,12 +169,8 @@
 
           {% for s in recent_surveys %}
           <div class="ui segment">
-            <b><u>{{ s.title }}</u>
-              <a class="ui button primary inverted right floated"
-                href="{{ url_for('admin.survey_view', id=s.id) }}">View</a>
-              <a class="ui button orange inverted right floated"
-                href="{{ url_for('admin.edit_survey', survey_id=s.id) }}">Edit</a>
-            </b><br />
+            <h4 style="margin-bottom:0px;"><u><a href="{{ url_for('admin.survey_view', id=s.id) }}">{{ s.title }}</a></u>
+            </h4>
             <b>Questions:</b> {{ s.questions|length }} <br />
             <b>Total responses:</b> {{ s.responses|length }} <br />
             <b>Created on:</b> {{ s.created_on.strftime("%b %d, %Y %I:%M %p") }} <br />

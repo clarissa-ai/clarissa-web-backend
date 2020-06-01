@@ -7,7 +7,24 @@
     
     <div class="ui grid stackable padded centered aligned">
 
-      <div class="five wide column">
+      <div class="six wide column">
+
+        <div class="three ui large buttons">
+          <a class="ui labeled icon button" href="{{ url_for('admin.survey_home') }}">
+            <i class="home icon"></i>  
+            Survey Home
+          </a>
+          <a class="ui labeled icon button" href="{{ url_for('admin.all_surveys') }}">
+            <i class="list alternate icon"></i>
+            All Surveys
+          </a>
+          <a class="ui labeled icon button" href="{{ url_for('admin.all_responses') }}">
+            <i class="clipboard list icon"></i>
+            Responses
+          </a>
+        </div>
+
+
 
         <div class="ui segments raised">
       
@@ -44,28 +61,6 @@
               <tr>
                 <td><b>Responses</b></td>
                 <td>{{ survey.responses|length }}</td>
-              </tr>
-              <tr>
-                <td><b>Active</b></td>
-                <td {% if survey.active %} class="positive center aligned">
-                  <i class="check icon"></i>
-                  {% else %}
-                  class="negative center aligned"
-                  >
-                  <i class="x icon"></i>
-                  {% endif %}
-                </td>
-              </tr>
-              <tr>
-                <td><b>Main</b></td>
-                <td {% if survey.main %} class="positive center aligned">
-                  <i class="check icon"></i>
-                  {% else %}
-                  class="negative center aligned"
-                  >
-                  <i class="x icon"></i>
-                  {% endif %}
-                </td>
               </tr>
             </tbody>
           </table>
@@ -115,115 +110,90 @@
             </div>
           <!-- END OF INTRO -->
 
-        <div class="ui segments stacked">
-
-          <div class="ui segment center aligned">
-            <h4>All Questions:</h4>
-          </div>
-
-          {% if survey.questions %}
-          {% for question in survey.questions %}
-          <div class="ui horizontal segments">
-            <div class="ui segment">
-              <b>Title: </b>{{ question.title }}<br />
-              <b>Description: </b>{{ question.description }}<br />
-              <b>Type: </b>{{ question.type }}
-              {% if question.options %}
-              <div class="ui segments">
-                {% for option in question.options %}
-                <div class="ui segment"></div>
-                {% endfor %}
-              </div>
-              {% endif %}
-            </div>
-          </div>
-          {% endfor %}
-          {% else %}
-          <div class="ui segment">
-            No questions have been added.
-          </div>
-          {% endif %}
-          <div class="ui segment">
-            <a class="ui button primary" href="{{ url_for('admin.add_question', survey_id=survey.id) }}">Add a
-              Question</a>
-          </div>
-
-
-        </div>
-
       </div>
 
 
       <div class="five wide column">
 
-        <div class="three ui large buttons">
-          <a class="ui labeled icon button" href="{{ url_for('admin.survey_home') }}">
-            <i class="home icon"></i>  
-            Survey Home
-          </a>
-          <a class="ui labeled icon button" href="{{ url_for('admin.all_surveys') }}">
-            <i class="list alternate icon"></i>
-            All Surveys
-          </a>
-          <a class="ui labeled icon button" href="{{ url_for('admin.all_responses') }}">
-            <i class="clipboard list icon"></i>
-            Responses
-          </a>
-        </div>
 
+        
         <div class="ui segments raised">
 
           <div class="ui segment">
             <h2>Configurations</h2>
           </div>
 
+          <table class="ui celled table segment" style="min-width: 100%;">
+            <tbody>
+              <tr>
+                <td class="four wide"><b>Active</b></td>
+                <td {% if survey.active %} class="positive center aligned three wide">
+                  <i class="check icon"></i>
+                  {% else %}
+                  class="negative center aligned three wide"
+                  >
+                  <i class="x icon"></i>
+                  {% endif %}
+                </td>
+                <td>
+
+                  {% if survey.active %}
+                    <a class="ui fluid labeled icon button orange" href="{{ url_for('admin.deactivate_survey', id=survey.id) }}">
+                      <i class="chevron circle down icon"></i>
+                      Deactivate Survey
+                    </a>
+                  {% else %}
+                    <a class="ui fluid labeled icon button green" href="{{ url_for('admin.activate_survey', id=survey.id) }}">
+                      <i class="chevron circle up icon"></i>
+                      Activate Survey
+                    </a>
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <td><b>Main</b></td>
+                <td {% if survey.main %} class="positive center aligned">
+                  <i class="check icon"></i>
+                  {% else %}
+                  class="negative center aligned"
+                  >
+                  <i class="x icon"></i>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if not survey.main  %}
+                    <a class="ui fluid labeled icon button teal" href="{{ url_for('admin.pub_main_survey', id=survey.id) }}">
+                      <i class="star icon"></i>
+                      Publish as Main Survey
+                    </a>
+                  {% else %}
+                    <a class="ui fluid labeled icon button purple" href="{{ url_for('admin.depub_main_survey', id=survey.id) }}">
+                      <i class="star outline icon"></i>
+                      Remove as Main Survey
+                    </a>
+                  {% endif %}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="ui horizontal segments">
           <div class="ui segment">
-            <b>Survey Design</b><br/>
-            Surveys must be designed as DAGs (Directed Acyclic Graphs). There must be a root (initial) question that is
-            presented to the user, and every option must have a "next question", there the user will be directed to
-            after selecting that option. <br />
+            <a class="ui fluid button violet" href="{{ url_for('admin.survey_design_guide', survey_id=survey.id, survey_title=survey.title) }}">
+              <i class="eye icon"></i>
+              Survey Design Guide
+            </a>
 
           </div>
 
-          <div class="ui horizontal segments">
 
             <div class="ui segment center aligned">
-              <a class="ui fluid labeled icon button yellow" href="{{ url_for('admin.edit_survey', survey_id=survey.id) }}">
+              <a class="ui fluid button yellow" href="{{ url_for('admin.edit_survey', survey_id=survey.id) }}">
                 <i class="pencil icon"></i>
                 Edit Survey
               </a>
             </div>
 
-            {% if survey.active %}
-            <div class="ui segment center aligned">
-              <a class="ui fluid labeled icon button orange" href="{{ url_for('admin.deactivate_survey', id=survey.id) }}">
-                <i class="chevron circle down icon"></i>
-                Deactivate Survey
-              </a>
-            </div>
-            {% else %}
-            <div class="ui segment center aligned">
-              <a class="ui fluid labeled icon button green" href="{{ url_for('admin.activate_survey', id=survey.id) }}">
-                <i class="chevron circle up icon"></i>
-                Activate Survey
-              </a>
-            </div>
-            {% endif %}
-            {% if not survey.main  %}
-            <div class="ui segment center aligned">
-              <a class="ui fluid labeled icon button teal" href="{{ url_for('admin.pub_main_survey', id=survey.id) }}">
-                <i class="star icon"></i>
-                Publish as Main Survey
-              </a>
-            </div>
-            {% else %}
-            <div class="ui segment center aligned">
-              <a class="ui fluid labeled icon button purple" href="{{ url_for('admin.depub_main_survey', id=survey.id) }}">
-                <i class="star outline icon"></i>
-                Remove as Main Survey
-              </a>
-            </div>
-            {% endif %}
+            
 
           </div>
         </div>
@@ -288,6 +258,45 @@
 
         <div class="ui segments stacked">
 
+          <div class="ui segment center aligned">
+            <h4>All Questions:</h4>
+          </div>
+
+          {% if survey.questions %}
+          {% for question in survey.questions %}
+          <div class="ui horizontal segments">
+            <div class="ui segment">
+              <b>Title: </b>{{ question.title }}<br />
+              <b>Description: </b>{{ question.description }}<br />
+              <b>Type: </b>{{ question.type }}
+              {% if question.options %}
+              <div class="ui segments">
+                {% for option in question.options %}
+                <div class="ui segment"></div>
+                {% endfor %}
+              </div>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+          {% else %}
+          <div class="ui segment">
+            No questions have been added.
+          </div>
+          {% endif %}
+          <div class="ui segment">
+            <a class="ui button primary" href="{{ url_for('admin.add_question', survey_id=survey.id) }}">Add a
+              Question</a>
+          </div>
+
+
+        </div>
+
+      </div>
+
+      <div class="five wide column">
+        <div class="ui segments stacked">
+
           <div class="ui segment">
             <h2>Final Summaries</h2>
           </div>
@@ -339,8 +348,7 @@
           </div>
 
         </div>
-
-      </div>
+      </div> 
 
     </div>
   </div>

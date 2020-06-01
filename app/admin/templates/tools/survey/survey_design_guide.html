@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="pusher">
+  <div class="main-content">
+    <div class="ui grid stackable padded">
+
+      <div class="two wide column right aligned">
+        {% if survey_id != "0" %}
+        <a class="ui button fluid labeled icon small" href="{{ url_for('admin.survey_view', id=survey_id) }}">
+          <i class="left arrow icon"></i>
+          {{ survey_title }}
+        </a><br/>
+        {% endif %}
+        <a class="ui button fluid labeled icon" href="{{ url_for('admin.index') }}">
+          <i class="home icon"></i>
+          Admin Home
+        </a><br/>
+        <a class="ui button fluid labeled icon" href="{{ url_for('admin.survey_home') }}">
+          <i class="clipboard icon"></i>
+          Surveys Home
+        </a><br/>
+      </div>
+
+      <div class="five wide column">
+        <div class="ui segments raised">
+
+          <div class="ui segment center aligned blue inverted">
+            <h2>Survey Basics</h2>
+          </div>
+
+          <div class="ui segment">
+
+            <b>Survey Design</b><br/>
+            Surveys must be designed as DAGs (Directed Acyclic Graphs). There must be a root (initial) question that is
+            presented to the user, and every option must have a "next question", there the user will be directed to
+            after selecting that option. <br />
+          
+          </div>
+
+          <div class="ui segment">
+            <b>Survey Elements</b><br/>
+            Surveys contain 3 main elements: the title page, question pages, and the final summary page.<br/><br/>
+
+            <u>Title page: </u><br/>
+            The title page is the first page a user will see when taking the survey. It has a title (same as survey title), description, and set of "links" (resources for the user). Each
+            link/resources has a title, description, and a URL that the resource redirects to when clicked
+            <br/><br/>
+
+            <u>Question pages:</u><br/>
+
+            <br/><br/>
+
+            <u>Final Summary pages:</u><br/>
+
+            <br/>
+          </div>
+
+          <div class="ui segment">
+            <b>Publishing surveys</b><br/>
+            A survey has 2 fields determining whether or not the survey is published. "Main" and "Active" represent whether or not the survey is the 
+            main survey, displayed on the home page 
+          </div>
+
+        </div>
+      </div>
+
+      <div class="four wide column">
+        <div class="ui segments raised">
+
+          <div class="ui segment center aligned violet inverted">
+            <h2>Questions</h2>
+          </div>
+
+          <div class="ui segment">
+
+          </div>
+
+        </div>
+      </div>
+
+      <div class="four wide column">
+        <div class="ui segments raised">
+
+          <div class="ui segment center aligned purple inverted">
+            <h2>Summaries</h2>
+          </div>
+
+          <div class="ui segment">
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

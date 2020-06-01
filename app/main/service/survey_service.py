@@ -18,7 +18,10 @@ def get_main_survey():
     response_object = {
         'status': 'success',
         'message': 'Successfully retrieved main published survey.',
-        'survey': s.get_json()
+        'survey': {
+            'id': s.id,
+            'title': s.title
+        }
     }
     return response_object
 

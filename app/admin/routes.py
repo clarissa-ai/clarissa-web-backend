@@ -453,6 +453,11 @@ def delete_info_group(survey_id, summary_id, infogroup_id):
     db.session.commit()
     return redirect(url_for('admin.view_summary', survey_id=survey.id, summary_id=summary.id))
 
+@bp.route('/surveys/survey_design_guide/<survey_id>/<survey_title>')
+@login_required
+def survey_design_guide(survey_id, survey_title):
+    return render_template('/tools/survey/survey_design_guide.html', title="Survey Design Guide", survey_id=survey_id, survey_title=survey_title)
+
 #---------------------------------------------------------------------------------------------#
 #    DEVELOPMENT ADMINISTRATION ROUTES: get status of git repos and deployments               #
 #---------------------------------------------------------------------------------------------#
