@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+import os
 import datetime
 from sqlalchemy import desc
 
@@ -31,6 +32,8 @@ from .forms import (
     EditSummaryForm,
     CreateInfoGroupForm
 )
+
+from werkzeug.utils import secure_filename
 
 from ..main import db
 from ..main.model.user import User
@@ -113,6 +116,7 @@ def all_responses():
 def create_survey():
     create_survey_form = CreateSurveyForm()
     if create_survey_form.validate_on_submit():
+
         expiration_date_datetime = datetime.datetime.strptime(create_survey_form.expiration_date.data, "%b %d, %Y %I:%M %p")
         s = Survey(
             author_id = current_user.id,
@@ -122,6 +126,20 @@ def create_survey():
             active = create_survey_form.active.data,
             expiration_date = expiration_date_datetime
         )
+        db.session.add(s)
+        db.session.commit()
+        # IMAGE UPLOADING LOGIC
+        image_link = None
+        if create_survey_form.image_upload.data:
+            f = create_survey_form.image_upload.data
+            filename = secure_filename(f.filename)
+            image_link = "survey_{}_title_image_{}".format(s.id, filename)
+            image_folder = os.path.abspath(os.path.dirname(__file__)) + "/../resources/images/"
+            file_path = os.path.join(image_folder, image_link)
+            print(file_path)
+            f.save(file_path)
+            s.image_link = image_link
+
         if create_survey_form.main.data:
             main_s = Survey.query.filter_by(main=True).first()
             if main_s:
@@ -150,6 +168,19 @@ def create_link(survey_id):
         )
         db.session.add(link)
         db.session.commit()
+        # IMAGE UPLOADING LOGIC
+        image_link = None
+        if create_link_form.image_upload.data:
+            f = create_link_form.image_upload.data
+            filename = secure_filename(f.filename)
+            image_link = "survey_{}_link_{}_image_{}".format(survey_id, link.id, filename)
+            image_folder = os.path.abspath(os.path.dirname(__file__)) + "/../resources/images/"
+            file_path = os.path.join(image_folder, image_link)
+            print(file_path)
+            f.save(file_path)
+            link.image_link = image_link
+        db.session.add(link)
+        db.session.commit()
         return redirect(url_for('admin.survey_view', id=s.id))
     return render_template('tools/survey/new_link.html', title="Create a new link", form=create_link_form, survey=s)
 
@@ -167,7 +198,19 @@ def edit_link(survey_id, link_id):
         l.title = edit_link_form.title.data
         l.description = edit_link_form.description.data
         l.link = edit_link_form.link.data
-        # deal with image upload
+
+        # IMAGE UPLOADING LOGIC
+        image_link = None
+        if edit_link_form.image_upload.data:
+            f = edit_link_form.image_upload.data
+            filename = secure_filename(f.filename)
+            image_link = "survey_{}_link_{}_image_{}".format(survey_id, l.id, filename)
+            image_folder = os.path.abspath(os.path.dirname(__file__)) + "/../resources/images/"
+            file_path = os.path.join(image_folder, image_link)
+            print(file_path)
+            f.save(file_path)
+            l.image_link = image_link
+
         db.session.add(l)
         db.session.commit()
         return redirect(url_for('admin.survey_view', id=s.id))
@@ -303,6 +346,19 @@ def edit_survey(survey_id):
         s.description = edit_survey_form.description.data
         s.active = edit_survey_form.active.data
         s.expiration_date = expiration_date_datetime
+
+        image_link = None
+        if edit_survey_form.image_upload.data:
+            f = edit_survey_form.image_upload.data
+            filename = secure_filename(f.filename)
+            image_link = "survey_{}_title_image_{}".format(s.id, filename)
+            image_folder = os.path.abspath(os.path.dirname(__file__)) + "/../resources/images/"
+            file_path = os.path.join(image_folder, image_link)
+            print(file_path)
+            f.save(file_path)
+            s.image_link = image_link
+
+
         db.session.add(s)
         db.session.commit()
         return redirect(url_for('admin.survey_view', id=s.id))

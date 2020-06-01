@@ -20,7 +20,7 @@
           </div>
         {% endif %}
         
-        <form class="ui large form" method="post" novalidate>
+        <form class="ui large form" method="post" novalidate enctype="multipart/form-data">
           {{ form.hidden_tag() }}
 
           <div class="ui segments stackable">
@@ -51,6 +51,13 @@
                   <i class="calendar icon"></i>
                   {{ form.expiration_date(placeholder="Date/Time", autocomplete="off") }}
                 </div>
+              </div>
+            </div>
+
+            <div class="ui segment">
+              <div class="required field">
+                {{ form.image_upload.label }}
+                {{ form.image_upload }}
               </div>
             </div>
 

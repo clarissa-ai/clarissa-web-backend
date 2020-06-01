@@ -25,6 +25,7 @@ class CreateAdminAccountForm(FlaskForm):
 class CreateSurveyForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
+    image_upload = FileField('Title Image', validators=[FileAllowed(['jpg', 'png'], 'Images only!')])
     active = BooleanField('Active')
     main = BooleanField('Main')
     expiration_date = StringField('Expiration date', validators=[DataRequired()])
@@ -33,6 +34,7 @@ class CreateSurveyForm(FlaskForm):
 class EditSurveyForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
+    image_upload = FileField('Title Image', validators=[FileAllowed(['jpg', 'png'], 'Images only!')])
     active = BooleanField('Active')
     expiration_date = StringField('Expiration date', validators=[DataRequired()])
     submit = SubmitField("Confirm Changes")

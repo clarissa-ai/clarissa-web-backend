@@ -33,7 +33,15 @@ app.register_blueprint(app_blueprint)
 app.register_blueprint(admin_blueprint)
 
 # Register CORS manager with app instance
-CORS(app)
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+
+@app.after_request
+
+def after_request(response):
+  response.headers.add('Access-Control-Allow-Origin', '*')
+  response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+  response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+  return response
 
 app.app_context().push
 

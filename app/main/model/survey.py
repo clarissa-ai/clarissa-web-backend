@@ -34,7 +34,7 @@ class Survey(db.Model):
             'title': self.title,
             'description': self.description,
             'root_id': str(r_id),
-            'image_url': self.image_link if self.image_link else '',
+            'image_url': '/api/images/get_image/{}'.format(self.image_link) if self.image_link else '',
             'links': [l.get_json() for l in self.links],
             'questions': [q.get_json() for q in self.questions],
             'summaries': [s.get_json() for s in self.summaries]
@@ -67,7 +67,7 @@ class Link(db.Model):
             'title': self.title,
             'description': self.description,
             'link': self.link,
-            'image_url': self.image_link if self.image_link else ''
+            'image_url': '/api/images/get_image/{}'.format(self.image_link) if self.image_link else ''
         }
 
 class Question(db.Model):
@@ -133,7 +133,7 @@ class Summary(db.Model):
             'id': str(self.id),
             'title': self.title,
             'description': self.description,
-            'image_url': self.image_link if self.image_link else '',
+            'image_url': '/api/images/get_image/{}'.format(self.image_link) if self.image_link else '',
             'info_groups': [g.get_json()  for g in self.info_groups]
         }
 

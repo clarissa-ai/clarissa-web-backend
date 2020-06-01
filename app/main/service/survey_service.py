@@ -23,7 +23,7 @@ def get_main_survey():
             'title': s.title
         }
     }
-    return response_object
+    return response_object, 200
 
 def get_active_surveys():
     surveys = []

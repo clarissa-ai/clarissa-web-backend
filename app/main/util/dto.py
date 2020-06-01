@@ -20,3 +20,6 @@ class SurveyDTO:
     get_survey = api.model('get_survey_endpoint', {
         'id': fields.Integer(required=True, description='The id of the survey')
     })
+
+class ImageDTO:
+    api = Namespace('image', description='image retrieval operations')

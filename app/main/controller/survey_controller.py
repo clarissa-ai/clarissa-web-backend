@@ -1,8 +1,9 @@
 from flask import request
 from flask_restplus import Resource
+from flask_cors import cross_origin
 
 from ..util.dto import SurveyDTO
-from..service.survey_service import (
+from ..service.survey_service import (
     save_model,
     get_active_surveys, 
     get_survey,
