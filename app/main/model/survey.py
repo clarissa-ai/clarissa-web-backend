@@ -129,10 +129,10 @@ class Summary(db.Model):
 
     def get_json(self):
         return {
-            'id': self.id,
+            'id': str(self.id),
             'title': self.title,
             'description': self.description,
-            'info_groups': [g.get_json for g in self.info_groups]
+            'info_groups': [g.get_json()  for g in self.info_groups]
         }
 
 class SummaryInfoGroup(db.Model):
@@ -141,6 +141,7 @@ class SummaryInfoGroup(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(100), nullable=False)
+    link_URL = db.Column(db.String(300), nullable=False)
     details = db.relationship('SummaryDetail', backref='summary')
     summary_id = db.Column(db.Integer, db.ForeignKey('summary.id'))
 
@@ -150,7 +151,7 @@ class SummaryInfoGroup(db.Model):
     def get_json(self):
         return {
             'title': self.title,
-            'details': [d.get_json() for d in self.details]
+            'details': [str(d.text) for d in self.details]
         }
 
 class SummaryDetail(db.Model):
@@ -164,8 +165,6 @@ class SummaryDetail(db.Model):
     def __repr__(self):
         return "<SummaryDetail '{}'>".format(self.text)
 
-    def get_json(self):
-        return self.text
 
 
 class Response(db.Model):

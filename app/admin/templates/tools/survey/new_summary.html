@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="pusher">
+  <div class="main-content">
+
+    <div class="ui grid padded stackable centered">
+      
+      <div class="six wide column ">
+
+        {% if form.errors %}
+        <div class="ui message red">
+          <i class="close icon"></i>
+          <b>Form errors:</b>
+          <ul>
+            {% for err in form.errors %}
+            <li><b>Target: </b>{{err}},<b> Message: </b>{{ form.errors[err][0] }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+
+        <form class="ui large form" method="post" novalidate>
+          {{ form.hidden_tag() }}
+          <div class="ui segments">
+            
+            <div class="ui segment center aligned teal inverted">
+              <h3>Add Summary to {{ survey.title }}</h3>
+            </div>
+            
+            <div class="ui segment">
+              <div class="required field">
+                {{ form.title.label }}
+                {{ form.title }}
+              </div>
+            </div>
+
+            <div class="ui segment">
+              <div class="required field">
+                {{ form.description.label }}
+                {{ form.description }}
+              </div>
+            </div>
+
+            <div class="ui segment center aligned">
+              {{ form.submit(class_="ui fluid large teal submit button") }}
+            </div>
+
+          </div>
+        </form>
+      </div>
+
+      <div class="four wide column">
+        <div class="ui segments raised" style="margin-top:2.5%;">
+
+          <div class="ui segment center aligned teal inverted">
+            <h3>Survey Information</h3>
+          </div>
+          
+          
+          <table class="ui segment celled table" style="min-width:100%">
+            <tbody>
+              <thead>
+                <th>Title:</th>
+                <th>{{ survey.title }}</th>
+              </thead>
+              <tr>
+                <td class="five wide"><b>Description</b></td>
+                <td>{{ survey.description }}</td>
+              </tr>
+              <tr>
+                <td><b>Created on</td>
+                <td>{{ survey.created_on.strftime("%b %d, %Y %I:%M %p") }}</td>
+              </tr>
+              <tr>
+                <td><b>Expiration Date</b></td>
+                <td>{{ survey.expiration_date.strftime("%b %d, %Y %I:%M %p") }}</td>
+              </tr>
+              <tr>
+                <td><b>Questions</b></td>
+                <td>{{ survey.questions|length }}</td>
+              </tr>
+              <tr>
+                <td><b>Total Responses</b></td>
+                <td>{{ survey.responses|length }}</td>
+              </tr>
+              <tr>
+                <td><b>Active</b></td>
+                <td {% if survey.active %} class="positive center aligned">
+                  <i class="check icon"></i>
+                  {% else %}
+                  class="negative center aligned"
+                  >
+                  <i class="x icon"></i>
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <td><b>Main</b></td>
+                <td {% if survey.main %} class="positive center aligned">
+                  <i class="check icon"></i>
+                  {% else %}
+                  class="negative center aligned"
+                  >
+                  <i class="x icon"></i>
+                  {% endif %}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="ui segments">
+          <div class="ui segment teal inverted center aligned">
+            <h3>Survey Summaries</h3>
+          </div>
+          {% for summary in survey.summaries %}
+          <div class="ui segment">
+            <b>Title: </b>{{ summary.title }}<br/>
+            <b>Description: </b>{{ summary.description }}<br/>
+          </div>
+          {% endfor %}
+          {% if not survey.summaries %}
+          <div class="ui segment">
+            No summaries have been added to this survey. You are adding the first summary!
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

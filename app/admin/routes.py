@@ -26,12 +26,15 @@ from .forms import (
     AddQuestionForm,
     EditQuestionForm,
     CreateLinkForm,
-    EditLinkForm
+    EditLinkForm,
+    CreateSummaryForm,
+    EditSummaryForm,
+    CreateInfoGroupForm
 )
 
 from ..main import db
 from ..main.model.user import User
-from ..main.model.survey import Survey, Question, Link
+from ..main.model.survey import Survey, Question, Link, Summary, SummaryInfoGroup, SummaryDetail
 
 @bp.route('/')
 @login_required
@@ -331,22 +334,124 @@ def edit_option(survey_id, question_id):
 @bp.route('/surveys/<survey_id>/create_summary', methods=['GET', 'POST'])
 @login_required
 def create_summary(survey_id):
-    return render_template('/tools/survey/new_summary.html')
+    s = Survey.query.filter_by(id=survey_id).first()
+    if not s:
+        flash("Requested survey doesn't exist.")
+        return redirect(url_for('admin.survey_home'))
+    form = CreateSummaryForm()
+    if form.validate_on_submit():
+        summary = Summary(
+            title=form.title.data,
+            description=form.description.data,
+            survey_id=survey_id
+        )
+        db.session.add(summary)
+        db.session.commit()
+        return redirect(url_for('admin.survey_view', id=survey_id))
+    return render_template('/tools/survey/new_summary.html', title="Creating Summary", form=form, survey=s)
 
 @bp.route('/surveys/<survey_id>/view_summary/<summary_id>', methods=['GET', 'POST'])
 @login_required
 def view_summary(survey_id, summary_id):
-    return render_template('/tools/survey/new_summary.html')
+    survey = Survey.query.filter_by(id=survey_id).first()
+    if not survey:
+        flash("Requested survey doesn't exist.")
+        return redirect(url_for('admin.survey_home'))
+    summary = Summary.query.filter_by(id=summary_id).first()
+    if not summary:
+        flash("Requested summary doesn't exist.")
+        return redirect(url_for('admin.survey_view', id=survey_id))
+    return render_template('/tools/survey/view_summary.html', title="Viewing summary", summary=summary, survey=survey)
 
 @bp.route('/surveys/<survey_id>/edit_summary/<summary_id>', methods=['GET', 'POST'])
 @login_required
 def edit_summary(survey_id, summary_id):
-    return render_template('/tools/survey/new_summary.html')
+    s = Survey.query.filter_by(id=survey_id).first()
+    if not s:
+        flash("Requested survey doesn't exist.")
+        return redirect(url_for('admin.survey_home'))
+    summary = Summary.query.filter_by(id=summary_id).first()
+    if not summary:
+        flash("Requested summary doesn't exist.")
+        return redirect(url_for('admin.survey_view', id=survey_id))
+    form = EditSummaryForm()
+    if form.validate_on_submit():
+        summary.title = form.title.data
+        summary.description = form.description.data
+        db.session.add(summary)
+        db.session.commit()
+        return redirect(url_for('admin.survey_view', id=survey_id))    
+    return render_template('/tools/survey/edit_summary.html', survey=s, summary=summary, form=form)
 
 @bp.route('/surveys/<survey_id>/delete_summary/<summary_id>', methods=['GET', 'POST'])
 @login_required
 def delete_summary(survey_id, summary_id):
-    return render_template('/tools/survey/new_summary.html')
+    survey = Survey.query.filter_by(id=survey_id).first()
+    if not survey:
+        flash("Requested survey doesn't exist.")
+        return redirect(url_for('admin.survey_home'))
+    summary = Summary.query.filter_by(id=summary_id).first()
+    if not summary:
+        flash("Requested summary doesn't exist.")
+        return redirect(url_for('admin.survey_view', id=survey_id))
+    db.session.delete(summary)
+    db.session.commit()
+    return redirect(url_for('admin.survey_view', id=survey_id))
+
+@bp.route('/surveys/<survey_id>/summary/<summary_id>/new_info_group', methods=['GET', 'POST'])
+@login_required
+def create_info_group(survey_id, summary_id):
+    survey = Survey.query.filter_by(id=survey_id).first()
+    if not survey:
+        flash("Requested survey doesn't exist.")
+        return redirect(url_for('admin.survey_home'))
+    summary = Summary.query.filter_by(id=summary_id).first()
+    if not summary:
+        flash("Requested summary doesn't exist.")
+        return redirect(url_for('admin.survey_view', id=survey_id))
+    form = CreateInfoGroupForm()
+    
+    # Complex form logic
+    if form.validate_on_submit():
+        g = SummaryInfoGroup(
+            title=form.title.data,
+            link_URL=form.link.data,
+            summary_id=summary_id
+        )
+        db.session.add(g)
+        db.session.commit()
+        for detail in form.details.data:
+            d = SummaryDetail(text=detail['text'], infogroup_id=g.id)
+            db.session.add(d)
+        db.session.commit()
+        return redirect(url_for('admin.view_summary', survey_id=survey_id, summary_id=summary_id))
+    
+    return render_template('/tools/survey/new_info_group.html', 
+                            title="Create Summary Information Group", 
+                            form=form, 
+                            survey=survey, 
+                            summary=summary
+                          )
+
+
+@bp.route('/surveys/<survey_id>/summary/<summary_id>/info_group/<infogroup_id>/delete')
+@login_required
+def delete_info_group(survey_id, summary_id, infogroup_id):
+    survey = Survey.query.filter_by(id=survey_id).first()
+    if not survey:
+        flash("Requested survey doesn't exist.")
+        return redirect(url_for('admin.survey_home'))
+    summary = Summary.query.filter_by(id=summary_id).first()
+    if not summary:
+        flash("Requested summary doesn't exist.")
+        return redirect(url_for('admin.survey_view', id=survey_id))
+    infogroup = SummaryInfoGroup.query.filter_by(id=infogroup_id).first()
+    if not infogroup:
+        flash("Requested info group doesn't exist.")
+        return redirect(url_for('admin.view_summary', survey_id=survey.id, summary_id=summary.id))
+    db.session.delete(infogroup)
+    db.session.commit()
+    return redirect(url_for('admin.view_summary', survey_id=survey.id, summary_id=summary.id))
 
 #---------------------------------------------------------------------------------------------#
 #    DEVELOPMENT ADMINISTRATION ROUTES: get status of git repos and deployments               #

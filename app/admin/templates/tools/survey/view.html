@@ -38,7 +38,11 @@
                 <td>{{ survey.links|length }}</td>
               </tr>
               <tr>
-                <td><b>Total Responses</b></td>
+                <td><b>Summaries</b></td>
+                <td>{{ survey.summaries|length }}</td>
+              </tr>
+              <tr>
+                <td><b>Responses</b></td>
                 <td>{{ survey.responses|length }}</td>
               </tr>
               <tr>
@@ -288,21 +292,33 @@
             <h2>Final Summaries</h2>
           </div>
 
-          {% if summaries %}
-          {% for summary in summaries %}
+          {% if survey.summaries %}
+          {% for summary in survey.summaries %}
           <div class="ui segment">
             <b>Title: </b> {{ summary.title }}<br/>
             <b>Description: </b> {{ summary.description }}<br/>
-            <div class="ui buttons small">
+            <b>Info groups: </b><br/>
+            <ul>
+              {% for group in summary.info_groups %}
+              <li>{{ group.title }}
+                <ul>
+                  {% for d in group.details %}
+                  <li>{{ d.text }}</li>
+                  {% endfor %}
+                </ul>
+              </li>
+              {% endfor %}
+            </ul>
+              <div class="ui buttons tiny fluid">
               <a class="ui button primary" href="{{ url_for('admin.view_summary', survey_id=survey.id, summary_id=summary.id) }}">
                 <i class="eye icon"></i> 
                 View Summary               
               </a>
-              <a class="ui button teal" href="{{ url_for('admin.edit_summary', survey_id=survey.id, summary_id=summary.id) }}">
+              <a class="ui button yellow" href="{{ url_for('admin.edit_summary', survey_id=survey.id, summary_id=summary.id) }}">
                 <i class="pencil icon"></i>
                 Edit Summary                
               </a>
-              <a class="ui button teal" href="{{ url_for('admin.delete_summary', survey_id=survey.id, summary_id=summary.id) }}">
+              <a class="ui button red" href="{{ url_for('admin.delete_summary', survey_id=survey.id, summary_id=summary.id) }}">
                 <i class="trash alternate icon"></i>            
                 Delete Summary    
               </a>

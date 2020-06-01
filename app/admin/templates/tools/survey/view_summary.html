@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="pusher">
+  <div class="main-content">
+
+    <div class="ui grid padded stackable centered">
+      
+      <div class="six wide column ">
+
+      
+          <div class="ui segments raised">
+            
+            <div class="ui segment center aligned teal inverted">
+              <h3>Title: {{ summary.title }}</h3>
+            </div>
+
+            <div class="ui segment">
+              <h4>Description: </h4>
+                {{ summary.description }}
+            </div>
+
+            <div class="ui segment">
+              
+              <h4>Information groups:</h4>
+              
+              <div class="ui segments">
+                {% if not summary.info_groups %}
+                <div class="ui segment">
+                  No information groups have been added to this survey summary. Use the button below to add an information group.
+                </div>
+                {% else %}
+                {% for group in summary.info_groups %}
+                <div class="ui segment">
+                  <b>Title: </b>{{ group.title }}<br/>
+                  <b>Link: </b><a href="{{group.link_URL}}">{{ group.link_URL }}</a>
+                  <ul>
+                    {% for detail in group.details %}
+                    <li>{{ detail.text }}</li>
+                    {% endfor %}
+                  </ul>
+                  <a class="ui button red tiny" href="{{ url_for('admin.delete_info_group', survey_id=survey.id, summary_id=summary.id, infogroup_id=group.id) }}">
+                    <i class="trash alternate icon"></i>
+                    Delete Group
+                  </a>
+                </div>
+                {% endfor %}
+                {% endif %}
+              </div>
+
+            </div>
+
+            <div class="ui segment">
+
+              <a class="ui button blue labeled icon" href="{{ url_for('admin.survey_view', id=survey.id) }}">
+                <i class="left arrow icon"></i>
+                Back to Survey
+              </a>
+
+              <a class="ui button teal labeled icon" href="{{ url_for('admin.create_info_group', survey_id=survey.id, summary_id=summary.id) }}">
+                <i class="circle plus icon"></i>
+                Add an Info Group
+              </a>
+
+            </div>
+
+          </div>
+      </div>
+
+      <div class="four wide column">
+        <div class="ui segments raised" style="margin-top:2.5%;">
+
+          <div class="ui segment center aligned teal inverted">
+            <h3>Survey Information</h3>
+          </div>
+          
+          
+          <table class="ui segment celled table" style="min-width:100%">
+            <tbody>
+              <thead>
+                <th>Title:</th>
+                <th>{{ survey.title }}</th>
+              </thead>
+              <tr>
+                <td class="five wide"><b>Description</b></td>
+                <td>{{ survey.description }}</td>
+              </tr>
+              <tr>
+                <td><b>Created on</td>
+                <td>{{ survey.created_on.strftime("%b %d, %Y %I:%M %p") }}</td>
+              </tr>
+              <tr>
+                <td><b>Expiration Date</b></td>
+                <td>{{ survey.expiration_date.strftime("%b %d, %Y %I:%M %p") }}</td>
+              </tr>
+              <tr>
+                <td><b>Questions</b></td>
+                <td>{{ survey.questions|length }}</td>
+              </tr>
+              <tr>
+                <td><b>Total Responses</b></td>
+                <td>{{ survey.responses|length }}</td>
+              </tr>
+              <tr>
+                <td><b>Active</b></td>
+                <td {% if survey.active %} class="positive center aligned">
+                  <i class="check icon"></i>
+                  {% else %}
+                  class="negative center aligned"
+                  >
+                  <i class="x icon"></i>
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <td><b>Main</b></td>
+                <td {% if survey.main %} class="positive center aligned">
+                  <i class="check icon"></i>
+                  {% else %}
+                  class="negative center aligned"
+                  >
+                  <i class="x icon"></i>
+                  {% endif %}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="ui segments">
+          <div class="ui segment teal inverted center aligned">
+            <h3>Survey Summaries</h3>
+          </div>
+          {% for summary in survey.summaries %}
+          <div class="ui segment">
+            <b>Title: </b>{{ summary.title }}<br/>
+            <b>Description: </b>{{ summary.description }}<br/>
+          </div>
+          {% endfor %}
+          {% if not survey.summaries %}
+          <div class="ui segment">
+            No summaries have been added to this survey. You are adding the first summary!
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

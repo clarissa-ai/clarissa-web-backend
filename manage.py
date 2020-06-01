@@ -12,9 +12,11 @@ from app.main import create_app, db
 from flask_cors import CORS
 
 # Import necessary models
-from app.main.model import user
-from app.main.model import blacklist
-from app.main.model import survey
+from app.main.model import ( 
+    user,
+    blacklist,
+    survey,
+)
 
 # Import API and Admin blueprints
 from app import blueprint as app_blueprint
@@ -76,6 +78,32 @@ def reset_dev():
             registered_on = datetime.datetime.utcnow()
         )
         db.session.add(test_u)
+        covid_screening = survey.Survey(
+            title = "COVID-19 Screening Tool",
+            description = "Understand the next steps you can take to protect yourself and others against COVID-19. This short screening provides a recommendation to keep you healthy.",
+            created_on = datetime.datetime.utcnow(),
+            expiration_date = datetime.datetime.utcnow() + datetime.timedelta(days=50),
+            active=True,
+            main=True,
+            author_id=1
+        )
+        db.session.add(covid_screening)
+        q1 = survey.Question(
+            title = "Have you experienced any of the following symptoms?",
+            description = "Please select all the symptoms you have been experiencing.",
+            type = "multiple_choice", 
+            survey_id = covid_screening.id
+        )
+        covid_screening.root = q1
+        db.session.add(covid_screening)
+        db.session.add(q1)
+        q2 = survey.Question(
+            title = "Do you live in a state with a high density of COVID-19 cases?",
+            description = "Please answer this Yes or No question.", 
+            type = "multiple_choice", 
+            survey_id = covid_screening.id
+        )
+        db.session.add(q2)
         db.session.commit()
 
 # Always should be at end of file:
