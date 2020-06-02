@@ -20,7 +20,7 @@
         </div>
         {% endif %}
 
-        <form class="ui large form" method="post" novalidate>
+        <form class="ui large form" method="post" novalidate enctype="multipart/form-data">
           {{ form.hidden_tag() }}
           <div class="ui segments">
             
@@ -39,6 +39,13 @@
               <div class="required field">
                 {{ form.description.label }}
                 <textarea id="description" name="description" required="">{{ summary.description }}</textarea>
+              </div>
+            </div>
+
+            <div class="ui segment">
+              <div class="required field">
+                {{ form.image_upload.label }}
+                {{ form.image_upload }}
               </div>
             </div>
 

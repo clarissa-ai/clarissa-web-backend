@@ -13,6 +13,8 @@ from wtforms import (
 )
 from wtforms.validators import DataRequired
 
+question_types = [('multiple_choice', 'Multiple Choice'),]
+
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
@@ -42,16 +44,16 @@ class EditSurveyForm(FlaskForm):
 class AddQuestionForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
-    type = SelectField('Type', validators=[DataRequired()], choices=[('multiple_choice', 'Multiple Choice'),])
+    type = SelectField('Type', validators=[DataRequired()], choices=question_types)
     root = BooleanField('Root')
     submit = SubmitField("Add Question to Survey")
     
 class EditQuestionForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
-    type = SelectField('Type', validators=[DataRequired()], choices=[('multiple_choice', 'Multiple Choice'),])
+    type = SelectField('Type', validators=[DataRequired()], choices=question_types)
     root = BooleanField('Root')
-    submit = SubmitField("Add Question to Survey")
+    submit = SubmitField("Confirm Changes")
 
 class CreateLinkForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
@@ -70,11 +72,13 @@ class EditLinkForm(FlaskForm):
 class CreateSummaryForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
+    image_upload = FileField('Link Image', validators=[FileAllowed(['jpg', 'png'], 'Images only!')])
     submit = SubmitField('Add Summary to Survey')
 
 class EditSummaryForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
+    image_upload = FileField('Link Image', validators=[FileAllowed(['jpg', 'png'], 'Images only!')])
     submit = SubmitField('Confirm Changes')
 
 class DetailForm(Form):

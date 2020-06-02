@@ -234,8 +234,8 @@ def survey_view(id):
     if not s:
         flash("Requested survey doesn't exist.")
         return redirect(url_for('admin.survey_home'))
-    summaries = Question.query.filter_by(type='summary', survey_id=s.id).all()
-    return render_template('tools/survey/view.html', title="Survey: {}".format(s.title), survey=s, summaries=summaries)
+    root = Question.query.filter_by(id=s.root_id).first()
+    return render_template('tools/survey/view.html', title="Survey: {}".format(s.title), survey=s, root=root)
 
 @bp.route('/survey/<id>/deactivate')
 @login_required
@@ -302,17 +302,16 @@ def add_question(survey_id):
         return redirect(url_for('admin.survey_home'))
     if add_question_form.validate_on_submit():
         q = Question(
-            title=add_question_form.title.data,
-            description=add_question_form.description.data,
-            type=add_question_form.type.data
+            title = add_question_form.title.data,
+            description = add_question_form.description.data,
+            type = add_question_form.type.data,
+            survey_id = survey_id
         )
-        if add_question_form.root.data:
-            s.root = None
-            db.session.add(s)
-            s.root = q
-        q.survey_id = s.id
-        db.session.add(s)
         db.session.add(q)
+        db.session.commit()
+        if add_question_form.root.data == True:
+            s.root_id = q.id            
+        db.session.add(s)
         db.session.commit()
         return redirect(url_for('admin.question_view', survey_id=s.id, question_id=q.id))
     return render_template('tools/survey/new_question.html', title="New Question", form=add_question_form, survey=s, root=root)
@@ -367,12 +366,34 @@ def edit_survey(survey_id):
 @bp.route('/surveys/edit/<survey_id>/question/<question_id>', methods=['GET', 'POST'])
 @login_required
 def edit_question(survey_id, question_id):
+    s = Survey.query.filter_by(id=survey_id).first()
+    if not s:
+        flash("Requested survey doesn't exist.")
+        return redirect(url_for('admin.survey_home'))
+    q = Question.query.filter_by(id=question_id).first()
+    if not q:
+        flash("Requested question could not be found in database.")
+        return redirect(url_for('admin.survey_view', id=survey_id))
     edit_question_form = EditQuestionForm()
-    return render_template('tools/survey/edit_question.html', title="Edit Question")
+    if edit_question_form.validate_on_submit():
+        q.title = edit_question_form.title.data
+        q.description = edit_question_form.description.data
+        q.type = edit_question_form.type.data
+        if edit_question_form.root.data == True:
+            s.root_id = q.id
+        db.session.add(s)
+        db.session.add(q)
+        db.session.commit()
+        return redirect(url_for('admin.survey_view', id=s.id))
+    return render_template('tools/survey/edit_question.html', title="Edit Question", form=edit_question_form, question=q, survey=s)
 
 @bp.route('/surveys/edit/<survey_id>/delete_question/<question_id>')
 @login_required
 def delete_question(survey_id, question_id):
+    s = Survey.query.filter_by(id=survey_id).first()
+    if not s:
+        flash("Requested survey doesn't exist.")
+        return redirect(url_for('admin.survey_home'))
     q = Question.query.filter_by(id=question_id).first()
     if not q:
         flash("Requested question could not be found in database.")
@@ -403,6 +424,19 @@ def create_summary(survey_id):
         )
         db.session.add(summary)
         db.session.commit()
+
+        image_link = None
+        if form.image_upload.data:
+            f = form.image_upload.data
+            filename = secure_filename(f.filename)
+            image_link = "survey_{}_summary_{}_image_{}".format(s.id, summary.id, filename)
+            image_folder = os.path.abspath(os.path.dirname(__file__)) + "/../resources/images/"
+            file_path = os.path.join(image_folder, image_link)
+            f.save(file_path)
+            summary.image_link = image_link
+        db.session.add(summary)
+        db.session.commit()
+
         return redirect(url_for('admin.survey_view', id=survey_id))
     return render_template('/tools/survey/new_summary.html', title="Creating Summary", form=form, survey=s)
 
@@ -434,6 +468,17 @@ def edit_summary(survey_id, summary_id):
     if form.validate_on_submit():
         summary.title = form.title.data
         summary.description = form.description.data
+
+        image_link = None
+        if form.image_upload.data:
+            f = form.image_upload.data
+            filename = secure_filename(f.filename)
+            image_link = "survey_{}_summary_{}_image_{}".format(s.id, summary.id, filename)
+            image_folder = os.path.abspath(os.path.dirname(__file__)) + "/../resources/images/"
+            file_path = os.path.join(image_folder, image_link)
+            f.save(file_path)
+            summary.image_link = image_link
+
         db.session.add(summary)
         db.session.commit()
         return redirect(url_for('admin.survey_view', id=survey_id))    

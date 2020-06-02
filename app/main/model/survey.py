@@ -19,7 +19,7 @@ class Survey(db.Model):
     title = db.Column(db.String(120), nullable=False)
     description = db.Column(db.String(1000), nullable=False)
 
-    root = db.relationship('Question', uselist=False, backref='parent')
+    root_id = db.Column(db.Integer)
 
     questions = db.relationship('Question', backref='survey')
     responses = db.relationship('Response', backref='survey')
@@ -28,8 +28,8 @@ class Survey(db.Model):
 
     def get_json(self):
         r_id = -1
-        if self.root:
-            r_id = str(self.root.id) 
+        if self.root_id:
+            r_id = str(self.root_id) 
         return {
             'title': self.title,
             'description': self.description,
