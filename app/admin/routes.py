@@ -136,7 +136,6 @@ def create_survey():
             image_link = "survey_{}_title_image_{}".format(s.id, filename)
             image_folder = os.path.abspath(os.path.dirname(__file__)) + "/../resources/images/"
             file_path = os.path.join(image_folder, image_link)
-            print(file_path)
             f.save(file_path)
             s.image_link = image_link
 
@@ -158,6 +157,9 @@ def create_link(survey_id):
     if not s:
         flash("Requested survey doesn't exist.")
         return redirect(url_for('admin.survey_home'))
+    if len(s.links) == 4:
+        flash('No more than 4 links are allowed per survey.')
+        return redirect(url_for('admin.survey_view', id=s.id))
     create_link_form = CreateLinkForm()
     if create_link_form.validate_on_submit():
         link = Link(
@@ -176,7 +178,6 @@ def create_link(survey_id):
             image_link = "survey_{}_link_{}_image_{}".format(survey_id, link.id, filename)
             image_folder = os.path.abspath(os.path.dirname(__file__)) + "/../resources/images/"
             file_path = os.path.join(image_folder, image_link)
-            print(file_path)
             f.save(file_path)
             link.image_link = image_link
         db.session.add(link)
@@ -207,7 +208,6 @@ def edit_link(survey_id, link_id):
             image_link = "survey_{}_link_{}_image_{}".format(survey_id, l.id, filename)
             image_folder = os.path.abspath(os.path.dirname(__file__)) + "/../resources/images/"
             file_path = os.path.join(image_folder, image_link)
-            print(file_path)
             f.save(file_path)
             l.image_link = image_link
 
@@ -353,10 +353,8 @@ def edit_survey(survey_id):
             image_link = "survey_{}_title_image_{}".format(s.id, filename)
             image_folder = os.path.abspath(os.path.dirname(__file__)) + "/../resources/images/"
             file_path = os.path.join(image_folder, image_link)
-            print(file_path)
             f.save(file_path)
             s.image_link = image_link
-
 
         db.session.add(s)
         db.session.commit()

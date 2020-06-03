@@ -70,6 +70,15 @@ class Link(db.Model):
             'image_url': '/api/images/get_image/{}'.format(self.image_link) if self.image_link else ''
         }
 
+# defining types of questions with tuples: 
+# first element: server-side name
+# second element: client-side name
+question_types = [
+    ('single_select', 'Single Select'), 
+    ('multiple_select','Multiple Select'), 
+    ('short_answer', 'Short Answer')
+    ]
+
 class Question(db.Model):
     """Question model for representing survey questions"""
     __tablename__ = "question"
@@ -82,7 +91,11 @@ class Question(db.Model):
 
     survey_id = db.Column(db.Integer, db.ForeignKey('survey.id'))
 
-
+    def display_type(self):
+        types = {}
+        for (server, client) in question_types:
+            types[server] = client
+        return types[self.type]
 
     def get_json(self):
         return {

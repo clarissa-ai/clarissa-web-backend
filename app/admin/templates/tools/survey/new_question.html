@@ -44,7 +44,7 @@
             <div class="ui segment">
               <div class="required field">
                 {{ form.type.label }}
-                {{ form.type }}
+                {{ form.type(class="ui dropdown") }}
               </div>
             </div>
 
@@ -73,4 +73,12 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block post_script %}
+<script>
+  $('.ui.dropdown')
+    .dropdown()
+  ;
+</script>
 {% endblock %}

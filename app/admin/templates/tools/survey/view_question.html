@@ -8,28 +8,64 @@
 
         <div class="ui segments stacked">
 
-          <div class="ui segment center aligned">
+          <div class="ui segment center aligned blue inverted">
             <h3>
               {{ question.title }} 
             </h3>
           </div>
 
-          <div class="ui segment">
-            <b>Description: </b><br/>
-            {{ question.description }}
+          <div class="ui horizontal segments">
+            <div class="ui segment">
+              <b>Description: </b><br/>
+              {{ question.description }}<br/>
+            </div>
+
+            <div class="ui segment" style="display: flex; align-items: center">
+              <b>Root question:</b>
+            </div>
+            <div class="ui segment center aligned
+            {% if question.id == question.survey.root_id %}green inverted{% else %}red inverted{% endif %}
+            " style="display: flex; align-items: center">
+             {% if question.id == question.survey.root_id %}
+                <i class="check icon"></i>
+              {% else %}
+                <i class="x icon"></i>
+              {% endif %}
+            </div>
           </div>
 
           <div class="ui segment">
+            <b>Type: </b> {{ question.display_type() }}
+          </div>
+
+          <div class="ui segment center aligned">
             {% if question.options %}
             <b>Options:</b><br/>
             {% else %}
             <p>No options have been added to this question.</p>
-            <a class="ui button primary">Add an option</a>
+            <a class="ui button green labeled icon" href="{{ url_for('admin.add_option', survey_id=question.survey_id, question_id=question.id) }}">
+              <i class="plus circle icon"></i>
+              Add an option
+            </a>
             {% endif %}
           </div>
 
-          <div class="ui segment">
-            <a class="ui button secondary" href="{{ url_for('admin.survey_view', id=question.survey_id) }}">
+          <div class="ui segment center aligned">
+            
+            <div class="ui buttons">
+              <a class="ui button yellow labeled icon" href="{{ url_for('admin.edit_question', survey_id=question.survey_id, question_id=question.id ) }}">
+                <i class="pencil icon"></i>
+                Edit Question
+              </a>
+              <a class="ui button red labeled icon" href="{{ url_for('admin.delete_question', survey_id=question.survey_id, question_id=question.id ) }}">
+                <i class="trash alternate icon"></i>
+                Delete Question
+              </a>
+              </div>
+          </div>
+
+          <div class="ui segment center aligned">
+            <a class="ui button primary labeled icon" href="{{ url_for('admin.survey_view', id=question.survey_id) }}">
               <i class="arrow alternate circle left icon"></i>
               Back to survey page
             </a>

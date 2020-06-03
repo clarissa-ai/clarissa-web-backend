@@ -8,16 +8,20 @@
       
       <div class="six wide column ">
 
-      
           <div class="ui segments raised">
             
             <div class="ui segment center aligned teal inverted">
-              <h3>Title: {{ summary.title }}</h3>
+              <h3><u>Summary Title:</u> {{ summary.title }}</h3>
             </div>
 
             <div class="ui segment">
               <h4>Description: </h4>
                 {{ summary.description }}
+            </div>
+
+            <div class="ui segment">
+              <h4>Image:</h4>
+              <img class="ui small image bordered" src="{{ url_for('api.image_image_server', image_name=summary.image_link )}}" />
             </div>
 
             <div class="ui segment">
@@ -34,12 +38,12 @@
                 <div class="ui segment">
                   <b>Title: </b>{{ group.title }}<br/>
                   <b>Link: </b><a href="{{group.link_URL}}">{{ group.link_URL }}</a>
-                  <ul>
+                  <ul style="margin-top: 0.5%; margin-bottom:1%;">
                     {% for detail in group.details %}
                     <li>{{ detail.text }}</li>
                     {% endfor %}
                   </ul>
-                  <a class="ui button red tiny" href="{{ url_for('admin.delete_info_group', survey_id=survey.id, summary_id=summary.id, infogroup_id=group.id) }}">
+                  <a class="ui button red inverted tiny" href="{{ url_for('admin.delete_info_group', survey_id=survey.id, summary_id=summary.id, infogroup_id=group.id) }}">
                     <i class="trash alternate icon"></i>
                     Delete Group
                   </a>

@@ -12,8 +12,8 @@ from wtforms import (
     FormField
 )
 from wtforms.validators import DataRequired
+from ..main.model.survey import question_types
 
-question_types = [('multiple_choice', 'Multiple Choice'),]
 
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired()])
