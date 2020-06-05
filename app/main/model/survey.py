@@ -33,8 +33,9 @@ class Survey(db.Model):
         return {
             'title': self.title,
             'description': self.description,
-            'root_id': str(r_id),
+            'root_id': r_id,
             'image_url': '/api/images/get_image/{}'.format(self.image_link) if self.image_link else '',
+            'question_count': len(self.questions),
             'links': [l.get_json() for l in self.links],
             'questions': [q.get_json() for q in self.questions],
             'summaries': [s.get_json() for s in self.summaries]
@@ -89,6 +90,8 @@ class Question(db.Model):
     type = db.Column(db.String(100), nullable=False)
     options = db.relationship('Option', backref='question')
 
+    default_next_id = db.Column(db.Integer)
+
     survey_id = db.Column(db.Integer, db.ForeignKey('survey.id'))
 
     def display_type(self):
@@ -99,10 +102,11 @@ class Question(db.Model):
 
     def get_json(self):
         return {
-            'id': str(self.id),
+            'id': self.id,
             'type': self.type,
             'title': self.title,
             'description': self.description,
+            'default_next': self.default_next_id if self.default_next_id else -1,
             'options': [o.get_json() for o in self.options]
         }
 
@@ -121,7 +125,7 @@ class Option(db.Model):
     def get_json(self):
         return {
             'title': str(self.title),
-            'next': str(next_id)
+            'next': next_id
         }
 
     def __repr__(self):
@@ -143,7 +147,7 @@ class Summary(db.Model):
 
     def get_json(self):
         return {
-            'id': str(self.id),
+            'id': self.id,
             'title': self.title,
             'description': self.description,
             'image_url': '/api/images/get_image/{}'.format(self.image_link) if self.image_link else '',
@@ -166,7 +170,8 @@ class SummaryInfoGroup(db.Model):
     def get_json(self):
         return {
             'title': self.title,
-            'details': [str(d.text) for d in self.details]
+            'link_URL': self.link_URL,
+            'details': [str(d.text) for d in self.details],
         }
 
 class SummaryDetail(db.Model):

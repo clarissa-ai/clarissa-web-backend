@@ -386,8 +386,9 @@
                   </div>
                 </div>
 
+                {% if summary.image_link %}
                 <img class="ui tiny image bordered right floated" src="{{ url_for('api.image_image_server', image_name=summary.image_link) }}"/>
-
+                {% endif %}
                 <br/><br/>
             <b>Description: </b> {{ summary.description }}<br/>
             <b>Info groups: </b><br/>

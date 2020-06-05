@@ -323,7 +323,9 @@ def question_view(survey_id, question_id):
     if not q:
         flash("Requested question doesn't exist.")
         return redirect(url_for('admin.survey_view', id=survey_id))
-    return render_template('tools/survey/view_question.html', title="Question: {}".format(q.title), question=q)
+    d_n = Question.query.filter_by(id=q.default_next_id).first()
+    d_n_t = d_n.title if d_n else "Final Question (directs to summary)"
+    return render_template('tools/survey/view_question.html', title="Question: {}".format(q.title), question=q, default_next_title=d_n_t)
 
 @bp.route('/surveys/new/<survey_id>/question/<question_id>/option')
 @login_required

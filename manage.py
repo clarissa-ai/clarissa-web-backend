@@ -71,6 +71,7 @@ def reset_dev():
     if ENVIRONMENT_VAR == 'dev':
         db.drop_all()
         db.create_all()
+        # ADMIN USER
         admin_u = user.User(
             first_name = "ROOT",
             email = "testadmin@clarissa.ai",
@@ -79,6 +80,8 @@ def reset_dev():
             registered_on = datetime.datetime.utcnow()
         )
         db.session.add(admin_u)
+        db.session.commit()
+        # TEST USER
         test_u = user.User(
             first_name = "Teo",
             email = "teo@clarissa.ai",
@@ -86,6 +89,8 @@ def reset_dev():
             registered_on = datetime.datetime.utcnow()
         )
         db.session.add(test_u)
+        db.session.commit()
+        # COVID SCREENING
         covid_screening = survey.Survey(
             title = "COVID-19 Screening Tool",
             description = "Understand the next steps you can take to protect yourself and others against COVID-19. This short screening provides a recommendation to keep you healthy.",
@@ -93,25 +98,58 @@ def reset_dev():
             expiration_date = datetime.datetime.utcnow() + datetime.timedelta(days=50),
             active=True,
             main=True,
-            author_id=1
+            author_id=admin_u.id
         )
         db.session.add(covid_screening)
+        db.session.commit()
+        # COVID SCREENING QUESTIONS
         q1 = survey.Question(
             title = "Have you experienced any of the following symptoms?",
             description = "Please select all the symptoms you have been experiencing.",
-            type = "multiple_choice", 
+            type = "multiple_select", 
             survey_id = covid_screening.id
         )
-        covid_screening.root = q1
-        db.session.add(covid_screening)
         db.session.add(q1)
+        db.session.commit()
+        covid_screening.root_id = q1.id
         q2 = survey.Question(
             title = "Do you live in a state with a high density of COVID-19 cases?",
-            description = "Please answer this Yes or No question.", 
-            type = "multiple_choice", 
+            description = "Please answer this yes or no question.", 
+            type = "single_select", 
             survey_id = covid_screening.id
         )
         db.session.add(q2)
+        db.session.add(covid_screening)
+        db.session.commit()
+        # LINKS
+        l1 = survey.Link(
+            title="Disenfect Surfaces",
+            description="Information about hand-washing, physical distancing, isolating from others, and more.",
+            link="https://www.cdc.gov/coronavirus/2019-ncov/index.html",
+            survey_id = covid_screening.id
+        )
+        l2 = survey.Link(
+            title="Wash your Hands",
+            description="Information about hand-washing, physical distancing, isolating from others, and more.",
+            link="https://www.cdc.gov/coronavirus/2019-ncov/index.html",
+            survey_id = covid_screening.id
+        )
+        l3 = survey.Link(
+            title="Wear a Mask",
+            description="Information about hand-washing, physical distancing, isolating from others, and more.",
+            link="https://www.cdc.gov/coronavirus/2019-ncov/index.html",
+            survey_id = covid_screening.id
+        )
+        l4 = survey.Link(
+            title="Adhere to Social Distancing",
+            description="Information about hand-washing, physical distancing, isolating from others, and more.",
+            link="https://www.cdc.gov/coronavirus/2019-ncov/index.html",
+            survey_id = covid_screening.id
+        )
+        db.session.add(l1)
+        db.session.add(l2)
+        db.session.add(l3)
+        db.session.add(l4)
         db.session.commit()
 
 # Always should be at end of file:

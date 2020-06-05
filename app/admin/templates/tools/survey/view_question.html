@@ -4,7 +4,7 @@
 <div class="pusher">
   <div class="main-content">
     <div class="ui grid stackable padded centered aligned">
-      <div class="five wide column">
+      <div class="six wide column">
 
         <div class="ui segments stacked">
 
@@ -34,8 +34,16 @@
             </div>
           </div>
 
-          <div class="ui segment">
-            <b>Type: </b> {{ question.display_type() }}
+          <div class="ui horizontal segments">
+
+            <div class="ui segment">
+              <b>Type: </b> {{ question.display_type() }}
+            </div>
+
+            <div class="ui segment">
+              <b>Default next:</b> {{ default_next_title }}
+            </div>
+
           </div>
 
           <div class="ui segment center aligned">
