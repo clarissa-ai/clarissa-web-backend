@@ -16,6 +16,7 @@ from app.main.model import (
     user,
     blacklist,
     survey,
+    action
 )
 
 # Import API and Admin blueprints
@@ -53,7 +54,7 @@ manager.add_command('db', MigrateCommand)
 @manager.command
 def run():
     '''Runs Flask Application'''
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0", ssl_context=('cert.pem','key.pem'))
 
 @manager.command
 def test():
@@ -72,11 +73,10 @@ def reset_dev():
         db.drop_all()
         db.create_all()
         # ADMIN USER
-        admin_u = user.User(
-            first_name = "ROOT",
+        admin_u = user.AdminUser(
+            username = "ROOT USER",
             email = "testadmin@clarissa.ai",
             password = "test",
-            admin = True,
             registered_on = datetime.datetime.utcnow()
         )
         db.session.add(admin_u)

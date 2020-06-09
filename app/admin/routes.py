@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+
 import os
 import datetime
 from sqlalchemy import desc
@@ -36,7 +37,7 @@ from .forms import (
 from werkzeug.utils import secure_filename
 
 from ..main import db
-from ..main.model.user import User
+from ..main.model.user import AdminUser
 from ..main.model.survey import Survey, Question, Link, Summary, SummaryInfoGroup, SummaryDetail
 
 @bp.route('/')
@@ -53,16 +54,13 @@ def login():
         return redirect(url_for('admin.index'))
     login_form = LoginForm()
     if login_form.validate_on_submit():
-        user = User.query.filter_by(email=login_form.email.data).first()
+        user = AdminUser.query.filter_by(email=login_form.email.data).first()
         if user is None or not user.check_password(login_form.password.data):
             flash('Invalid username or password')
             return redirect(url_for('admin.login'))
-        if user.admin == True:
-            login_user(user, remember=login_form.remember_me.data)
-            flash("Successfully logged into admin dashboard!")
-            return redirect(url_for("admin.index"))
-        else:
-            flash("User does not have administrative privelleges.")
+        login_user(user, remember=login_form.remember_me.data)
+        flash("Successfully logged into admin dashboard!")
+        return redirect(url_for("admin.index"))
     return render_template('user/login.html', title="Admin Login", form=login_form)
 
 

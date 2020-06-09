@@ -17,6 +17,7 @@ werkzeug = "==0.16.1"
 flask-wtf = "*"
 flask-login = "*"
 flask-cors = "*"
+pyopenssl = "*"
 
 [requires]
 python_version = "3.6"
