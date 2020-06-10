@@ -46,16 +46,30 @@
 
           </div>
 
-          <div class="ui segment center aligned">
+          <div class="ui segment {% if not question.options %}center aligned{% endif %}">
             {% if question.options %}
             <b>Options:</b><br/>
+              <div class="ui segments" style="margin-top:1%;">
+              {% for o in question.options %}
+              <div class="ui horizontal segments">
+                <div class="ui segment">
+                {{ o.title }}
+                </div>
+                <div class="ui segment">
+                  <a class="ui button red inverted tiny" href="{{ url_for('admin.delete_option', survey_id=o.question.survey.id, question_id=o.question.id, option_id=o.id) }}">
+                    Delete option
+                  </a>
+                </div>
+              </div>
+              {% endfor %}
+              </div>
             {% else %}
             <p>No options have been added to this question.</p>
+            {% endif %}
             <a class="ui button green labeled icon" href="{{ url_for('admin.add_option', survey_id=question.survey_id, question_id=question.id) }}">
               <i class="plus circle icon"></i>
               Add an option
             </a>
-            {% endif %}
           </div>
 
           <div class="ui segment center aligned">

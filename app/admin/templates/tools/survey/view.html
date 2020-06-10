@@ -249,7 +249,7 @@
               {% if root.options %}
               <div class="ui segments">
                 {% for option in root.options %}
-                <div class="ui segment"></div>
+                <div class="ui segment">{{option.title}}</div>
                 {% endfor %}
               </div>
               {% endif %}
@@ -298,14 +298,8 @@
             <div class="ui segment">
               <b>Title: </b>{{ question.title }}<br />
               <b>Description: </b>{{ question.description }}<br />
-              <b>Type: </b>{{ question.display_type() }} 
-              {% if question.options %}
-              <div class="ui segments">
-                {% for option in question.options %}
-                <div class="ui segment"></div>
-                {% endfor %}
-              </div>
-              {% endif %}  
+              <b>Type: </b>{{ question.display_type() }} <br/>
+              <b>Options: </b>{{ question.options|length }}
             </div>
             <div class="ui segment">           
               <div class="ui basic right pointing dropdown icon button">

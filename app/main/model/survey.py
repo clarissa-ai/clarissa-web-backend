@@ -29,7 +29,7 @@ class Survey(db.Model):
     def get_json(self):
         r_id = -1
         if self.root_id:
-            r_id = str(self.root_id) 
+            r_id = self.root_id
         return {
             'title': self.title,
             'description': self.description,
@@ -71,14 +71,22 @@ class Link(db.Model):
             'image_url': '/api/images/get_image/{}'.format(self.image_link) if self.image_link else ''
         }
 
-# defining types of questions with tuples: 
-# first element: server-side name
-# second element: client-side name
-question_types = [
-    ('single_select', 'Single Select'), 
-    ('multiple_select','Multiple Select'), 
-    ('short_answer', 'Short Answer')
-    ]
+## DICTIONARIES FOR QUESTION TYPE DEFINITIONS ##
+question_type_dict = {
+    'single_select': 'Single Select', 
+    'multiple_select': 'Multiple Select', 
+    'short_answer': 'Short Answer',
+    'dropdown': 'Dropdown',
+    'dropdown_from_dataset': 'Dropdown from Dataset'
+}
+
+question_description_dict = {
+    'single_select': "Single Select", 
+    'multiple_select': 'Multiple Select', 
+    'short_answer': 'Short Answer',
+    'dropdown': 'Dropdown',
+    'dropdown_from_dataset': 'Dropdown from Dataset'
+}
 
 class Question(db.Model):
     """Question model for representing survey questions"""
@@ -94,11 +102,18 @@ class Question(db.Model):
 
     survey_id = db.Column(db.Integer, db.ForeignKey('survey.id'))
 
+    @staticmethod
+    def get_type_list():
+        list = []
+        for key, val in question_type_dict.items():
+            list.append((key,val))
+        return list
+
     def display_type(self):
-        types = {}
-        for (server, client) in question_types:
-            types[server] = client
-        return types[self.type]
+        return question_type_dict[self.type]
+
+    def display_type_description(self):
+        return question_description_dict[self.type]
 
     def get_json(self):
         return {
@@ -118,15 +133,26 @@ class Option(db.Model):
     __tablename__ = "option"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    next_id = db.Column(db.Integer, db.ForeignKey('question.id'))
-    next_type = db.Column(db.String(100))
     title = db.Column(db.String(200), nullable=False)
+    question_id = db.Column(db.Integer, db.ForeignKey('question.id'))
+    
+    # ID of next question -- default to question's default_next_id if no ID
+    next_id = db.Column(db.Integer)
+
+    # Weights to summaries that an option is related to
+    summary_id = db.Column(db.Integer)
+    summary_weight = db.Column(db.Integer)
 
     def get_json(self):
-        return {
-            'title': str(self.title),
-            'next': next_id
+        response_object = {
+            'title': self.title
         }
+        if self.next_id != None:
+            response_object['next_id'] = self.next_id
+        if self.summary_id != None:
+            response_object['summary_id'] = self.summary_id
+            response_object['summary_weight'] = self.summary_weight if self.summary_weight else 0
+        return response_object
 
     def __repr__(self):
         return "<Option '{}'>".format(self.title)

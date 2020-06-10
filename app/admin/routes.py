@@ -31,14 +31,24 @@ from .forms import (
     EditLinkForm,
     CreateSummaryForm,
     EditSummaryForm,
-    CreateInfoGroupForm
+    CreateInfoGroupForm,
+    AddOptionForm,
+    EditOptionForm
 )
 
 from werkzeug.utils import secure_filename
 
 from ..main import db
 from ..main.model.user import AdminUser
-from ..main.model.survey import Survey, Question, Link, Summary, SummaryInfoGroup, SummaryDetail
+from ..main.model.survey import (
+    Survey, 
+    Question, 
+    Link, 
+    Summary, 
+    SummaryInfoGroup, 
+    SummaryDetail, 
+    Option
+)
 
 @bp.route('/')
 @login_required
@@ -325,11 +335,56 @@ def question_view(survey_id, question_id):
     d_n_t = d_n.title if d_n else "Final Question (directs to summary)"
     return render_template('tools/survey/view_question.html', title="Question: {}".format(q.title), question=q, default_next_title=d_n_t)
 
-@bp.route('/surveys/new/<survey_id>/question/<question_id>/option')
+@bp.route('/surveys/new/<survey_id>/question/<question_id>/option', methods=['GET','POST'])
 @login_required
 def add_option(survey_id, question_id):
-    add_option_form = AddOptionForm()
-    return render_template('/tools/survey/new_option.html', title="New Option", form=add_option_form)
+    s = Survey.query.filter_by(id=survey_id).first()
+    if not s:
+        flash("Requested survey doesn't exist.")
+        return redirect(url_for('admin.survey_home'))
+    q = Question.query.filter_by(id=question_id).first()
+    if not q:
+        flash("Requested question doesn't exist.")
+        return redirect(url_for('admin.survey_view', id=survey_id))
+    questions = []
+    for sq in s.questions:
+        if sq.id != q.id: 
+            questions.append(sq)
+    add_option_form = AddOptionForm(questions, s.summaries)
+    if add_option_form.validate_on_submit():
+        o = Option(
+            title = add_option_form.title.data,
+            question_id = q.id
+        )
+        if add_option_form.next_question.data and add_option_form.next_question.data != -1:
+            o.next_id = add_option_form.next_question.data
+        if add_option_form.summary.data:
+            o.summary_id = add_option_form.summary.data
+            if add_option_form.summary_weight.data:
+                o.summary_weight = add_option_form.summary_weight.data
+        db.session.add(o)
+        db.session.commit()
+        return redirect(url_for('admin.question_view', survey_id=s.id, question_id=q.id))
+    return render_template('/tools/survey/new_option.html', title="New Option", form=add_option_form, survey=s, question=q)
+
+@bp.route('/surveys/edit/<survey_id>/question/<question_id>/delete_option/<option_id>')
+@login_required
+def delete_option(survey_id, question_id, option_id):
+    s = Survey.query.filter_by(id=survey_id).first()
+    if not s:
+        flash("Requested survey doesn't exist.")
+        return redirect(url_for('admin.survey_home'))
+    q = Question.query.filter_by(id=question_id).first()
+    if not q:
+        flash("Requested question could not be found in database.")
+        return redirect(url_for('admin.survey_view', id=survey_id))
+    o = Option.query.filter_by(id=option_id).first()
+    if not o:
+        flash("Requested option could not be found in database.")
+        return redirect(url_for('admin.question_view', survey_id=survey_id, question_id=question_id))
+    db.session.delete(o)
+    db.session.commit()
+    return redirect(url_for('admin.question_view', survey_id=survey_id, question_id=question_id))
 
 @bp.route('/surveys/edit/<survey_id>', methods=['GET', 'POST'])
 @login_required

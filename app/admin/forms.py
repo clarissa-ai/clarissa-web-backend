@@ -9,10 +9,11 @@ from wtforms import (
     TextAreaField,
     SelectField,
     FieldList, 
-    FormField
+    FormField,
+    IntegerField
 )
 from wtforms.validators import DataRequired
-from ..main.model.survey import question_types
+from ..main.model.survey import Question, Option
 
 
 class LoginForm(FlaskForm):
@@ -44,14 +45,14 @@ class EditSurveyForm(FlaskForm):
 class AddQuestionForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
-    type = SelectField('Type', validators=[DataRequired()], choices=question_types)
+    type = SelectField('Type', validators=[DataRequired()], choices=Question.get_type_list())
     root = BooleanField('Root')
     submit = SubmitField("Add Question to Survey")
     
 class EditQuestionForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
-    type = SelectField('Type', validators=[DataRequired()], choices=question_types)
+    type = SelectField('Type', validators=[DataRequired()], choices=Question.get_type_list())
     root = BooleanField('Root')
     submit = SubmitField("Confirm Changes")
 
@@ -92,3 +93,21 @@ class CreateInfoGroupForm(FlaskForm):
         min_entries=1,
         max_entries=10
     )
+
+class AddOptionForm(FlaskForm):
+
+    title = StringField('Title', validators=[DataRequired()])
+    next_question = SelectField('Next Question', choices=[], coerce=int)
+    summary = SelectField('Summary', choices=[], coerce=int)
+    summary_weight = IntegerField('Summary weight')
+    submit = SubmitField('Add Option')
+
+    def __init__(self, questions, summaries, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.next_question.choices = [(q.id, q.title) for q in questions]
+        self.summary.choices = [(s.id, s.title) for s in summaries]
+        self.next_question.choices.insert(0, (-1,'Use Question\'s Default Next'))
+
+    
+class EditOptionForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])

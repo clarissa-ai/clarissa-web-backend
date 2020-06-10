@@ -54,7 +54,7 @@ manager.add_command('db', MigrateCommand)
 @manager.command
 def run():
     '''Runs Flask Application'''
-    app.run(host="0.0.0.0", ssl_context=('cert.pem','key.pem'))
+    app.run(host="0.0.0.0") #, ssl_context=('cert.pem','key.pem')
 
 @manager.command
 def test():
