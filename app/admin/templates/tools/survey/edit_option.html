@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="pushe">
+  <div class="main-content">
+    <div class="ui grid stackable padded centered">
+      
+      <div class="six wide column">
+
+        {% if form.errors %}
+        <div class="ui message red">
+          <i class="close icon"></i>
+          <b>Form errors:</b>
+          <ul>
+            {% for err in form.errors %}
+            <li><b>Target: </b>{{err}},<b> Message: </b>{{ form.errors[err][0] }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+
+        <form class="ui large form" method="post" novalidate enctype="multipart/form-data">
+          {{ form.hidden_tag() }}
+          <div class="ui segments">
+            <div class="ui segment blue inverted center aligned">
+              <h2>Editing option from "{{ question.title }}"</h2>
+            </div>
+
+            <div class="ui segment">
+              <div class="required field">
+              {{ form.title.label }}
+              {{ form.title(value=option.title) }}
+              </div>
+            </div>
+
+            <div class="ui segment">
+              <div class="field">
+              {{ form.next_question.label }}
+              {{ form.next_question(class="ui dropdown") }}
+              </div>
+            </div>
+
+            <div class="ui segment">
+              <div class="field">
+              {{ form.summary.label }}
+              {{ form.summary(class="ui dropdown") }}
+            </div>
+            </div>
+
+            <div class="ui segment">
+              <div class="field">
+              {{ form.summary_weight.label }}
+              {{ form.summary_weight(value=option.summary_weight if option.summary_weight else 0) }}
+            </div>
+            </div>
+
+            <div class="ui segment">
+              {{ form.submit(class="ui button teal")}}
+            </div>
+          </div>
+        </form>
+
+      </div>
+
+      <div class="five wide column">
+
+        <div class="ui segments stacked">
+
+          <div class="ui segment violet inverted center aligned">
+            <h3>Survey Info</h3>
+          </div>
+          <table class="ui segment celled table" style="min-width:100%">
+            <tbody>
+              <tr>
+                <td class="three wide" colspan="1"><b>Description</b></td>
+                <td colspan="5">{{ survey.description }}</td>
+              </tr>
+              <tr>
+                <td colspan="1"><b>Created on</td>
+                <td colspan="5">{{ survey.created_on.strftime("%b %d, %Y %I:%M %p") }}</td>
+              </tr>
+              <tr>
+                <td colspan="1"><b>Expiration Date</b></td>
+                <td colspan="5">{{ survey.expiration_date.strftime("%b %d, %Y %I:%M %p") }}</td>
+              </tr>
+              <tr>
+                <td colspan="1"><b>Questions:</b></td>
+                <td colspan="1">{{ survey.questions|length }}</td>
+                <td colspan="1"><b>Links:</b></td>
+                <td colspan="1">{{ survey.links|length }}</td>
+                <td colspan="1" rowspan="2"><b>Title Image:</b></td>
+                <td colspan="3" rowspan="2">
+                  {% if survey.image_link %}
+                  <img  class="ui tiny circular image"src="{{url_for('api.image_image_server', image_name=survey.image_link)}}"/>
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <td colspan="1"><b>Summaries:</b></td>
+                <td colspan="1">{{ survey.summaries|length }}</td>
+                <td colspan="1"><b>Responses:</b></td>
+                <td colspan="1">{{ survey.responses|length }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="ui segments stacked">
+
+          <div class="ui segment center aligned purple inverted">
+            <h3>Current question</h3>
+          </div>
+          
+          <table class="ui segment celled table" style="min-width:100%">
+            <tbody>
+              <tr>
+                <td class="three wide" colspan="1"><b>Title</b></td>
+                <td colspan="5">{{ question.title }}</td>
+              </tr>
+              <tr>
+                <td class="three wide" colspan="1"><b>Description</b></td>
+                <td colspan="5">{{ question.description }}</td>
+              </tr>
+              <tr>
+                <td class="three wide" colspan="1"><b>Type</b></td>
+                <td colspan="5">{{ question.type }}</td>
+              </tr>
+
+            </tbody>
+          </table>
+        
+        </div>
+
+        <div class="ui segments stacked">
+          
+          <div class="ui segment purple inverted center aligned">
+            <h3>Other Survey Questions</h3>
+          </div>
+          {% for q in survey.questions %}
+          {% if question.id != q.id %}
+            <div class="ui horizontal segments">
+              <div class="ui segment">
+                <b>Title: </b>{{ q.title }}<br />
+                <b>Description: </b>{{ q.description }}<br />
+                <b>Type: </b>{{ q.type }}         
+              </div>
+              
+              {% if q.options %}
+              <div class="ui segments">
+                {% for option in q.options %}
+                <div class="ui segment"></div>
+                {% endfor %}
+              </div>
+              {% endif %}
+              
+            </div>
+          {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

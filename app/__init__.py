@@ -7,7 +7,7 @@ from .main.controller.user_controller import api as user_ns
 from .main.controller.auth_controller import api as auth_ns
 from .main.controller.survey_controller import api as survey_ns
 from .main.controller.image_controller import api as image_ns
-
+from .main.controller.routes_controller import api as route_ns
 blueprint = Blueprint('api', __name__)
 
 api = Api(blueprint,
@@ -20,3 +20,4 @@ api.add_namespace(user_ns, path='/api/user')
 api.add_namespace(auth_ns, path='/api')
 api.add_namespace(survey_ns, path='/api/survey')
 api.add_namespace(image_ns, path='/api/images')
+api.add_namespace(route_ns, path='/api')

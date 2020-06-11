@@ -23,3 +23,6 @@ class SurveyDTO:
 
 class ImageDTO:
     api = Namespace('image', description='image retrieval operations')
+
+class RouteDTO:
+    api = Namespace('route', description='custom route retrieval')

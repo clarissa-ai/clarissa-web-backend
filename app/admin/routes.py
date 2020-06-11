@@ -303,17 +303,19 @@ def depub_main_survey(id):
 @login_required
 def add_question(survey_id):
     root = request.args.get('root')
-    add_question_form = AddQuestionForm()
     s = Survey.query.filter_by(id=survey_id).first()
     if not s:
         flash("Requested survey doesn't exist.")
         return redirect(url_for('admin.survey_home'))
+
+    add_question_form = AddQuestionForm(s.questions)
     if add_question_form.validate_on_submit():
         q = Question(
             title = add_question_form.title.data,
             description = add_question_form.description.data,
             type = add_question_form.type.data,
-            survey_id = survey_id
+            survey_id = survey_id,
+            default_next_id = add_question_form.default_next.data
         )
         db.session.add(q)
         db.session.commit()
@@ -327,13 +329,33 @@ def add_question(survey_id):
 @login_required
 @bp.route('/survey/<survey_id>/question/<question_id>')
 def question_view(survey_id, question_id):
+    s = Survey.query.filter_by(id=survey_id).first()
+    if not s:
+        flash("Requested survey doesn't exist.")
+        return redirect(url_for('admin.survey_home'))
     q = Question.query.filter_by(id=question_id).first()
     if not q:
         flash("Requested question doesn't exist.")
         return redirect(url_for('admin.survey_view', id=survey_id))
     d_n = Question.query.filter_by(id=q.default_next_id).first()
-    d_n_t = d_n.title if d_n else "Final Question (directs to summary)"
-    return render_template('tools/survey/view_question.html', title="Question: {}".format(q.title), question=q, default_next_title=d_n_t)
+    if d_n:
+        q.default_next_title = d_n.title
+        q.default_next_link = url_for('admin.question_view', survey_id=s.id, question_id=d_n.id)
+    else:
+        q.default_next_title = "Final Question (directs to summary)"
+        q.default_next_link = ""
+    option_data = {}
+    for option in q.options:
+        next_q = Question.query.filter_by(id=option.next_id).first()
+        option_data[option.id] = {}
+        option_data[option.id]["next_link"] = url_for("admin.question_view", survey_id=option.question.survey.id, question_id=option.next_id) if next_q else url_for("admin.question_view", survey_id=option.question.survey.id, question_id=option.question.default_next_id)
+        option_data[option.id]["next_title"] = next_q.title if next_q else "No next question assigned (uses default next)"
+        option_summary = Summary.query.filter_by(id=option.summary_id).first()
+        option_data[option.id]["summary_link"] = url_for('admin.view_summary', survey_id=option.question.survey.id, summary_id=option_summary.id) if option_summary else ""
+        option_data[option.id]["summary_title"] = option_summary.title if option_summary else "No associated summary exists"
+    return render_template('tools/survey/view_question.html', title="Question: {}".format(q.title), question=q, option_data=option_data)
+
+
 
 @bp.route('/surveys/new/<survey_id>/question/<question_id>/option', methods=['GET','POST'])
 @login_required
@@ -346,6 +368,7 @@ def add_option(survey_id, question_id):
     if not q:
         flash("Requested question doesn't exist.")
         return redirect(url_for('admin.survey_view', id=survey_id))
+    # vvv THIS WHOLE SECTION CAN BE OPTIMIZED WITH ANOTHER SQL QUERY vvv
     questions = []
     for sq in s.questions:
         if sq.id != q.id: 
@@ -427,17 +450,21 @@ def edit_question(survey_id, question_id):
     if not q:
         flash("Requested question could not be found in database.")
         return redirect(url_for('admin.survey_view', id=survey_id))
-    edit_question_form = EditQuestionForm()
+    edit_question_form = EditQuestionForm(Question.query.filter_by(survey_id=survey_id).filter(Question.id != question_id).all())
     if edit_question_form.validate_on_submit():
         q.title = edit_question_form.title.data
         q.description = edit_question_form.description.data
         q.type = edit_question_form.type.data
         if edit_question_form.root.data == True:
             s.root_id = q.id
+        q.default_next_id = edit_question_form.default_next.data
         db.session.add(s)
         db.session.add(q)
         db.session.commit()
-        return redirect(url_for('admin.survey_view', id=s.id))
+        back_link = request.args.get('back_link')
+        return redirect(url_for('admin.survey_view', id=s.id)) if not back_link else redirect(back_link)
+    edit_question_form.type.data = q.type
+    edit_question_form.default_next.data = q.default_next_id
     return render_template('tools/survey/edit_question.html', title="Edit Question", form=edit_question_form, question=q, survey=s)
 
 @bp.route('/surveys/edit/<survey_id>/delete_question/<question_id>')
@@ -455,11 +482,27 @@ def delete_question(survey_id, question_id):
     db.session.commit()
     return redirect(url_for('admin.survey_view', id=survey_id))
 
-@bp.route('/surveys/edit/<survey_id>/question/<question_id>/option', methods=['GET', 'POST'])
+@bp.route('/surveys/edit/<survey_id>/question/<question_id>/option/<option_id>', methods=['GET', 'POST'])
 @login_required
-def edit_option(survey_id, question_id):
-    edit_option_form = EditOptionForm()
-    return render_template('/tools/survey/edit_option.html')
+def edit_option(survey_id, question_id, option_id):
+    s = Survey.query.filter_by(id=survey_id).first()
+    if not s:
+        flash("Requested survey doesn't exist.")
+        return redirect(url_for('admin.survey_home'))
+    q = Question.query.filter_by(id=question_id).first()
+    if not q:
+        flash("Requested question could not be found in database.")
+        return redirect(url_for('admin.survey_view', id=survey_id))
+    o = Option.query.filter_by(id=option_id).first()
+    if not o:
+        flash("Requested option could not be found in database.")
+        return redirect(url_for('admin.question_view', survey_id=survey_id, question_id=question_id))
+    edit_option_form = EditOptionForm(Question.query.filter(Question.survey_id==survey_id).filter(Question.id != question_id).all(), s.summaries)
+    if edit_option_form.validate_on_submit():
+        o.title = edit_option_form.title.data
+    edit_option_form.summary.data = o.summary_id 
+    edit_option_form.next_question.data = o.next_id
+    return render_template('/tools/survey/edit_option.html', form=edit_option_form, question=q, survey=s, option=o)
 
 @bp.route('/surveys/<survey_id>/create_summary', methods=['GET', 'POST'])
 @login_required

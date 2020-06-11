@@ -46,15 +46,27 @@ class AddQuestionForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
     type = SelectField('Type', validators=[DataRequired()], choices=Question.get_type_list())
+    default_next = SelectField('Default Next Question', validators=[DataRequired()], coerce=int, choices=[])
     root = BooleanField('Root')
     submit = SubmitField("Add Question to Survey")
+
+    def __init__(self, questions, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.default_next.choices = [(q.id, q.title) for q in questions]
+        self.default_next.choices.insert(0, (-1,'Last Question (Direct to summary)'))
     
 class EditQuestionForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
     type = SelectField('Type', validators=[DataRequired()], choices=Question.get_type_list())
+    default_next = SelectField('Default Next Question', validators=[DataRequired()], coerce=int, choices=[])
     root = BooleanField('Root')
     submit = SubmitField("Confirm Changes")
+
+    def __init__(self, questions, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.default_next.choices = [(q.id, q.title) for q in questions]
+        self.default_next.choices.insert(0, (-1,'Last Question (Direct to summary)'))
 
 class CreateLinkForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
@@ -105,9 +117,22 @@ class AddOptionForm(FlaskForm):
     def __init__(self, questions, summaries, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.next_question.choices = [(q.id, q.title) for q in questions]
-        self.summary.choices = [(s.id, s.title) for s in summaries]
         self.next_question.choices.insert(0, (-1,'Use Question\'s Default Next'))
+        self.summary.choices = [(s.id, s.title) for s in summaries]
+        self.summary.choices.insert(0, (0, "None"))
 
     
 class EditOptionForm(FlaskForm):
+
     title = StringField('Title', validators=[DataRequired()])
+    next_question = SelectField('Next Question', choices=[], coerce=int)
+    summary = SelectField('Summary', choices=[], coerce=int)
+    summary_weight = IntegerField('Summary weight')
+    submit = SubmitField('Confirm Changes')
+
+    def __init__(self, questions, summaries, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.next_question.choices = [(q.id, q.title) for q in questions]
+        self.next_question.choices.insert(0, (-1,'Use Question\'s Default Next'))
+        self.summary.choices = [(s.id, s.title) for s in summaries]
+        self.summary.choices.insert(0, (0, "None"))
