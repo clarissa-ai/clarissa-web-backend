@@ -220,4 +220,4 @@ class Response(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     survey_id = db.Column(db.Integer, db.ForeignKey('survey.id'))
-    json_response = db.Column(db.Text)
+    json_response = db.Column(db.JSON)

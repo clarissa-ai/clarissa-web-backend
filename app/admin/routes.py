@@ -49,11 +49,23 @@ from ..main.model.survey import (
     SummaryDetail, 
     Option
 )
+from ..main.model.action import Action
+
+## Utility function for recording admin actions
+def record_action(text, type):
+    a = Action(
+        user_id = current_user.id,
+        datetime = datetime.datetime.utcnow(),
+        text = text, 
+        type = type
+    )
+    db.session.add(a)
+    db.session.commit()
 
 @bp.route('/')
 @login_required
 def index():
-    return render_template('dashboard/index.html', title="Admin Home")
+    return render_template('dashboard/index.html', title="Admin Home", actions=Action.query.order_by(Action.id.desc()).limit(10))
 
 
 
@@ -70,12 +82,14 @@ def login():
             return redirect(url_for('admin.login'))
         login_user(user, remember=login_form.remember_me.data)
         flash("Successfully logged into admin dashboard!")
+        record_action("{} logged in.".format(current_user.username), "login")
         return redirect(url_for("admin.index"))
     return render_template('user/login.html', title="Admin Login", form=login_form)
 
 
 @bp.route('/logout')
 def logout():
+    record_action("{} logged out.".format(current_user.username), "login")
     logout_user()
     return redirect(url_for('admin.index'))
 
@@ -109,6 +123,7 @@ def survey_home():
                             active_surveys=active_surveys, 
                             recent_surveys=recent_surveys,
                             main_survey=main_survey)
+
 @bp.route('/surveys/list')
 @login_required
 def all_surveys():
@@ -155,6 +170,7 @@ def create_survey():
                 s.main = True
         db.session.add(s)
         db.session.commit()
+        record_action("\"{}\" survey created (id: {})".format(s.title, s.id), "create")
         return redirect(url_for('admin.survey_view', id=s.id))
     return render_template('tools/survey/new.html', title="New Survey", form=create_survey_form)
 
@@ -190,6 +206,7 @@ def create_link(survey_id):
             link.image_link = image_link
         db.session.add(link)
         db.session.commit()
+        record_action("Added link {} to survey \"{}\".".format(link.title, link.survey.title), "create")
         return redirect(url_for('admin.survey_view', id=s.id))
     return render_template('tools/survey/new_link.html', title="Create a new link", form=create_link_form, survey=s)
 
@@ -500,6 +517,17 @@ def edit_option(survey_id, question_id, option_id):
     edit_option_form = EditOptionForm(Question.query.filter(Question.survey_id==survey_id).filter(Question.id != question_id).all(), s.summaries)
     if edit_option_form.validate_on_submit():
         o.title = edit_option_form.title.data
+        print(edit_option_form.next_question.data)
+        if not edit_option_form.next_question.data  == -2:
+            o.next_id = edit_option_form.next_question.data
+        else:
+            o.next_id = None
+        o.summary_id = edit_option_form.summary.data
+        if edit_option_form.summary_weight.data != 0:
+            o.summary_weight = edit_option_form.summary_weight.data
+        db.session.add(o)
+        db.session.commit()
+        return redirect(url_for('admin.question_view', survey_id=survey_id, question_id=question_id))
     edit_option_form.summary.data = o.summary_id 
     edit_option_form.next_question.data = o.next_id
     return render_template('/tools/survey/edit_option.html', form=edit_option_form, question=q, survey=s, option=o)

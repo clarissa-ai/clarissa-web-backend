@@ -117,7 +117,8 @@ class AddOptionForm(FlaskForm):
     def __init__(self, questions, summaries, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.next_question.choices = [(q.id, q.title) for q in questions]
-        self.next_question.choices.insert(0, (-1,'Use Question\'s Default Next'))
+        self.next_question.choices.insert(0, (-2,'Use Question\'s Default Next'))
+        self.next_question.choices.insert(0, (-1,'Last Question (Direct to summary)'))
         self.summary.choices = [(s.id, s.title) for s in summaries]
         self.summary.choices.insert(0, (0, "None"))
 
@@ -133,6 +134,7 @@ class EditOptionForm(FlaskForm):
     def __init__(self, questions, summaries, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.next_question.choices = [(q.id, q.title) for q in questions]
-        self.next_question.choices.insert(0, (-1,'Use Question\'s Default Next'))
+        self.next_question.choices.insert(0, (-2,'Use Question\'s Default Next'))
+        self.next_question.choices.insert(0, (-1,'Last Question (Direct to summary)'))
         self.summary.choices = [(s.id, s.title) for s in summaries]
         self.summary.choices.insert(0, (0, "None"))
