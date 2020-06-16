@@ -31,14 +31,15 @@ class TestingConfig(Config):
 class ProductionConfig(Config):
     DEBUG = False
     ENV = 'production'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
     # uncomment the line below to use postgres
     # SQLALCHEMY_DATABASE_URI = postgres_local_base
 
 
 config_by_name = dict(
-    dev=DevelopmentConfig,
-    test=TestingConfig,
-    prod=ProductionConfig
+    DEV=DevelopmentConfig,
+    TEST=TestingConfig,
+    PRODUCTION=ProductionConfig
 )
 
 key = Config.SECRET_KEY

@@ -9,3 +9,4 @@ class Action(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('adminuser.id'))
     datetime = db.Column(db.DateTime, nullable=False)
     text = db.Column(db.Text)
+    type = db.Column(db.String(100))

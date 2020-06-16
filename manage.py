@@ -24,7 +24,7 @@ from app import blueprint as app_blueprint
 from app.admin import bp as admin_blueprint
 
 # Get current environemnt from environment variable, defaults to dev
-ENVIRONMENT_VAR = os.getenv('BOILERPLATE_ENV') or 'dev'
+ENVIRONMENT_VAR = os.getenv('DEPLOY_ENV') or 'dev'
 
 # Use application factory to create app based on environment
 app = create_app(ENVIRONMENT_VAR)
@@ -37,7 +37,6 @@ app.register_blueprint(admin_blueprint)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 @app.after_request
-
 def after_request(response):
   response.headers.add('Access-Control-Allow-Origin', '*')
   response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
@@ -54,7 +53,7 @@ manager.add_command('db', MigrateCommand)
 @manager.command
 def run():
     '''Runs Flask Application'''
-    app.run(host="0.0.0.0") #, ssl_context=('cert.pem','key.pem')
+    app.run(host="0.0.0.0")
 
 @manager.command
 def test():
@@ -152,7 +151,14 @@ def reset_dev():
         db.session.add(l4)
         db.session.commit()
 
+@manager.command
+def reset_alembic_ver():
+    print(db.session.connection().execute("DROP TABLE alembic_version;"))
+
 # Always should be at end of file:
 # actually runs the file when "python manage.py" is run from CLI
 if __name__ == '__main__':
-    manager.run()
+    if ENVIRONMENT_VAR == "PRODUCTION":
+        run()
+    else: 
+        manager.run()

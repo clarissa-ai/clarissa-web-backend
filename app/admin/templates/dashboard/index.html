@@ -240,91 +240,41 @@
       <!-- RECENT ACTIONS -->
       <div class="eight wide column">
 
-        <div class="ui segments stacked raised">
+          <table class="ui celled table" style="margin-top: 0%;">
+            <thead>
+              <tr>
+                <th class="center aligned" colspan="4"><h2>Recent Actions</h2></th>
+              </tr>
+              <tr>
+                <th>Time</th>
+                <th>User</th>
+                <th>Description</th>
+                <th>Type</th>
+              </tr>
+            </thead>
 
-          <div class="ui segment negative message">
-            This feature is still under development. The actions are fake and does not reflect the actual recent actions.
-          </div>
+            <tbody>
+              {% for action in actions %}
+              <tr class="
+                {% if action.type == "create" %}
+                  positive
+                {% elif action.type == "edit" %}
+                  yellow inverted
+                {% elif action.type == "destroy" %}
+                  negative
+                {% endif %}
+                "
+                >
+                <td>{{ action.datetime.strftime("%b %d, %Y %I:%M %p") }}</td>
+                <td>{{ action.user.username }}</td>
+                <td>{{ action.text }}</td>
+                <td>{{ action.type }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
 
-          <div class="ui segment">
-            <h2><b>
-                Recent Actions:
-              </b></h2>
-          </div>
+          </table>
 
-          <div class="ui segment black">
-            <p>5/24 10:32 AM: COVID-19 Survey released</p>
-          </div>
-
-          <div class="ui segment">
-            <p>5/22 11:32 AM: Admin user "teo@clarissa.ai" joined.</p>
-          </div>
-
-          <div class="ui segment warning message">
-            <p>5/22 9:11 AM: Processor usage above 90%!</p>
-          </div>
-
-          <div class="ui segment">
-            <p>5/21 12:45 PM: Server restarting for resource recycling</p>
-          </div>
-
-          <div class="ui segment">
-            <p>5/24 10:32 AM: COVID-19 Survey released</p>
-          </div>
-
-          <div class="ui segment">
-            <p>5/22 11:32 AM: Admin user "teo@clarissa.ai" joined.</p>
-          </div>
-
-          <div class="ui segment warning message">
-            <p>5/22 9:11 AM: Processor usage above 75%!</p>
-          </div>
-
-          <div class="ui segment">
-            <p>5/21 12:45 PM: Server restarting for resource recycling</p>
-          </div>
-
-          <div class="ui segment">
-            <p>5/21 12:45 PM: Server restarting for resource recycling</p>
-          </div>
-
-          <div class="ui segment">
-            <p>5/24 10:32 AM: COVID-19 Survey released</p>
-          </div>
-
-          <div class="ui segment">
-            <p>5/22 11:32 AM: Admin user "teo@clarissa.ai" joined.</p>
-          </div>
-
-          <div class="ui segment warning message">
-            <p>5/22 9:11 AM: Processor usage above 75%!</p>
-          </div>
-
-          <div class="ui segment">
-            <p>5/21 12:45 PM: Server restarting for resource recycling</p>
-          </div>
-
-          <div class="ui segment">
-            <p>5/21 12:45 PM: Server restarting for resource recycling</p>
-          </div>
-
-          <div class="ui segment">
-            <p>5/24 10:32 AM: COVID-19 Survey released</p>
-          </div>
-
-          <div class="ui segment">
-            <p>5/22 11:32 AM: Admin user "teo@clarissa.ai" joined.</p>
-          </div>
-
-          <div class="ui segment warning message">
-            <p>5/22 9:11 AM: Processor usage above 75%!</p>
-          </div>
-
-          <div class="ui segment">
-            <p>5/21 12:45 PM: Server restarting for resource recycling</p>
-          </div>
-
-        </div>
 
       </div>
 

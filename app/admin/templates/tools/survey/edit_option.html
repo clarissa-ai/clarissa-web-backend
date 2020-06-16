@@ -148,7 +148,7 @@
               {% if q.options %}
               <div class="ui segments">
                 {% for option in q.options %}
-                <div class="ui segment"></div>
+                <div class="ui segment">{{option.title}}</div>
                 {% endfor %}
               </div>
               {% endif %}
