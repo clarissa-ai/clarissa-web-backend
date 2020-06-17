@@ -2,20 +2,20 @@
 # GITHUB ACTIONS pipeline to deploy to preprod server
 #------------------------------------------------------------------
 
-name: Preprod-Deploy
+name: Prod-Deploy
 
 # Configuring some global environment variables that we will use in our jobs
 env:
   S3_BUCKET_NAME: "clarissa.preprod"
-  EB_APPLICATION_NAME: "Clarissa-Preprod"
-  EB_ENVIRONMENT_NAME: "ClarissaPreprod-env"
+  EB_APPLICATION_NAME: "Clarissa-Production"
+  EB_ENVIRONMENT_NAME: "ClarissaProduction-env"
   DEPLOY_PACKAGE_NAME: "flask-app-${{ github.sha }}.zip"
   AWS_REGION_NAME: "us-east-2"
 
 # This action will only run when the preprod branch is pushed to
 on:
   push:
-    branches: [ preprod ]
+    branches: [ prod ]
 
 # These jobs will run in chronological order
 jobs:
@@ -61,13 +61,12 @@ jobs:
           aws elasticbeanstalk create-application-version \
           --application-name ${{ env.EB_APPLICATION_NAME }} \
           --source-bundle S3Bucket="${{ env.S3_BUCKET_NAME }}",S3Key="${{ env.DEPLOY_PACKAGE_NAME }}" \
-          --version-label "Ver-${{ github.sha }}" \
+          --version-label "PROD-Ver-${{ github.sha }}" \
           --description "CommitSHA-${{ github.sha }}"
        
       - name: Deploy new ElasticBeanstalk Application Version
-        run : aws elasticbeanstalk update-environment --environment-name ${{ env.EB_ENVIRONMENT_NAME }} --version-label "Ver-${{ github.sha }}"
+        run : aws elasticbeanstalk update-environment --environment-name ${{ env.EB_ENVIRONMENT_NAME }} --version-label "PROD-Ver-${{ github.sha }}"
       
            
       - name: Print confirmation message
         run: echo "Successfully completed CD pipeline"
-
