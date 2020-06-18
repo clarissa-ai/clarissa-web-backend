@@ -90,8 +90,9 @@ class AdminUser(UserMixin, db.Model):
     registered_on = db.Column(db.DateTime, nullable=False)
     password_hash = db.Column(db.String(100))
 
+    @staticmethod
     @login_manager.user_loader
-    def load_user(self, id):
+    def load_user(id):
         return AdminUser.query.get(int(id))
 
     @property

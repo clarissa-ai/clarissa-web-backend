@@ -12,7 +12,7 @@ from flask import (
     request
 )
 
-from . import bp
+from . import admin_bp as bp
 
 from flask_login import (
     login_required,
