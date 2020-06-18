@@ -8,7 +8,7 @@ name: Prod-Deploy
 env:
   S3_BUCKET_NAME: "clarissa.preprod"
   EB_APPLICATION_NAME: "Clarissa-Production"
-  EB_ENVIRONMENT_NAME: "ClarissaProduction-env"
+  EB_ENVIRONMENT_NAME: "ClarissaProduction"
   DEPLOY_PACKAGE_NAME: "flask-app-${{ github.sha }}.zip"
   AWS_REGION_NAME: "us-east-2"
 
