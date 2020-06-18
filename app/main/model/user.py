@@ -6,6 +6,7 @@ from app.main.model.blacklist import BlacklistToken
 from ..config import key
 from .. import login_manager
 from flask_login import UserMixin
+from .action import Action
 
 
 class User(db.Model):
@@ -89,8 +90,9 @@ class AdminUser(UserMixin, db.Model):
     registered_on = db.Column(db.DateTime, nullable=False)
     password_hash = db.Column(db.String(100))
 
+    @staticmethod
     @login_manager.user_loader
-    def load_user(self, id):
+    def load_user(id):
         return AdminUser.query.get(int(id))
 
     @property
@@ -108,3 +110,8 @@ class AdminUser(UserMixin, db.Model):
 
     def __repr__(self):
         return "<User '{}'>".format(self.username)
+
+
+def resolve_lint_import_warning():
+    a = Action()
+    print(a)

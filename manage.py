@@ -19,7 +19,7 @@ from app.main.model import (
 
 # Import API and Admin blueprints
 from app import blueprint as app_blueprint
-from app.admin import bp as admin_blueprint
+from app.admin import admin_bp as admin_blueprint
 
 # Get current environemnt from environment variable, defaults to dev
 ENVIRONMENT_VAR = os.getenv('DEPLOY_ENV') or 'DEV'
@@ -28,8 +28,8 @@ ENVIRONMENT_VAR = os.getenv('DEPLOY_ENV') or 'DEV'
 app = create_app(ENVIRONMENT_VAR)
 
 # Register API and Admin blueprints to Flask app instance
-app.register_blueprint(app_blueprint)
 app.register_blueprint(admin_blueprint)
+app.register_blueprint(app_blueprint)
 
 # Register CORS manager with app instance
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
