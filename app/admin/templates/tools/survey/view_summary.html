@@ -5,74 +5,74 @@
   <div class="main-content">
 
     <div class="ui grid padded stackable centered">
-      
+
       <div class="six wide column ">
 
-          <div class="ui segments raised">
-            
-            <div class="ui segment center aligned teal inverted">
-              <h3><u>Summary Title:</u> {{ summary.title }}</h3>
-            </div>
+        <div class="ui segments raised">
 
-            <div class="ui segment">
-              <h4>Description: </h4>
-                {{ summary.description }}
-            </div>
+          <div class="ui segment center aligned teal inverted">
+            <h3><u>Summary Title:</u> {{ summary.title }}</h3>
+          </div>
 
-            <div class="ui segment">
-              <h4>Image:</h4>
-              {% if summary.image_link %}
-              <img class="ui small image bordered" src="{{ url_for('api.image_image_server', image_name=summary.image_link )}}" />
+          <div class="ui segment">
+            <h4>Description: </h4>
+            {{ summary.description }}
+          </div>
+
+          <div class="ui segment">
+            <h4>Image:</h4>
+            {% if summary.image_link %}
+            <img class="ui small image bordered" src="{{ url_for('api.image_image_server', image_name=summary.image_link )}}" />
+            {% else %}
+            No image
+            {% endif %}
+          </div>
+
+          <div class="ui segment">
+
+            <h4>Information groups:</h4>
+
+            <div class="ui segments">
+              {% if not summary.info_groups %}
+              <div class="ui segment">
+                No information groups have been added to this survey summary. Use the button below to add an information group.
+              </div>
               {% else %}
-              No image
+              {% for group in summary.info_groups %}
+              <div class="ui segment">
+                <b>Title: </b>{{ group.title }}<br />
+                <b>Link: </b><a href="{{group.link_URL}}">{{ group.link_URL }}</a>
+                <ul style="margin-top: 0.5%; margin-bottom:1%;">
+                  {% for detail in group.details %}
+                  <li>{{ detail.text }}</li>
+                  {% endfor %}
+                </ul>
+                <a class="ui button red inverted tiny" href="{{ url_for('admin.delete_info_group', survey_id=survey.id, summary_id=summary.id, infogroup_id=group.id) }}">
+                  <i class="trash alternate icon"></i>
+                  Delete Group
+                </a>
+              </div>
+              {% endfor %}
               {% endif %}
             </div>
 
-            <div class="ui segment">
-              
-              <h4>Information groups:</h4>
-              
-              <div class="ui segments">
-                {% if not summary.info_groups %}
-                <div class="ui segment">
-                  No information groups have been added to this survey summary. Use the button below to add an information group.
-                </div>
-                {% else %}
-                {% for group in summary.info_groups %}
-                <div class="ui segment">
-                  <b>Title: </b>{{ group.title }}<br/>
-                  <b>Link: </b><a href="{{group.link_URL}}">{{ group.link_URL }}</a>
-                  <ul style="margin-top: 0.5%; margin-bottom:1%;">
-                    {% for detail in group.details %}
-                    <li>{{ detail.text }}</li>
-                    {% endfor %}
-                  </ul>
-                  <a class="ui button red inverted tiny" href="{{ url_for('admin.delete_info_group', survey_id=survey.id, summary_id=summary.id, infogroup_id=group.id) }}">
-                    <i class="trash alternate icon"></i>
-                    Delete Group
-                  </a>
-                </div>
-                {% endfor %}
-                {% endif %}
-              </div>
+          </div>
 
-            </div>
+          <div class="ui segment">
 
-            <div class="ui segment">
+            <a class="ui button blue labeled icon" href="{{ url_for('admin.survey_view', id=survey.id) }}">
+              <i class="left arrow icon"></i>
+              Back to Survey
+            </a>
 
-              <a class="ui button blue labeled icon" href="{{ url_for('admin.survey_view', id=survey.id) }}">
-                <i class="left arrow icon"></i>
-                Back to Survey
-              </a>
-
-              <a class="ui button teal labeled icon" href="{{ url_for('admin.create_info_group', survey_id=survey.id, summary_id=summary.id) }}">
-                <i class="circle plus icon"></i>
-                Add an Info Group
-              </a>
-
-            </div>
+            <a class="ui button teal labeled icon" href="{{ url_for('admin.create_info_group', survey_id=survey.id, summary_id=summary.id) }}">
+              <i class="circle plus icon"></i>
+              Add an Info Group
+            </a>
 
           </div>
+
+        </div>
       </div>
 
       <div class="four wide column">
@@ -81,8 +81,8 @@
           <div class="ui segment center aligned teal inverted">
             <h3>Survey Information</h3>
           </div>
-          
-          
+
+
           <table class="ui segment celled table" style="min-width:100%">
             <tbody>
               <thead>
@@ -140,8 +140,8 @@
           </div>
           {% for summary in survey.summaries %}
           <div class="ui segment">
-            <b>Title: </b>{{ summary.title }}<br/>
-            <b>Description: </b>{{ summary.description }}<br/>
+            <b>Title: </b>{{ summary.title }}<br />
+            <b>Description: </b>{{ summary.description }}<br />
           </div>
           {% endfor %}
           {% if not survey.summaries %}

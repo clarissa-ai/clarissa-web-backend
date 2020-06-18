@@ -4,40 +4,40 @@
 
 <div class="ui middle aligned center aligned grid" style="padding-top:10vh;">
 
-    <form class="ui large form" method="post" novalidate>
-        {{ form.hidden_tag() }}
-        <div class="ui stacked segments">
-            <div class="ui segment">
-                <div class="ui grey huge header">Clarissa Admin - Log in</div>
-            </div>
-            <div class="ui teal segment">
-                <div class="field">
-                    <div class="ui left icon input">
-                        <i class="user icon"></i>
-                        {{ form.email(size=32, placeholder="E-mail address") }}
-                    </div>
-                </div>
-                <div class="field">
-                    <div class="ui left icon input">
-                        <i class="lock icon"></i>
-                        {{ form.password(size=32, type="password", placeholder=form.password.label.text) }}
-                    </div>
-                </div>
-            </div>
-            <div class="ui segment inline field left" style="padding-bottom:0px;">
-                {{ form.remember_me(class="form-check-input") }}
-                <div class="ui left pointing label">
-                    Remember me
-                </div>
-            </div>
-            <div class="ui segment">
-                {{ form.submit(class_="ui fluid large teal submit button") }}
-            </div>
+  <form class="ui large form" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <div class="ui stacked segments">
+      <div class="ui segment">
+        <div class="ui grey huge header">Clarissa Admin - Log in</div>
+      </div>
+      <div class="ui teal segment">
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="user icon"></i>
+            {{ form.email(size=32, placeholder="E-mail address") }}
+          </div>
         </div>
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="lock icon"></i>
+            {{ form.password(size=32, type="password", placeholder=form.password.label.text) }}
+          </div>
+        </div>
+      </div>
+      <div class="ui segment inline field left" style="padding-bottom:0px;">
+        {{ form.remember_me(class="form-check-input") }}
+        <div class="ui left pointing label">
+          Remember me
+        </div>
+      </div>
+      <div class="ui segment">
+        {{ form.submit(class_="ui fluid large teal submit button") }}
+      </div>
+    </div>
 
-        <div class="ui error message"></div>
+    <div class="ui error message"></div>
 
-    </form>
+  </form>
 
 </div>
 

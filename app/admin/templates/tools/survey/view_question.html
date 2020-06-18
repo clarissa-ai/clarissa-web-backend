@@ -10,14 +10,14 @@
 
           <div class="ui segment center aligned blue inverted">
             <h3>
-              {{ question.title }} 
+              {{ question.title }}
             </h3>
           </div>
 
           <div class="ui horizontal segments">
             <div class="ui segment">
-              <b>Description: </b><br/>
-              {{ question.description }}<br/>
+              <b>Description: </b><br />
+              {{ question.description }}<br />
             </div>
 
             <div class="ui segment" style="display: flex; align-items: center">
@@ -26,10 +26,10 @@
             <div class="ui segment center aligned
             {% if question.id == question.survey.root_id %}green inverted{% else %}red inverted{% endif %}
             " style="display: flex; align-items: center; max-width: 7%;">
-             {% if question.id == question.survey.root_id %}
-                <i class="check icon"></i>
+              {% if question.id == question.survey.root_id %}
+              <i class="check icon"></i>
               {% else %}
-                <i class="x icon"></i>
+              <i class="x icon"></i>
               {% endif %}
             </div>
           </div>
@@ -48,53 +48,53 @@
 
           <div class="ui segment {% if not question.options %}center aligned{% endif %}">
             {% if question.options %}
-            <b>Options:</b><br/>
-              <table class="ui segment celled table" style="min-width:100%">
-                <tbody>
-                  <thead >
-                    <tr>
-                      <th rowspan="2">Title</th>
-                      <th rowspan="2">Next Question</th>
-                      <th colspan="2">Associated Summary</th>
-                      <th rowspan="2">Options</th>
-                    </tr>
-                    <tr>
-                      <th style="border-left: 1px solid rgba(34,36,38,.1) !important;">Title</th>
-                      <th>Weight</th>
-                    </tr>
-                  </thead>
-                  {% for o in question.options %}
+            <b>Options:</b><br />
+            <table class="ui segment celled table" style="min-width:100%">
+              <tbody>
+                <thead>
                   <tr>
-                    <td>{{ o.title }}</td>
-                    <td>
-                      <a href="{{ option_data[o.id]["next_link"] }}">{{option_data[o.id]["next_title"] }}</a>
-                    </td>
-                    <td>
-                      <a href="{{ option_data[o.id]["summary_link"] }}">{{ option_data[o.id]["summary_title"] }}</a>
-                    </td>
-                    <td>
-                      {{ o.summary_weight }}
-                    </td>
-                    <td>
-                      <div class="ui basic right pointing dropdown icon button">
-                        <i class="settings large icon"></i>
-                        <div class="menu">
-                          <a class="item" href="{{ url_for('admin.edit_option', survey_id=o.question.survey.id, question_id=o.question.id, option_id=o.id) }}">
-                            <i class="pencil icon"></i>
-                            Edit option
-                          </a>
-                          <a class="item" href="{{ url_for('admin.delete_option', survey_id=o.question.survey.id, question_id=o.question.id, option_id=o.id) }}">
-                            <i class="trash alternate icon"></i>
-                            Delete option
-                          </a>
-                        </div>
-                      </div>
-                    </td>
+                    <th rowspan="2">Title</th>
+                    <th rowspan="2">Next Question</th>
+                    <th colspan="2">Associated Summary</th>
+                    <th rowspan="2">Options</th>
                   </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-              
+                  <tr>
+                    <th style="border-left: 1px solid rgba(34,36,38,.1) !important;">Title</th>
+                    <th>Weight</th>
+                  </tr>
+                </thead>
+                {% for o in question.options %}
+                <tr>
+                  <td>{{ o.title }}</td>
+                  <td>
+                    <a href="{{ option_data[o.id]["next_link"] }}">{{option_data[o.id]["next_title"] }}</a>
+                  </td>
+                  <td>
+                    <a href="{{ option_data[o.id]["summary_link"] }}">{{ option_data[o.id]["summary_title"] }}</a>
+                  </td>
+                  <td>
+                    {{ o.summary_weight }}
+                  </td>
+                  <td>
+                    <div class="ui basic right pointing dropdown icon button">
+                      <i class="settings large icon"></i>
+                      <div class="menu">
+                        <a class="item" href="{{ url_for('admin.edit_option', survey_id=o.question.survey.id, question_id=o.question.id, option_id=o.id) }}">
+                          <i class="pencil icon"></i>
+                          Edit option
+                        </a>
+                        <a class="item" href="{{ url_for('admin.delete_option', survey_id=o.question.survey.id, question_id=o.question.id, option_id=o.id) }}">
+                          <i class="trash alternate icon"></i>
+                          Delete option
+                        </a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
             {% else %}
             <p>No options have been added to this question.</p>
             {% endif %}
@@ -107,7 +107,7 @@
           </div>
 
           <div class="ui segment center aligned">
-            
+
             <div class="ui buttons">
               <a class="ui button yellow labeled icon" href="{{ url_for('admin.edit_question', survey_id=question.survey_id, question_id=question.id, back_link=url_for('admin.question_view', survey_id=question.survey_id, question_id=question.id)) }}">
                 <i class="pencil icon"></i>
@@ -117,7 +117,7 @@
                 <i class="trash alternate icon"></i>
                 Delete Question
               </a>
-              </div>
+            </div>
           </div>
 
           <div class="ui segment center aligned">

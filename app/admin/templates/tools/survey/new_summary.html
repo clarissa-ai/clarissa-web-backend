@@ -5,7 +5,7 @@
   <div class="main-content">
 
     <div class="ui grid padded stackable centered">
-      
+
       <div class="six wide column ">
 
         {% if form.errors %}
@@ -23,11 +23,11 @@
         <form class="ui large form" method="post" novalidate enctype="multipart/form-data">
           {{ form.hidden_tag() }}
           <div class="ui segments">
-            
+
             <div class="ui segment center aligned teal inverted">
               <h3>Add Summary to {{ survey.title }}</h3>
             </div>
-            
+
             <div class="ui segment">
               <div class="required field">
                 {{ form.title.label }}
@@ -63,8 +63,8 @@
           <div class="ui segment center aligned teal inverted">
             <h3>Survey Information</h3>
           </div>
-          
-          
+
+
           <table class="ui segment celled table" style="min-width:100%">
             <tbody>
               <thead>
@@ -122,8 +122,8 @@
           </div>
           {% for summary in survey.summaries %}
           <div class="ui segment">
-            <b>Title: </b>{{ summary.title }}<br/>
-            <b>Description: </b>{{ summary.description }}<br/>
+            <b>Title: </b>{{ summary.title }}<br />
+            <b>Description: </b>{{ summary.description }}<br />
           </div>
           {% endfor %}
           {% if not survey.summaries %}
