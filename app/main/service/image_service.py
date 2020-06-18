@@ -3,6 +3,7 @@ import os
 
 local_path = os.path.abspath(os.path.dirname(__file__))
 
+
 def get_image(path):
     fullpath = local_path + "/../../resources/images/" + path
     contents = None

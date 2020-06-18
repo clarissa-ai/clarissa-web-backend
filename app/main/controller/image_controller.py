@@ -4,6 +4,7 @@ from flask_restplus import Resource
 
 api = ImageDTO.api
 
+
 @api.route('/get_image/<image_name>')
 class ImageServer(Resource):
     @api.doc('Retrieve an image based on passed in image filename')

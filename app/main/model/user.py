@@ -3,9 +3,10 @@ from .. import db, flask_bcrypt
 import datetime
 import jwt
 from app.main.model.blacklist import BlacklistToken
-from ..config import key 
+from ..config import key
 from .. import login_manager
 from flask_login import UserMixin
+
 
 class User(db.Model):
     """ User Model for storing all user details """
@@ -25,7 +26,9 @@ class User(db.Model):
 
     @password.setter
     def password(self, password):
-        self.password_hash = flask_bcrypt.generate_password_hash(password).decode('utf-8')
+        self.password_hash = flask_bcrypt.generate_password_hash(
+            password
+        ).decode('utf-8')
 
     def check_password(self, password):
         return flask_bcrypt.check_password_hash(self.password_hash, password)
@@ -40,7 +43,10 @@ class User(db.Model):
         """
         try:
             payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1, seconds=5),
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(
+                    days=1,
+                    seconds=5
+                ),
                 'iat': datetime.datetime.utcnow(),
                 'sub': user_id
             }
@@ -52,7 +58,7 @@ class User(db.Model):
         except Exception as e:
             return e
 
-    @staticmethod  
+    @staticmethod
     def decode_auth_token(auth_token):
         """
         Decodes the auth token
@@ -69,7 +75,8 @@ class User(db.Model):
         except jwt.ExpiredSignatureError:
             return 'Signature expired. Please log in again.'
         except jwt.InvalidTokenError:
-            return 'Invalid token. Please log in again.'        
+            return 'Invalid token. Please log in again.'
+
 
 class AdminUser(UserMixin, db.Model):
     """ User Model for storing all user details """
@@ -83,7 +90,7 @@ class AdminUser(UserMixin, db.Model):
     password_hash = db.Column(db.String(100))
 
     @login_manager.user_loader
-    def load_user(id):
+    def load_user(self, id):
         return AdminUser.query.get(int(id))
 
     @property
@@ -92,7 +99,9 @@ class AdminUser(UserMixin, db.Model):
 
     @password.setter
     def password(self, password):
-        self.password_hash = flask_bcrypt.generate_password_hash(password).decode('utf-8')
+        self.password_hash = flask_bcrypt.generate_password_hash(
+            password
+        ).decode('utf-8')
 
     def check_password(self, password):
         return flask_bcrypt.check_password_hash(self.password_hash, password)

@@ -2,12 +2,13 @@ from flask import request
 from flask_restplus import Resource
 
 from ..util.dto import UserDTO
-from ..service.user_service import save_new_user, get_all_users, get_user_by_id
+from ..service.user_service import save_new_user, get_all_users
 from ..service.auth_helper import Auth
-from ..util.decorator import token_required, admin_token_required
+from ..util.decorator import token_required
 
 api = UserDTO.api
 _user = UserDTO.user
+
 
 @api.route('/users')
 class UserList(Resource):
@@ -16,6 +17,7 @@ class UserList(Resource):
     def get(self):
         """List all registered users"""
         return get_all_users()
+
 
 @api.route('/register')
 class Registration(Resource):
@@ -26,6 +28,7 @@ class Registration(Resource):
         """Creates a new User """
         data = request.json
         return save_new_user(data=data)
+
 
 @token_required
 @api.route('/get_user_info')

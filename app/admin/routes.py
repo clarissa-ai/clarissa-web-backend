@@ -12,11 +12,11 @@ from flask import (
     request
 )
 
-from . import bp 
+from . import bp
 
 from flask_login import (
     login_required,
-    current_user, 
+    current_user,
     login_user,
     logout_user
 )
