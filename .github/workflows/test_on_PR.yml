@@ -5,9 +5,21 @@ jobs:
     name: Run tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - name: Setup python ${{ matrix.python-version }}
+      - name: Clone repo
+        uses: actions/checkout@v1
+        
+      - name: Setup python 3.7
         uses: actions/setup-python@v1
         with:
-          python-version: ${{ matrix.python-version }}
-          
+          python-version: "3.7"
+      
+      - name: Install pipenv
+        run: pip install pipenv
+      
+      - name: Cache dependencies
+      - uses: actions/cache@v1
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/Pipfile') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
