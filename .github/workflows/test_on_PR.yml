@@ -32,7 +32,7 @@ jobs:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/Pipfile') }}
           restore-keys: |
-            ${{ runner.os }}-pip-
+            ${{ runner.os }}-pip-${{ hashFiles('**/Pipfile') }}
             
       - name: Run tests
         run: pipenv run python manage.py test
