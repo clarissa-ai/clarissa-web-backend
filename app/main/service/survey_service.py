@@ -1,11 +1,13 @@
 import datetime
 
 from app.main import db
-from app.main.model.survey import Survey, Question, Option
+from app.main.model.survey import Survey
+
 
 def save_model(data):
     db.session.add(data)
     db.session.commit(data)
+
 
 def get_main_survey():
     s = Survey.get_main_survey()
@@ -13,7 +15,8 @@ def get_main_survey():
     if not s:
         response_object = {
             'status': 'failure',
-            'message': 'Failed to retreive main survey, main survey not published.'
+            'message': 'Failed to retreive main survey, \
+                main survey not published.'
         }
     response_object = {
         'status': 'success',
@@ -25,13 +28,13 @@ def get_main_survey():
     }
     return response_object, 200
 
+
 def get_active_surveys():
     surveys = []
     for s in Survey.query.all():
-        if s.expiration_date < datetime.datetime.utcnow() and s.active == True:
-            s.active == False
+        if s.expiration_date < datetime.datetime.utcnow() and s.active:
             save_model(s)
-        elif s.active == True:
+        elif s.active:
             surveys.append({
                 'id': str(s.id),
                 'title': s.title
@@ -42,6 +45,7 @@ def get_active_surveys():
         'surveys': surveys
     }
     return response_object, 200
+
 
 def get_survey(id):
     s = Survey.query.filter_by(id=id).first()
@@ -58,4 +62,3 @@ def get_survey(id):
             'survey': s.get_json()
         }
         return response_object, 200
-

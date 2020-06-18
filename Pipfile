@@ -21,6 +21,7 @@ pyopenssl = "*"
 gunicorn = "*"
 gevent = "*"
 psycopg2-binary = "*"
+flake8 = "*"
 
 [requires]
 python_version = "3.6"

@@ -1,6 +1,7 @@
 from .. import db
 import datetime
 
+
 class BlacklistToken(db.Model):
     """
     Token Model for storing JWT tokens

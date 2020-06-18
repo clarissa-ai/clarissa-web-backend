@@ -20,7 +20,12 @@ class TestDevelopmentConfig(TestCase):
         self.assertTrue(
             app.config['SQLALCHEMY_DATABASE_URI'] == 'sqlite:///{}'.format(
                 os.path.join(basedir, 'clarissa_dev_main.db')
-            )
+            ) or app.config['SQLALCHEMY_DATABASE_URI'] ==
+            'postgresql://{}:{}@{}:5432/postgres'.format(
+                    os.getenv('DEV_DB_USER'),
+                    os.getenv('DEV_DB_PWD'),
+                    os.getenv('DEV_DB_URL')
+                )
         )
 
 
