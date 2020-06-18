@@ -43,7 +43,7 @@ jobs:
       - name: Set up testing environment
         run: |
           pip install pipenv
-          pipenv shell
+          pipenv shell --no-interactive
           pipenv install
 
       - name: Run tests
