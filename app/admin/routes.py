@@ -238,18 +238,24 @@ def edit_link(survey_id, link_id):
 
         db.session.add(l)
         db.session.commit()
+        record_action("Edited link {} in survey \"{}\".".format(l.title, l.survey.title), "edit")
         return redirect(url_for('admin.survey_view', id=s.id))
     return render_template('tools/survey/edit_link.html', title="Editing link", form=edit_link_form, survey=s, link=l)
 
 @login_required
 @bp.route('/survey/<survey_id>/link/<link_id>/delete')
 def delete_link(survey_id, link_id):
+    s = Survey.query.filter_by(id=id).first()
+    if not s:
+        flash("Requested survey doesn't exist.")
+        return redirect(url_for('admin.survey_home'))
     l = Link.query.filter_by(id=link_id).first()
     if not l:
         flash("Requested link doesn't exist.")
         return redirect(url_for('admin.survey_view', id=survey_id))
     db.session.delete(l)
     db.session.commit()
+    record_action("Deleted link {} from survey \"{}\".".format(l.title, l.survey.title), "destroy")
     return redirect(url_for('admin.survey_view', id=survey_id))
 
 @bp.route('/survey/<id>')
@@ -274,6 +280,7 @@ def deactivate_survey(id):
     s.active = False
     db.session.add(s)
     db.session.commit()
+    record_action("Deactivated survey \"{}\".".format(s.title), "destroy")
     return redirect(url_for('admin.survey_view', id=s.id))
 
 @bp.route('/survey/<id>/activate')
@@ -286,6 +293,7 @@ def activate_survey(id):
     s.active = True
     db.session.add(s)
     db.session.commit()
+    record_action("Activated survey \"{}\".".format(s.title), "create")
     return redirect(url_for('admin.survey_view', id=s.id))
 
 @bp.route('/survey/<id>/pub_main_survey')
@@ -302,6 +310,7 @@ def pub_main_survey(id):
     s.active = True
     db.session.add(s)
     db.session.commit()
+    record_action("Published survey \"{}\".".format(s.title), "create")
     return redirect(url_for('admin.survey_view', id=s.id))
 
 @bp.route('/survey/<id>/depub_main_survey')
@@ -314,6 +323,7 @@ def depub_main_survey(id):
     s.main = False
     db.session.add(s)
     db.session.commit()
+    record_action("Unpublished survey \"{}\".".format(s.title), "destroy")
     return redirect(url_for('admin.survey_view', id=s.id))
 
 @bp.route('/surveys/new/<survey_id>/question', methods=['GET', 'POST'])
@@ -340,6 +350,7 @@ def add_question(survey_id):
             s.root_id = q.id            
         db.session.add(s)
         db.session.commit()
+        record_action("Added question \"{}\" to survey \"{}\".".format(q.title, s.title), "create")
         return redirect(url_for('admin.question_view', survey_id=s.id, question_id=q.id))
     return render_template('tools/survey/new_question.html', title="New Question", form=add_question_form, survey=s, root=root)
 
@@ -453,6 +464,7 @@ def edit_survey(survey_id):
 
         db.session.add(s)
         db.session.commit()
+        record_action("Edited survey \"{}\".".format(s.title), "edit")
         return redirect(url_for('admin.survey_view', id=s.id))
     return render_template('tools/survey/edit.html', title="Edit Survey", form=edit_survey_form, survey=s)
 
@@ -478,6 +490,7 @@ def edit_question(survey_id, question_id):
         db.session.add(s)
         db.session.add(q)
         db.session.commit()
+        record_action("Edited question \"{}\" in survey \"{}\".".format(q.title, q.survey.title), "create")
         back_link = request.args.get('back_link')
         return redirect(url_for('admin.survey_view', id=s.id)) if not back_link else redirect(back_link)
     edit_question_form.type.data = q.type
@@ -497,6 +510,7 @@ def delete_question(survey_id, question_id):
         return redirect(url_for('admin.survey_view', id=survey_id))
     db.session.delete(q)
     db.session.commit()
+    record_action("Deleted question \"{}\" from survey \"{}\".".format(q.title, q.survey.title), "create")
     return redirect(url_for('admin.survey_view', id=survey_id))
 
 @bp.route('/surveys/edit/<survey_id>/question/<question_id>/option/<option_id>', methods=['GET', 'POST'])
@@ -560,7 +574,7 @@ def create_summary(survey_id):
             summary.image_link = image_link
         db.session.add(summary)
         db.session.commit()
-
+        record_action("Added summary \"{}\" to survey \"{}\".".format(summary.title, summary.survey.title), "create")
         return redirect(url_for('admin.survey_view', id=survey_id))
     return render_template('/tools/survey/new_summary.html', title="Creating Summary", form=form, survey=s)
 
@@ -605,6 +619,7 @@ def edit_summary(survey_id, summary_id):
 
         db.session.add(summary)
         db.session.commit()
+        record_action("Edited summary \"{}\" in survey \"{}\".".format(summary.title, summary.survey.title), "edit")
         return redirect(url_for('admin.survey_view', id=survey_id))    
     return render_template('/tools/survey/edit_summary.html', survey=s, summary=summary, form=form)
 
@@ -621,6 +636,7 @@ def delete_summary(survey_id, summary_id):
         return redirect(url_for('admin.survey_view', id=survey_id))
     db.session.delete(summary)
     db.session.commit()
+    record_action("Deleted summary \"{}\" from survey \"{}\".".format(summary.title, summary.survey.title), "create")
     return redirect(url_for('admin.survey_view', id=survey_id))
 
 @bp.route('/surveys/<survey_id>/summary/<summary_id>/new_info_group', methods=['GET', 'POST'])
@@ -649,6 +665,7 @@ def create_info_group(survey_id, summary_id):
             d = SummaryDetail(text=detail['text'], infogroup_id=g.id)
             db.session.add(d)
         db.session.commit()
+        record_action("Added info group \"{}\" to summary \"{}\".".format(g.title, g.summary.title), "create")
         return redirect(url_for('admin.view_summary', survey_id=survey_id, summary_id=summary_id))
     
     return render_template('/tools/survey/new_info_group.html', 
@@ -676,6 +693,7 @@ def delete_info_group(survey_id, summary_id, infogroup_id):
         return redirect(url_for('admin.view_summary', survey_id=survey.id, summary_id=summary.id))
     db.session.delete(infogroup)
     db.session.commit()
+    record_action("Deleted info group \"{}\" from summary \"{}\".".format(infogroup.title, infogroup.summary.title), "create")
     return redirect(url_for('admin.view_summary', survey_id=survey.id, summary_id=summary.id))
 
 @bp.route('/surveys/survey_design_guide/<survey_id>/<survey_title>')

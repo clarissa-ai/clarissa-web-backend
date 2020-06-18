@@ -24,7 +24,7 @@ from app import blueprint as app_blueprint
 from app.admin import bp as admin_blueprint
 
 # Get current environemnt from environment variable, defaults to dev
-ENVIRONMENT_VAR = os.getenv('DEPLOY_ENV') or 'dev'
+ENVIRONMENT_VAR = os.getenv('DEPLOY_ENV') or 'DEV'
 
 # Use application factory to create app based on environment
 app = create_app(ENVIRONMENT_VAR)
@@ -68,7 +68,7 @@ def test():
 @manager.command
 def reset_dev():
     """Resets database, adds admin and test users, and any additional data (dev environment only)"""
-    if ENVIRONMENT_VAR == 'dev':
+    if ENVIRONMENT_VAR == 'DEV':
         db.drop_all()
         db.create_all()
         # ADMIN USER
@@ -158,7 +158,4 @@ def reset_alembic_ver():
 # Always should be at end of file:
 # actually runs the file when "python manage.py" is run from CLI
 if __name__ == '__main__':
-    if ENVIRONMENT_VAR == "PRODUCTION":
-        run()
-    else: 
-        manager.run()
+    manager.run()

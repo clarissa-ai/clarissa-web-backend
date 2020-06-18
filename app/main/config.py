@@ -12,11 +12,11 @@ class Config:
 
 
 class DevelopmentConfig(Config):
-    # uncomment the line below to use postgres
-    # SQLALCHEMY_DATABASE_URI = postgres_local_base
     DEBUG = True
     ENV='development'
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'clarissa_dev_main.db')
+    # UNCOMMENT THE LINE BELOW TO SWITCH BACK TO LOCAL SQLITE DB
+    # SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'clarissa_dev_main.db')
+    SQLALCHEMY_DATABASE_URI = 'postgresql://{}:{}@{}:5432/postgres'.format(os.getenv('DEV_DB_USER'), os.getenv('DEV_DB_PWD'), os.getenv('DEV_DB_URL'))
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
@@ -32,10 +32,10 @@ class ProductionConfig(Config):
     DEBUG = False
     ENV = 'production'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    # uncomment the line below to use postgres
-    # SQLALCHEMY_DATABASE_URI = postgres_local_base
+    SQLALCHEMY_DATABASE_URI = 'postgresql://{}:{}@{}:5432/postgres'.format(os.getenv('RDS_DB_USER'), os.getenv('RDS_DB_PWD'), os.getenv('RDS_DB_URL'))
 
 
+# Dictionary for retrieving correct config based on ENV variable
 config_by_name = dict(
     DEV=DevelopmentConfig,
     TEST=TestingConfig,
