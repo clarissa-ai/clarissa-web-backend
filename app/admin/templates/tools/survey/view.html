@@ -59,9 +59,7 @@
                 <td colspan="1">{{ survey.links|length }}</td>
                 <td colspan="1" rowspan="2"><b>Title Image:</b></td>
                 <td colspan="3" rowspan="2">
-                  {% if survey.image_link %}
-                  <img class="ui tiny circular image" src="{{url_for('api.image_image_server', image_name=survey.image_link)}}" />
-                  {% endif %}
+                  <img class="ui tiny circular image" src="{{ survey.get_image_url() }}" />
                 </td>
               </tr>
               <tr>
@@ -128,12 +126,7 @@
 
 
             <div class="ui segment">
-
-              {% if link.image_link %}
-              <img class="ui small circular image" src="{{ url_for('api.image_image_server', image_name=link.image_link) }}" />
-              {% else %}
-              No image
-              {% endif %}
+              <img class="ui small circular image" src="{{ link.get_image_url() }}" />
             </div>
           </div>
           {% endfor %}
@@ -382,9 +375,8 @@
               </div>
             </div>
 
-            {% if summary.image_link %}
-            <img class="ui tiny image bordered right floated" src="{{ url_for('api.image_image_server', image_name=summary.image_link) }}" />
-            {% endif %}
+            <img class="ui tiny image bordered right floated" src="{{ summary.get_image_url() }}" />
+
             <br /><br />
             <b>Description: </b> {{ summary.description }}<br />
             <b>Info groups: </b><br />

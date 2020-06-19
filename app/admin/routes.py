@@ -1,6 +1,5 @@
 from __future__ import absolute_import
 
-import os
 import datetime
 from sqlalchemy import desc
 
@@ -35,8 +34,6 @@ from .forms import (
     AddOptionForm,
     EditOptionForm
 )
-
-from werkzeug.utils import secure_filename
 
 from ..main import db
 from ..main.model.user import AdminUser
@@ -176,17 +173,12 @@ def create_survey():
         db.session.add(s)
         db.session.commit()
         # IMAGE UPLOADING LOGIC
-        image_link = None
         if create_survey_form.image_upload.data:
             f = create_survey_form.image_upload.data
-            filename = secure_filename(f.filename)
-            image_link = "survey_{}_title_image_{}".format(s.id, filename)
-            image_folder = os.path.abspath(
-                os.path.dirname(__file__)
-            ) + "/../resources/images/"
-            file_path = os.path.join(image_folder, image_link)
-            f.save(file_path)
-            s.image_link = image_link
+            s.image_file = f.read()
+            s.image_type = f.filename.split(".")[-1]
+            db.session.add(s)
+            db.session.commit()
 
         if create_survey_form.main.data:
             main_s = Survey.query.filter_by(main=True).first()
@@ -197,6 +189,7 @@ def create_survey():
                 )
             else:
                 s.main = True
+                s.active = True
         db.session.add(s)
         db.session.commit()
         record_action(
@@ -231,22 +224,13 @@ def create_link(survey_id):
         )
         db.session.add(link)
         db.session.commit()
+
         # IMAGE UPLOADING LOGIC
-        image_link = None
         if create_link_form.image_upload.data:
             f = create_link_form.image_upload.data
-            filename = secure_filename(f.filename)
-            image_link = "survey_{}_link_{}_image_{}".format(
-                survey_id,
-                link.id,
-                filename
-            )
-            image_folder = os.path.abspath(
-                os.path.dirname(__file__)
-            ) + "/../resources/images/"
-            file_path = os.path.join(image_folder, image_link)
-            f.save(file_path)
-            link.image_link = image_link
+            link.image_file = f.read()
+            link.image_type = f.filename.split(".")[-1]
+
         db.session.add(link)
         db.session.commit()
         record_action("Added link {} to survey \"{}\".".format(
@@ -278,21 +262,10 @@ def edit_link(survey_id, link_id):
         link.link = edit_link_form.link.data
 
         # IMAGE UPLOADING LOGIC
-        image_link = None
         if edit_link_form.image_upload.data:
             f = edit_link_form.image_upload.data
-            filename = secure_filename(f.filename)
-            image_link = "survey_{}_link_{}_image_{}".format(
-                survey_id,
-                link.id,
-                filename
-            )
-            image_folder = os.path.abspath(
-                os.path.dirname(__file__)
-            ) + "/../resources/images/"
-            file_path = os.path.join(image_folder, image_link)
-            f.save(file_path)
-            link.image_link = image_link
+            link.image_file = f.read()
+            link.image_type = f.filename.split(".")[-1]
 
         db.session.add(link)
         db.session.commit()
@@ -599,17 +572,12 @@ def edit_survey(survey_id):
         s.active = edit_survey_form.active.data
         s.expiration_date = expiration_date_datetime
 
-        image_link = None
+        # IMAGE UPLOADING LOGIC
         if edit_survey_form.image_upload.data:
             f = edit_survey_form.image_upload.data
-            filename = secure_filename(f.filename)
-            image_link = "survey_{}_title_image_{}".format(s.id, filename)
-            image_folder = os.path.abspath(
-                os.path.dirname(__file__)
-            ) + "/../resources/images/"
-            file_path = os.path.join(image_folder, image_link)
-            f.save(file_path)
-            s.image_link = image_link
+            s.image_file = f.read()
+            s.image_type = f.filename.split(".")[-1]
+
         db.session.add(s)
         db.session.commit()
         record_action("Edited survey \"{}\".".format(s.title), "edit")
@@ -723,7 +691,6 @@ def edit_option(survey_id, question_id, option_id):
     )
     if edit_option_form.validate_on_submit():
         o.title = edit_option_form.title.data
-        print(edit_option_form.next_question.data)
         if not edit_option_form.next_question.data == -2:
             o.next_id = edit_option_form.next_question.data
         else:
@@ -766,23 +733,15 @@ def create_summary(survey_id):
         db.session.add(summary)
         db.session.commit()
 
-        image_link = None
+        # IMAGE UPLOADING LOGIC
         if form.image_upload.data:
             f = form.image_upload.data
-            filename = secure_filename(f.filename)
-            image_link = "survey_{}_summary_{}_image_{}".format(
-                s.id,
-                summary.id,
-                filename
-            )
-            image_folder = os.path.abspath(
-                os.path.dirname(__file__)
-            ) + "/../resources/images/"
-            file_path = os.path.join(image_folder, image_link)
-            f.save(file_path)
-            summary.image_link = image_link
+            summary.image_file = f.read()
+            summary.image_type = f.filename.split(".")[-1]
+
         db.session.add(summary)
         db.session.commit()
+
         record_action(
             "Added summary \"{}\" to survey \"{}\".".format(
                 summary.title,
@@ -840,21 +799,11 @@ def edit_summary(survey_id, summary_id):
         summary.title = form.title.data
         summary.description = form.description.data
 
-        image_link = None
+        # IMAGE UPLOADING LOGIC
         if form.image_upload.data:
             f = form.image_upload.data
-            filename = secure_filename(f.filename)
-            image_link = "survey_{}_summary_{}_image_{}".format(
-                s.id,
-                summary.id,
-                filename
-            )
-            image_folder = os.path.abspath(
-                os.path.dirname(__file__)
-            ) + "/../resources/images/"
-            file_path = os.path.join(image_folder, image_link)
-            f.save(file_path)
-            summary.image_link = image_link
+            summary.image_file = f.read()
+            summary.image_type = f.filename.split(".")[-1]
 
         db.session.add(summary)
         db.session.commit()
