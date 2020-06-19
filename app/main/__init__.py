@@ -4,6 +4,7 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 
 from .config import config_by_name
+import psutil
 
 db = SQLAlchemy()
 flask_bcrypt = Bcrypt()
@@ -23,5 +24,5 @@ def create_app(config_name):
     db.init_app(app)
     flask_bcrypt.init_app(app)
     login_manager.init_app(app)
-
+    psutil.cpu_percent(interval=1)
     return app

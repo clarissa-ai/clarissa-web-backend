@@ -82,7 +82,7 @@ local_path = os.path.abspath(os.path.dirname(__file__))
 
 def get_filler(image_id, image_type):
     if image_id == "fill" and image_type == "png":
-        full_path = local_path + "/fillers/fill.png"
+        full_path = local_path + "/resources/image_service/fill.png"
         content = None
         with open(full_path, 'rb') as f:
             content = f.read()

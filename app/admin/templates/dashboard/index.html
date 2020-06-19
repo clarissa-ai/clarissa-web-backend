@@ -107,10 +107,6 @@
       <div class="six wide column">
         <div class="ui segments stacked raised">
 
-          <div class="ui segment negative message">
-            This feature is still under development. The data is fake and does not reflect the actual statistics.
-          </div>
-
           <div class="ui segment">
             <h2>Summary</h2>
           </div>
@@ -118,6 +114,9 @@
           <div class="ui segment black">
             <h3>Usage Statistics</h3>
             <div class="ui segments">
+              <div class="ui segment negative message">
+                This feature is still under development. The data is fake and does not reflect the actual statistics.
+              </div>
               <div class="ui segment card fluid">
                 <div class="content">
                   <div class="ui right floated header green">
@@ -125,7 +124,7 @@
                   </div>
                   <div class="header">
                     <div class="ui green header">
-                      5627
+                      X,XXX
                     </div>
                   </div>
                   <div class="meta">
@@ -141,7 +140,7 @@
                   </div>
                   <div class="header">
                     <div class="ui teal header">
-                      30,567
+                      XX,XXX
                     </div>
                   </div>
                   <div class="meta">
@@ -157,7 +156,7 @@
                   </div>
                   <div class="header">
                     <div class="ui blue header">
-                      2,438
+                      X,XXX
                     </div>
                   </div>
                   <div class="meta">
@@ -169,33 +168,28 @@
           </div>
 
           <div class="ui segment grey">
-            <h3>Server Status</h3>
+            <h3>Server Status
+              <i class="spinner icon" id="status_icon"></i>
+            </h3>
 
             <div class="ui segments">
               <div class="ui segment">
-                <div class="ui tiny olive progress">
-                  <div class="bar" style="width:58%"></div>
+                <div class="ui tiny yellow progress">
+                  <div class="bar" id="process_main" style="width:0%"></div>
                   <div class="label">Processor</div>
                 </div>
               </div>
               <div class="ui segment">
-                <div class="ui tiny teal progress">
-                  <div class="bar" style="width:78%"></div>
+                <div class="ui tiny blue progress">
+                  <div class="bar" id="ram_main" style="width:0%"></div>
                   <div class="label">RAM Usage</div>
                 </div>
               </div>
 
               <div class="ui segment">
                 <div class="ui tiny green progress">
-                  <div class="bar" style="width:72%"></div>
+                  <div class="bar" id="disk_main" style="width:0%"></div>
                   <div class="label">Disk Usage</div>
-                </div>
-              </div>
-
-              <div class="ui segment">
-                <div class="ui tiny orange progress">
-                  <div class="bar" style="width:25%"></div>
-                  <div class="label">Network Usage</div>
                 </div>
               </div>
             </div>
@@ -251,4 +245,20 @@
 
   </div>
 </div>
+
+<script>
+  const url = "/admin/sys_stats";
+
+  setInterval(function() {
+    $('#status_icon').attr('class', 'yellow spinner icon')
+    $.get(url, function(data, status) {
+      $('#process_main').attr('style', 'width:' + (10 + data['cpu_percent'] * 10) + '%');
+      $('#ram_main').attr('style', 'width:' + data['mem_percent'] + '%');
+      $('#disk_main').attr('style', 'width:' + data['disk_percent'] + '%');
+      $('#status_icon').attr('class', 'green check icon')
+    })
+  }, 1200)
+</script>
+
+
 {% endblock %}

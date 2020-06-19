@@ -129,62 +129,25 @@
 
 
       <div class="item">
-        <div class="header">Server Status</div>
+        <div class="header">Server Status
+          <i class="spinner icon" id="status_icon_sidebar"></i>
+        </div>
         <div class="ui tiny olive inverted progress">
-          <div class="bar" style="width: 54%"></div>
+          <div class="bar" style="width: 0%" id="process_sidebar"></div>
           <div class="label">Processor</div>
         </div>
 
         <div class="ui tiny teal inverted progress">
-          <div class="bar" style="width:78%"></div>
+          <div class="bar" style="width:0%" id="mem_sidebar"></div>
           <div class="label">RAM Usage</div>
         </div>
 
         <div class="ui tiny green inverted progress">
-          <div class="bar" style="width:72%"></div>
+          <div class="bar" style="width:0%" id="disk_sidebar"></div>
           <div class="label">Disk Usage</div>
         </div>
-
-        <div class="ui tiny orange inverted progress">
-          <div class="bar" style="width:25%"></div>
-          <div class="label">Network Usage</div>
-        </div>
       </div>
-      <!-- 
 
-            <a href="#" class="item">
-            <div>
-                <i class="icon chart line"></i>
-                Charts
-            </div>
-        </a>
-
-        <a class="item">
-            <div>
-                <i class="icon lightbulb"></i>
-                Apps
-            </div>
-        </a>
-        <div class="item">
-            <div class="header">Other</div>
-            <div class="menu">
-                <a href="#" class="item">
-                    <div>
-                        <i class="icon envelope"></i>
-                        Messages
-                    </div>
-                </a>
-
-                <a href="#" class="item">
-                    <div>
-                        <i class="icon calendar alternate"></i>
-                        Calendar
-                    </div>
-                </a>
-            </div>
-        </div>
-
-         -->
     </div>
 
     {% endif %}
@@ -267,10 +230,23 @@
             .sidebar('toggle');
         });
       });
+
       $('.message .close')
         .on('click', function() {
           $(this).closest('.message').transition('fade');
         });
+
+      const url_side = "/admin/sys_stats";
+
+      setInterval(function() {
+        $('#status_icon_sidebar').attr('class', 'yellow spinner icon')
+        $.get(url_side, function(data, status) {
+          $('#process_sidebar').attr('style', 'width:' + (10 + data['cpu_percent'] * 5) + '%');
+          $('#mem_sidebar').attr('style', 'width:' + data['mem_percent'] + '%');
+          $('#disk_sidebar').attr('style', 'width:' + data['disk_percent'] + '%');
+          $('#status_icon_sidebar').attr('class', 'green check icon')
+        })
+      }, 2000)
     </script>
     {% block post_script %}
     {% endblock %}

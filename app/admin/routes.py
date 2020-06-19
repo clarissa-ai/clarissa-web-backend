@@ -48,6 +48,8 @@ from ..main.model.survey import (
 )
 from ..main.model.action import Action
 
+from .utilities import get_system_stats
+
 
 # Utility function for recording admin actions
 def record_action(text, type):
@@ -59,6 +61,11 @@ def record_action(text, type):
     )
     db.session.add(a)
     db.session.commit()
+
+
+@bp.route('/sys_stats')
+def sys_stats():
+    return get_system_stats()
 
 
 @bp.route('/')
@@ -144,7 +151,8 @@ def survey_home():
 @bp.route('/surveys/list')
 @login_required
 def all_surveys():
-    return render_template('tools/survey/list.html')
+    surveys = Survey.query.all()
+    return render_template('tools/survey/list.html', surveys=surveys)
 
 
 @bp.route('/surveys/list/responses')
@@ -621,7 +629,7 @@ def edit_question(survey_id, question_id):
         db.session.commit()
         record_action("Edited question \"{}\" in survey \"{}\".".format(
             q.title, q.survey.title),
-            "create"
+            "edit"
         )
         back_link = request.args.get('back_link')
         return redirect(
@@ -957,3 +965,13 @@ def survey_design_guide(survey_id, survey_title):
 @login_required
 def development_home():
     return render_template('tools/dev/home.html', title="Dev Dashboard")
+
+
+# ---------------------------------------------------------------- #
+#                    USER ADMINISTRATION ROUTES                    #
+#           Configure administrative user privelleges              #
+# ---------------------------------------------------------------- #
+
+@login_required
+def admin():
+    return ''
