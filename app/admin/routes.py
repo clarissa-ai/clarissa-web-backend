@@ -878,7 +878,7 @@ def delete_summary(survey_id, summary_id):
             summary.title,
             summary.survey.title
         ),
-        "create"
+        "destroy"
     )
     return redirect(url_for('admin.survey_view', id=survey_id))
 
@@ -981,11 +981,25 @@ def survey_design_guide(survey_id, survey_title):
         survey_title=survey_title
     )
 
+
+# ---------------------------------------------------------------- #
+#                   CUSTOM ROUTE SETTING ROUTES                    #
+#           Configure custom routes for frontend pull              #
+# ---------------------------------------------------------------- #
+
+@bp.route('/custom_routes')
+@login_required
+def routes_home():
+    return render_template(
+        '/tools/route/home.html',
+        title='Custom Routing'
+    )
+
+
 # ---------------------------------------------------------------- #
 #               DEVELOPMENT ADMINISTRATION ROUTES                  #
 #            get status of git repos and deployments               #
 # ---------------------------------------------------------------- #
-
 
 @bp.route('/development')
 @login_required
