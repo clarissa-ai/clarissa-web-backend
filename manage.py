@@ -1,6 +1,5 @@
 # Import required libraries
 import os
-import datetime
 import unittest
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
@@ -11,15 +10,11 @@ from app.main import create_app, db
 # Import library to manage CORS
 from flask_cors import CORS
 
-# Import necessary models
-from app.main.model import ( 
-    user,
-    survey
-)
-
 # Import API and Admin blueprints
 from app import blueprint as app_blueprint
 from app.admin import admin_bp as admin_blueprint
+
+from app.main.app_init_utilities import root_user_setup
 
 # Get current environemnt from environment variable, defaults to dev
 ENVIRONMENT_VAR = os.getenv('DEPLOY_ENV') or 'DEV'
@@ -52,6 +47,9 @@ manager = Manager(app)
 migrate = Migrate(app, db)
 
 manager.add_command('db', MigrateCommand)
+
+with app.app_context():
+    root_user_setup(db, ENVIRONMENT_VAR)
 
 
 @manager.command
