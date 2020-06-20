@@ -152,13 +152,20 @@ def survey_home():
 @login_required
 def all_surveys():
     surveys = Survey.query.all()
-    return render_template('tools/survey/list.html', surveys=surveys)
+    return render_template(
+        'tools/survey/list.html',
+        title="Survey List",
+        surveys=surveys
+    )
 
 
 @bp.route('/surveys/list/responses')
 @login_required
 def all_responses():
-    return render_template('tools/survey/list_responses.html')
+    return render_template(
+        'tools/survey/list_responses.html',
+        title="Survey Responses"
+    )
 
 
 @bp.route('/surveys/new', methods=['GET', 'POST'])
@@ -972,6 +979,10 @@ def development_home():
 #           Configure administrative user privelleges              #
 # ---------------------------------------------------------------- #
 
+@bp.route('/user_list')
 @login_required
-def admin():
-    return ''
+def user_list():
+    return render_template(
+        'dashboard/administration/user_list.html',
+        title="Admin User List"
+    )

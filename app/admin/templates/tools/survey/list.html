@@ -21,16 +21,69 @@
       </div>
 
 
-      <div class="eight wide column">
+      <div class="eleven wide column">
 
+        <h1 style="margin-left:40%;">List of Surveys</h1>
+
+        <table class="ui celled table fluid">
+
+          <thead>
+            <th>Title</th>
+            <th>Created on</th>
+            <th>Expiration date</th>
+            <th>Active</th>
+            <th>Main</th>
+            <th>Questions</th>
+            <th>Links</th>
+            <th>Summaries</th>
+            <th>Responses</th>
+          </thead>
+
+          <tbody>
+            {% for survey in surveys %}
+            <tr>
+              <td>
+                <a href="{{ url_for('admin.survey_view', id=survey.id) }}">{{ survey.title }}</a>
+              </td>
+              <td>{{ survey.created_on.strftime("%b %d, %Y") }}</td>
+              <td>{{ survey.expiration_date.strftime("%b %d, %Y") }}</td>
+              <td {% if survey.active %} class="positive">
+                <i class="check icon"></i>
+                {% else %}
+                class="negative"><i class="x icon"></i>
+                {% endif %}
+              </td>
+              <td {% if survey.main %} class="positive">
+                <i class="check icon"></i>
+                {% else %}
+                class="negative"><i class="x icon"></i>
+                {% endif %}
+              </td>
+              <td>{{ survey.questions|count }}</td>
+              <td>{{ survey.links|count }}</td>
+              <td>{{ survey.summaries|count }}</td>
+              <td>{{ survey.responses|count }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+
+        </table>
       </div>
 
-      <div class="two wide column">
+      <div class="three wide column">
+
+        <div class="ui segments">
+
+          <div class="ui segment center aligned">
+            <h2>
+              Table Filters
+            </h2>
+          </div>
+
+        </div>
 
       </div>
-
     </div>
   </div>
-</div>
 
-{% endblock %}
+  {% endblock %}

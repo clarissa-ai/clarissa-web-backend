@@ -62,3 +62,7 @@ def get_survey(id):
             'survey': s.get_json()
         }
         return response_object, 200
+
+
+def post_survey_response(response):
+    return ""
