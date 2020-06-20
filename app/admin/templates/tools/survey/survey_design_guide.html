@@ -6,20 +6,34 @@
     <div class="ui grid stackable padded">
 
       <div class="two wide column right aligned">
+
         {% if survey_id != "0" %}
         <a class="ui button fluid labeled icon small" href="{{ url_for('admin.survey_view', id=survey_id) }}">
           <i class="left arrow icon"></i>
           {{ survey_title }}
         </a><br />
         {% endif %}
+
         <a class="ui button fluid labeled icon" href="{{ url_for('admin.index') }}">
           <i class="home icon"></i>
           Admin Home
         </a><br />
+
         <a class="ui button fluid labeled icon" href="{{ url_for('admin.survey_home') }}">
           <i class="clipboard icon"></i>
           Surveys Home
         </a><br />
+
+        <a class="ui button fluid labeled icon" href="{{ url_for('admin.all_responses') }}">
+          <i class="list alternate icon"></i>
+          Responses List
+        </a><br />
+
+        <a class="ui button fluid labeled icon" href="{{ url_for('admin.all_surveys') }}">
+          <i class="list alternate icon"></i>
+          Surveys List
+        </a>
+
       </div>
 
       <div class="five wide column">
@@ -76,7 +90,21 @@
           </div>
 
           <div class="ui segment">
+            <b>Question Core Elements</b><br />
+            <i>Title: </i> The title of each question <br />
+            <i>Description: </i> <br />
+          </div>
 
+          <div class="ui segment">
+            <b>Default next:</b><br />
+          </div>
+
+          <div class="ui segment">
+            <b>Question type:</b><br />
+          </div>
+          
+          <div class="ui segment">
+            <b>Options</b>
           </div>
 
         </div>
