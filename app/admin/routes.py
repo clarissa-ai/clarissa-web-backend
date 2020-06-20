@@ -44,7 +44,8 @@ from ..main.model.survey import (
     Summary,
     SummaryInfoGroup,
     SummaryDetail,
-    Option
+    Option,
+    Response
 )
 from ..main.model.action import Action
 
@@ -151,20 +152,38 @@ def survey_home():
 @bp.route('/surveys/list')
 @login_required
 def all_surveys():
-    surveys = Survey.query.all()
+    page = request.args.get('page', 1, type=int)
+    survey_query = Survey.query
+    surveys = survey_query.paginate(page, 20)
+    next_url = url_for('all_surveys', page=surveys.next_num) \
+        if surveys.has_next else None
+    prev_url = url_for('all_surveys', page=surveys.prev_num) \
+        if surveys.has_prev else None
     return render_template(
         'tools/survey/list.html',
         title="Survey List",
-        surveys=surveys
+        surveys=surveys.items,
+        next_url=next_url,
+        prev_url=prev_url
     )
 
 
 @bp.route('/surveys/list/responses')
 @login_required
 def all_responses():
+    page = request.args.get('page', 1, type=int)
+    response_query = Response.query
+    responses = response_query.paginate(page, 20)
+    next_url = url_for('all_surveys', page=responses.next_num) \
+        if responses.has_next else None
+    prev_url = url_for('all_surveys', page=responses.prev_num) \
+        if responses.has_prev else None
     return render_template(
         'tools/survey/list_responses.html',
-        title="Survey Responses"
+        title="Survey Responses",
+        responses=responses.items,
+        next_url=next_url,
+        prev_url=prev_url
     )
 
 

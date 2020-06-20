@@ -8,22 +8,27 @@
 
       <div class="two wide column">
 
-
         <a class="ui button fluid labeled icon" href="{{ url_for('admin.index') }}">
           <i class="home icon"></i>
           Admin Home
         </a><br />
+
         <a class="ui button fluid labeled icon" href="{{ url_for('admin.survey_home') }}">
           <i class="clipboard icon"></i>
           Surveys Home
         </a><br />
 
+        <a class="ui button fluid labeled icon" href="{{ url_for('admin.all_responses') }}">
+          <i class="list alternate icon"></i>
+          Responses List
+        </a>
+
       </div>
 
 
-      <div class="eleven wide column">
+      <div class="eleven wide column center aligned">
 
-        <h1 style="margin-left:40%;">List of Surveys</h1>
+        <h1>List of Surveys</h1>
 
         <table class="ui celled table fluid">
 
@@ -68,6 +73,16 @@
           </tbody>
 
         </table>
+
+        <div class="ui buttons">
+          <a class="ui {%if prev_url%}disabled{%endif%} button" {%if prev_url%}href="{{ prev_url }}" {%endif%}>
+            <i class="left chevron icon"></i>
+          </a>
+          <a class="ui {%if next_url%}disabled{%endif%} button" {%if prev_url%}href="{{ next_url}}" {%endif%}>
+            <i class="right chevron icon"></i>
+          </a>
+        </div>
+
       </div>
 
       <div class="three wide column">
