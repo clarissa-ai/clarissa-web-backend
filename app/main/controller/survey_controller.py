@@ -47,7 +47,10 @@ class MainSurvey(Resource):
 @api.route('/submit_response')
 class SubmitResponse(Resource):
     @api.doc('submit a response to a survey')
-    @api.response(200, 'Response successfully submitted.')
+    @api.doc(responses={
+        400: 'Failed to submit survey',
+        200: 'Response successfully submitted.'
+    })
     @api.expect(_post_survey_response, validate=True)
     def post(self):
         """Submit survey response JSON"""
