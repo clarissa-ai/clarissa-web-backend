@@ -22,6 +22,7 @@ gunicorn = "*"
 gevent = "*"
 psycopg2-binary = "*"
 flake8 = "*"
+psutil = "*"
 
 [requires]
 python_version = "3.6"

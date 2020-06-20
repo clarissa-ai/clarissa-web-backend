@@ -16,7 +16,7 @@ api = Api(
     title='CLARISSA API REFERENCE',
     version='1.0',
     description='''Documentation for Clarissa.ai API:
-      a flask restplus web service'''
+                    A flask restplus web service'''
 )
 
 api.add_namespace(user_ns, path='/api/user')

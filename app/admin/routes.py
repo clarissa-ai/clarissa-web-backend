@@ -1,6 +1,5 @@
 from __future__ import absolute_import
 
-import os
 import datetime
 from sqlalchemy import desc
 
@@ -36,8 +35,6 @@ from .forms import (
     EditOptionForm
 )
 
-from werkzeug.utils import secure_filename
-
 from ..main import db
 from ..main.model.user import AdminUser
 from ..main.model.survey import (
@@ -47,9 +44,12 @@ from ..main.model.survey import (
     Summary,
     SummaryInfoGroup,
     SummaryDetail,
-    Option
+    Option,
+    Response
 )
 from ..main.model.action import Action
+
+from .utilities import get_system_stats
 
 
 # Utility function for recording admin actions
@@ -62,6 +62,11 @@ def record_action(text, type):
     )
     db.session.add(a)
     db.session.commit()
+
+
+@bp.route('/sys_stats')
+def sys_stats():
+    return get_system_stats()
 
 
 @bp.route('/')
@@ -147,13 +152,39 @@ def survey_home():
 @bp.route('/surveys/list')
 @login_required
 def all_surveys():
-    return render_template('tools/survey/list.html')
+    page = request.args.get('page', 1, type=int)
+    survey_query = Survey.query
+    surveys = survey_query.paginate(page, 20)
+    next_url = url_for('all_surveys', page=surveys.next_num) \
+        if surveys.has_next else None
+    prev_url = url_for('all_surveys', page=surveys.prev_num) \
+        if surveys.has_prev else None
+    return render_template(
+        'tools/survey/list.html',
+        title="Survey List",
+        surveys=surveys.items,
+        next_url=next_url,
+        prev_url=prev_url
+    )
 
 
 @bp.route('/surveys/list/responses')
 @login_required
 def all_responses():
-    return render_template('tools/survey/list_responses.html')
+    page = request.args.get('page', 1, type=int)
+    response_query = Response.query
+    responses = response_query.paginate(page, 20)
+    next_url = url_for('all_surveys', page=responses.next_num) \
+        if responses.has_next else None
+    prev_url = url_for('all_surveys', page=responses.prev_num) \
+        if responses.has_prev else None
+    return render_template(
+        'tools/survey/list_responses.html',
+        title="Survey Responses",
+        responses=responses.items,
+        next_url=next_url,
+        prev_url=prev_url
+    )
 
 
 @bp.route('/surveys/new', methods=['GET', 'POST'])
@@ -176,17 +207,12 @@ def create_survey():
         db.session.add(s)
         db.session.commit()
         # IMAGE UPLOADING LOGIC
-        image_link = None
         if create_survey_form.image_upload.data:
             f = create_survey_form.image_upload.data
-            filename = secure_filename(f.filename)
-            image_link = "survey_{}_title_image_{}".format(s.id, filename)
-            image_folder = os.path.abspath(
-                os.path.dirname(__file__)
-            ) + "/../resources/images/"
-            file_path = os.path.join(image_folder, image_link)
-            f.save(file_path)
-            s.image_link = image_link
+            s.image_file = f.read()
+            s.image_type = f.filename.split(".")[-1]
+            db.session.add(s)
+            db.session.commit()
 
         if create_survey_form.main.data:
             main_s = Survey.query.filter_by(main=True).first()
@@ -197,6 +223,7 @@ def create_survey():
                 )
             else:
                 s.main = True
+                s.active = True
         db.session.add(s)
         db.session.commit()
         record_action(
@@ -231,22 +258,13 @@ def create_link(survey_id):
         )
         db.session.add(link)
         db.session.commit()
+
         # IMAGE UPLOADING LOGIC
-        image_link = None
         if create_link_form.image_upload.data:
             f = create_link_form.image_upload.data
-            filename = secure_filename(f.filename)
-            image_link = "survey_{}_link_{}_image_{}".format(
-                survey_id,
-                link.id,
-                filename
-            )
-            image_folder = os.path.abspath(
-                os.path.dirname(__file__)
-            ) + "/../resources/images/"
-            file_path = os.path.join(image_folder, image_link)
-            f.save(file_path)
-            link.image_link = image_link
+            link.image_file = f.read()
+            link.image_type = f.filename.split(".")[-1]
+
         db.session.add(link)
         db.session.commit()
         record_action("Added link {} to survey \"{}\".".format(
@@ -278,21 +296,10 @@ def edit_link(survey_id, link_id):
         link.link = edit_link_form.link.data
 
         # IMAGE UPLOADING LOGIC
-        image_link = None
         if edit_link_form.image_upload.data:
             f = edit_link_form.image_upload.data
-            filename = secure_filename(f.filename)
-            image_link = "survey_{}_link_{}_image_{}".format(
-                survey_id,
-                link.id,
-                filename
-            )
-            image_folder = os.path.abspath(
-                os.path.dirname(__file__)
-            ) + "/../resources/images/"
-            file_path = os.path.join(image_folder, image_link)
-            f.save(file_path)
-            link.image_link = image_link
+            link.image_file = f.read()
+            link.image_type = f.filename.split(".")[-1]
 
         db.session.add(link)
         db.session.commit()
@@ -599,17 +606,12 @@ def edit_survey(survey_id):
         s.active = edit_survey_form.active.data
         s.expiration_date = expiration_date_datetime
 
-        image_link = None
+        # IMAGE UPLOADING LOGIC
         if edit_survey_form.image_upload.data:
             f = edit_survey_form.image_upload.data
-            filename = secure_filename(f.filename)
-            image_link = "survey_{}_title_image_{}".format(s.id, filename)
-            image_folder = os.path.abspath(
-                os.path.dirname(__file__)
-            ) + "/../resources/images/"
-            file_path = os.path.join(image_folder, image_link)
-            f.save(file_path)
-            s.image_link = image_link
+            s.image_file = f.read()
+            s.image_type = f.filename.split(".")[-1]
+
         db.session.add(s)
         db.session.commit()
         record_action("Edited survey \"{}\".".format(s.title), "edit")
@@ -653,7 +655,7 @@ def edit_question(survey_id, question_id):
         db.session.commit()
         record_action("Edited question \"{}\" in survey \"{}\".".format(
             q.title, q.survey.title),
-            "create"
+            "edit"
         )
         back_link = request.args.get('back_link')
         return redirect(
@@ -723,7 +725,6 @@ def edit_option(survey_id, question_id, option_id):
     )
     if edit_option_form.validate_on_submit():
         o.title = edit_option_form.title.data
-        print(edit_option_form.next_question.data)
         if not edit_option_form.next_question.data == -2:
             o.next_id = edit_option_form.next_question.data
         else:
@@ -766,23 +767,15 @@ def create_summary(survey_id):
         db.session.add(summary)
         db.session.commit()
 
-        image_link = None
+        # IMAGE UPLOADING LOGIC
         if form.image_upload.data:
             f = form.image_upload.data
-            filename = secure_filename(f.filename)
-            image_link = "survey_{}_summary_{}_image_{}".format(
-                s.id,
-                summary.id,
-                filename
-            )
-            image_folder = os.path.abspath(
-                os.path.dirname(__file__)
-            ) + "/../resources/images/"
-            file_path = os.path.join(image_folder, image_link)
-            f.save(file_path)
-            summary.image_link = image_link
+            summary.image_file = f.read()
+            summary.image_type = f.filename.split(".")[-1]
+
         db.session.add(summary)
         db.session.commit()
+
         record_action(
             "Added summary \"{}\" to survey \"{}\".".format(
                 summary.title,
@@ -840,21 +833,11 @@ def edit_summary(survey_id, summary_id):
         summary.title = form.title.data
         summary.description = form.description.data
 
-        image_link = None
+        # IMAGE UPLOADING LOGIC
         if form.image_upload.data:
             f = form.image_upload.data
-            filename = secure_filename(f.filename)
-            image_link = "survey_{}_summary_{}_image_{}".format(
-                s.id,
-                summary.id,
-                filename
-            )
-            image_folder = os.path.abspath(
-                os.path.dirname(__file__)
-            ) + "/../resources/images/"
-            file_path = os.path.join(image_folder, image_link)
-            f.save(file_path)
-            summary.image_link = image_link
+            summary.image_file = f.read()
+            summary.image_type = f.filename.split(".")[-1]
 
         db.session.add(summary)
         db.session.commit()
@@ -895,7 +878,7 @@ def delete_summary(survey_id, summary_id):
             summary.title,
             summary.survey.title
         ),
-        "create"
+        "destroy"
     )
     return redirect(url_for('admin.survey_view', id=survey_id))
 
@@ -998,13 +981,41 @@ def survey_design_guide(survey_id, survey_title):
         survey_title=survey_title
     )
 
+
+# ---------------------------------------------------------------- #
+#                   CUSTOM ROUTE SETTING ROUTES                    #
+#           Configure custom routes for frontend pull              #
+# ---------------------------------------------------------------- #
+
+@bp.route('/custom_routes')
+@login_required
+def routes_home():
+    return render_template(
+        '/tools/route/home.html',
+        title='Custom Routing'
+    )
+
+
 # ---------------------------------------------------------------- #
 #               DEVELOPMENT ADMINISTRATION ROUTES                  #
 #            get status of git repos and deployments               #
 # ---------------------------------------------------------------- #
 
-
 @bp.route('/development')
 @login_required
 def development_home():
     return render_template('tools/dev/home.html', title="Dev Dashboard")
+
+
+# ---------------------------------------------------------------- #
+#                    USER ADMINISTRATION ROUTES                    #
+#           Configure administrative user privelleges              #
+# ---------------------------------------------------------------- #
+
+@bp.route('/user_list')
+@login_required
+def user_list():
+    return render_template(
+        'dashboard/administration/user_list.html',
+        title="Admin User List"
+    )

@@ -4,7 +4,7 @@
 
 <div class="pusher">
   <div class="main-content">
-    
+
     <div class="ui grid stackable padded centered aligned">
 
       <div class="six wide column">
@@ -12,7 +12,7 @@
         <div class="ui grid centered">
           <div class="five wide column">
             <a class="ui labeled icon button fluid" href="{{ url_for('admin.survey_home') }}">
-              <i class="home icon"></i>  
+              <i class="home icon"></i>
               Survey Home
             </a>
           </div>
@@ -33,7 +33,7 @@
 
 
         <div class="ui segments raised">
-      
+
           <div class="ui segment center aligned inverted blue">
             <h2>{{ survey.title }}</h2>
           </div>
@@ -59,9 +59,7 @@
                 <td colspan="1">{{ survey.links|length }}</td>
                 <td colspan="1" rowspan="2"><b>Title Image:</b></td>
                 <td colspan="3" rowspan="2">
-                  {% if survey.image_link %}
-                  <img  class="ui tiny circular image" src="{{url_for('api.image_image_server', image_name=survey.image_link)}}"/>
-                  {% endif %}
+                  <img class="ui tiny circular image" src="{{ survey.get_image_url() }}" />
                 </td>
               </tr>
               <tr>
@@ -85,74 +83,69 @@
           </div>
         </div>
 
-          
 
-          <!-- INTRO RESOURCES START -->
-            <div class="ui segments stacked">
 
-              <div class="ui segment center aligned">
-                <h4>Title Page Link Information</h4>
-              </div>
+        <!-- INTRO RESOURCES START -->
+        <div class="ui segments stacked">
 
-              {% if survey.links %}
-                {% for link in survey.links %}
-                  <div class="ui horizontal segments">
-                    
-                    <div class="ui segment">
-                      
-                      <div class="ui compact menu">
-                        <div class="ui dropdown item">
-                          {{link.title}}
-                          <i class="dropdown icon"></i>
-                          <div class="menu">
-                            <a href="{{ url_for('admin.edit_link', survey_id=survey.id, link_id=link.id) }}">
-                              <div class="item">
-                                <i class="pencil icon"></i>
-                                Edit Link
-                              </div>
-                            </a>
-                            <a href="{{ url_for('admin.delete_link', survey_id=survey.id, link_id=link.id) }}">
-                              <div class="item">
-                                  <i class="trash alternate icon"></i>
-                                  Delete Link
-                              </div>
-                            </a>
-                          </div>
-                        </div>
+          <div class="ui segment center aligned">
+            <h4>Title Page Link Information</h4>
+          </div>
+
+          {% if survey.links %}
+          {% for link in survey.links %}
+          <div class="ui horizontal segments">
+
+            <div class="ui segment">
+
+              <div class="ui compact menu">
+                <div class="ui dropdown item">
+                  {{link.title}}
+                  <i class="dropdown icon"></i>
+                  <div class="menu">
+                    <a href="{{ url_for('admin.edit_link', survey_id=survey.id, link_id=link.id) }}">
+                      <div class="item">
+                        <i class="pencil icon"></i>
+                        Edit Link
                       </div>
-                      
-                      <br/>
-                      <b>Description: </b>{{ link.description}}<br/>
-                      <b>Link URL: </b> <a href="{{ link.link }}">{{ link.link }}</a><br/>
-                    </div>
-
-                      
-                    <div class="ui segment">
-                      
-                      {% if link.image_link %}
-                      <img class="ui small circular image" src="{{ url_for('api.image_image_server', image_name=link.image_link) }}"/>
-                      {% else %}
-                      No image
-                      {% endif %}
-                    </div>
+                    </a>
+                    <a href="{{ url_for('admin.delete_link', survey_id=survey.id, link_id=link.id) }}">
+                      <div class="item">
+                        <i class="trash alternate icon"></i>
+                        Delete Link
+                      </div>
+                    </a>
                   </div>
-                {% endfor %}
-              {% else %}
-              <div class="ui segment">
-                This survey currently doesn't have any links. Links appear on the title page of the survey, providing the user some additional resources they can reference before taking the survey.
+                </div>
               </div>
-              {% endif %}
 
-              {% if not survey.links|length >= 4 %}
-              <div class="ui segment">
-                <a class="ui button green labeled icon" href="{{ url_for('admin.create_link', survey_id=survey.id) }}">
-                  <i class="circle plus icon"></i>
-                  Add a Link
-                </a>
-              </div>
-              {% endif %}
+              <br />
+              <b>Description: </b>{{ link.description}}<br />
+              <b>Link URL: </b> <a href="{{ link.link }}">{{ link.link }}</a><br />
             </div>
-          <!-- END OF INTRO -->
+
+
+            <div class="ui segment">
+              <img class="ui small circular image" src="{{ link.get_image_url() }}" />
+            </div>
+          </div>
+          {% endfor %}
+          {% else %}
+          <div class="ui segment">
+            This survey currently doesn't have any links. Links appear on the title page of the survey, providing the user some additional resources they can reference before taking the survey.
+          </div>
+          {% endif %}
+
+          {% if not survey.links|length >= 4 %}
+          <div class="ui segment">
+            <a class="ui button green labeled icon" href="{{ url_for('admin.create_link', survey_id=survey.id) }}">
+              <i class="circle plus icon"></i>
+              Add a Link
+            </a>
+          </div>
+          {% endif %}
+        </div>
+        <!-- END OF INTRO -->
 
       </div>
 
@@ -160,7 +153,7 @@
       <div class="five wide column">
 
 
-        
+
         <div class="ui segments raised">
 
           <div class="ui segment">
@@ -182,15 +175,15 @@
                 <td>
 
                   {% if survey.active %}
-                    <a class="ui fluid labeled icon button orange" href="{{ url_for('admin.deactivate_survey', id=survey.id) }}">
-                      <i class="chevron circle down icon"></i>
-                      Deactivate Survey
-                    </a>
+                  <a class="ui fluid labeled icon button orange" href="{{ url_for('admin.deactivate_survey', id=survey.id) }}">
+                    <i class="chevron circle down icon"></i>
+                    Deactivate Survey
+                  </a>
                   {% else %}
-                    <a class="ui fluid labeled icon button green" href="{{ url_for('admin.activate_survey', id=survey.id) }}">
-                      <i class="chevron circle up icon"></i>
-                      Activate Survey
-                    </a>
+                  <a class="ui fluid labeled icon button green" href="{{ url_for('admin.activate_survey', id=survey.id) }}">
+                    <i class="chevron circle up icon"></i>
+                    Activate Survey
+                  </a>
                   {% endif %}
                 </td>
               </tr>
@@ -206,88 +199,86 @@
                 </td>
                 <td>
                   {% if not survey.main  %}
-                    <a class="ui fluid labeled icon button teal" href="{{ url_for('admin.pub_main_survey', id=survey.id) }}">
-                      <i class="star icon"></i>
-                      Publish as Main Survey
-                    </a>
+                  <a class="ui fluid labeled icon button teal" href="{{ url_for('admin.pub_main_survey', id=survey.id) }}">
+                    <i class="star icon"></i>
+                    Publish as Main Survey
+                  </a>
                   {% else %}
-                    <a class="ui fluid labeled icon button purple" href="{{ url_for('admin.depub_main_survey', id=survey.id) }}">
-                      <i class="star outline icon"></i>
-                      Remove as Main Survey
-                    </a>
+                  <a class="ui fluid labeled icon button purple" href="{{ url_for('admin.depub_main_survey', id=survey.id) }}">
+                    <i class="star outline icon"></i>
+                    Remove as Main Survey
+                  </a>
                   {% endif %}
                 </td>
               </tr>
             </tbody>
           </table>
           <div class="ui horizontal segments">
-          <div class="ui segment">
-            <a class="ui fluid button violet" href="{{ url_for('admin.survey_design_guide', survey_id=survey.id, survey_title=survey.title) }}">
-              <i class="eye icon"></i>
-              Survey Design Guide
-            </a>
+            <div class="ui segment">
+              <a class="ui fluid button violet" href="{{ url_for('admin.survey_design_guide', survey_id=survey.id, survey_title=survey.title) }}">
+                <i class="eye icon"></i>
+                Survey Design Guide
+              </a>
 
-          </div>
+            </div>
 
 
 
-            
+
 
           </div>
         </div>
 
         <!-- ROOT QUESTION SEGMENT START -->
-          <div class="ui segments stacked">
+        <div class="ui segments stacked">
 
-            <div class="ui segment center aligned">
-              <h4>
-                Root Question Information
-              </h4>
-            </div>
+          <div class="ui segment center aligned">
+            <h4>
+              Root Question Information
+            </h4>
+          </div>
 
-            {% if root %}
-            <div class="ui segment">
-              <b>Title: </b>{{ root.title }}<br />
-              <b>Description: </b>{{ root.description }}<br />
-              <b>Type: </b>{{ root.display_type() }}
-              {% if root.options %}
-              <div class="ui segments">
-                {% for option in root.options %}
-                <div class="ui segment">{{option.title}}</div>
-                {% endfor %}
-              </div>
-              {% endif %}
-            </div>
-            <div class="ui segment">
-              <div class="ui  buttons fluid">
-                <a class="ui basic primary button" href="{{ url_for('admin.question_view', survey_id=survey.id, question_id=root.id)}}">
-                  <i class="eye icon"></i>
-                  View
-                </a>
-                <a href="{{ url_for('admin.edit_question', survey_id=survey.id, question_id=root.id) }}"
-                  class="ui basic button orange">
-                  <i class="pencil alternate icon"></i>
-                  Edit
-                </a>
-                <a href="{{ url_for('admin.delete_question', survey_id=survey.id, question_id=root.id) }}"
-                  class="ui basic button red">
-                  <i class="trash alternate icon"></i>
-                  Delete
-                </a>
-              </div>
-            </div>
-            {% else %}
-            <div class="ui segment">
-              No root question has been added. Add a new question and set it as the root, or edit an existing question
-              to be root. The root question will always appear first to the user.<br />
-            </div>
-            <div class="ui segment">
-              <a class="ui button green labeled icon" href="{{ url_for('admin.add_question', survey_id=survey.id, root=True) }}">
-                <i class="circle plus icon"></i>
-                Add a Root Question</a>
+          {% if root %}
+          <div class="ui segment">
+            <b>Title: </b>{{ root.title }}<br />
+            <b>Description: </b>{{ root.description }}<br />
+            <b>Type: </b>{{ root.display_type() }}
+            {% if root.options %}
+            <div class="ui segments">
+              {% for option in root.options %}
+              <div class="ui segment">{{option.title}}</div>
+              {% endfor %}
             </div>
             {% endif %}
           </div>
+          <div class="ui segment">
+            <div class="ui  buttons fluid">
+              <a class="ui basic primary button" href="{{ url_for('admin.question_view', survey_id=survey.id, question_id=root.id)}}">
+                <i class="eye icon"></i>
+                View
+              </a>
+              <a href="{{ url_for('admin.edit_question', survey_id=survey.id, question_id=root.id) }}" class="ui basic button orange">
+                <i class="pencil alternate icon"></i>
+                Edit
+              </a>
+              <a href="{{ url_for('admin.delete_question', survey_id=survey.id, question_id=root.id) }}" class="ui basic button red">
+                <i class="trash alternate icon"></i>
+                Delete
+              </a>
+            </div>
+          </div>
+          {% else %}
+          <div class="ui segment">
+            No root question has been added. Add a new question and set it as the root, or edit an existing question
+            to be root. The root question will always appear first to the user.<br />
+          </div>
+          <div class="ui segment">
+            <a class="ui button green labeled icon" href="{{ url_for('admin.add_question', survey_id=survey.id, root=True) }}">
+              <i class="circle plus icon"></i>
+              Add a Root Question</a>
+          </div>
+          {% endif %}
+        </div>
         <!-- ROOT QUESTION SEGMENT END -->
 
         <div class="ui segments stacked">
@@ -302,28 +293,28 @@
             <div class="ui segment">
               <b>Title: </b>{{ question.title }}<br />
               <b>Description: </b>{{ question.description }}<br />
-              <b>Type: </b>{{ question.display_type() }} <br/>
+              <b>Type: </b>{{ question.display_type() }} <br />
               <b>Options: </b>{{ question.options|length }}
             </div>
-            <div class="ui segment">           
+            <div class="ui segment">
               <div class="ui basic right pointing dropdown icon button">
-                  <i class="settings large icon"></i>
-                  <div class="menu">
-                      <a class="item" href="{{ url_for('admin.question_view', survey_id=survey.id, question_id=question.id)}}">
-                        <i class="eye icon"></i>
-                        View
-                      </a>
-                      <a class="item" href="{{ url_for('admin.edit_question', survey_id=survey.id, question_id=question.id) }}">
-                        <i class="pencil alternate icon"></i>
-                        Edit
-                      </a>
-                      <a class="item" href="{{ url_for('admin.delete_question', survey_id=survey.id, question_id=question.id) }}">
-                        <i class="trash alternate icon"></i>
-                        Delete
-                      </a>
+                <i class="settings large icon"></i>
+                <div class="menu">
+                  <a class="item" href="{{ url_for('admin.question_view', survey_id=survey.id, question_id=question.id)}}">
+                    <i class="eye icon"></i>
+                    View
+                  </a>
+                  <a class="item" href="{{ url_for('admin.edit_question', survey_id=survey.id, question_id=question.id) }}">
+                    <i class="pencil alternate icon"></i>
+                    Edit
+                  </a>
+                  <a class="item" href="{{ url_for('admin.delete_question', survey_id=survey.id, question_id=question.id) }}">
+                    <i class="trash alternate icon"></i>
+                    Delete
+                  </a>
                 </div>
               </div>
-            
+
             </div>
           </div>
           {% endfor %}
@@ -356,40 +347,39 @@
           {% for summary in survey.summaries %}
           <div class="ui segment">
 
-                      
-                <div class="ui compact menu">
-                  <div class="ui dropdown item">
-                    {{ summary.title }}
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                      <a href="{{ url_for('admin.view_summary', survey_id=survey.id, summary_id=summary.id) }}">
-                        <div class="item">
-                          <i class="eye icon"></i>
-                          View Summary
-                        </div>
-                      </a>
-                      <a href="{{ url_for('admin.edit_summary', survey_id=survey.id, summary_id=summary.id) }}">
-                        <div class="item">
-                          <i class="pencil icon"></i>
-                          Edit Summary
-                        </div>
-                      </a>
-                      <a href="{{ url_for('admin.delete_summary', survey_id=survey.id, summary_id=summary.id) }}">
-                        <div class="item">
-                            <i class="trash alternate icon"></i>
-                            Delete Summary
-                        </div>
-                      </a>
-                    </div>
-                  </div>
-                </div>
 
-                {% if summary.image_link %}
-                <img class="ui tiny image bordered right floated" src="{{ url_for('api.image_image_server', image_name=summary.image_link) }}"/>
-                {% endif %}
-                <br/><br/>
-            <b>Description: </b> {{ summary.description }}<br/>
-            <b>Info groups: </b><br/>
+            <div class="ui compact menu">
+              <div class="ui dropdown item">
+                {{ summary.title }}
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                  <a href="{{ url_for('admin.view_summary', survey_id=survey.id, summary_id=summary.id) }}">
+                    <div class="item">
+                      <i class="eye icon"></i>
+                      View Summary
+                    </div>
+                  </a>
+                  <a href="{{ url_for('admin.edit_summary', survey_id=survey.id, summary_id=summary.id) }}">
+                    <div class="item">
+                      <i class="pencil icon"></i>
+                      Edit Summary
+                    </div>
+                  </a>
+                  <a href="{{ url_for('admin.delete_summary', survey_id=survey.id, summary_id=summary.id) }}">
+                    <div class="item">
+                      <i class="trash alternate icon"></i>
+                      Delete Summary
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <img class="ui tiny image bordered right floated" src="{{ summary.get_image_url() }}" />
+
+            <br /><br />
+            <b>Description: </b> {{ summary.description }}<br />
+            <b>Info groups: </b><br />
             <ul style="margin-top:1%">
               {% for group in summary.info_groups %}
               <li>{{ group.title }}
@@ -417,7 +407,7 @@
           </div>
 
         </div>
-      </div> 
+      </div>
 
     </div>
   </div>
@@ -427,8 +417,7 @@
 
 {% block post_script %}
 <script>
-$('.ui.dropdown')
-  .dropdown()
-;
+  $('.ui.dropdown')
+    .dropdown();
 </script>
 {% endblock %}

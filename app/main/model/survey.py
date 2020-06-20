@@ -10,7 +10,6 @@ class Survey(db.Model):
     main = db.Column(db.Boolean, default=False, nullable=False)
     created_on = db.Column(db.DateTime, nullable=False)
     expiration_date = db.Column(db.DateTime, nullable=False)
-    image_link = db.Column(db.String(300))
 
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     author = db.relationship('User', foreign_keys='Survey.author_id')
@@ -18,12 +17,24 @@ class Survey(db.Model):
     title = db.Column(db.String(120), nullable=False)
     description = db.Column(db.String(1000), nullable=False)
 
+    image_file = db.Column(db.LargeBinary)
+    image_type = db.Column(db.String(4))
+
     root_id = db.Column(db.Integer)
 
     questions = db.relationship('Question', backref='survey')
     responses = db.relationship('Response', backref='survey')
     links = db.relationship('Link', backref='survey')
     summaries = db.relationship('Summary', backref='survey')
+
+    def get_image_url(self):
+        url = '/api/images/get_image/filler/fill.png'
+        if self.image_file:
+            url = '/api/images/get_image/survey/{}.{}'.format(
+                self.id,
+                self.image_type
+            )
+        return url
 
     def get_json(self):
         r_id = -1
@@ -33,8 +44,7 @@ class Survey(db.Model):
             'title': self.title,
             'description': self.description,
             'root_id': r_id,
-            'image_url': '/api/images/get_image/{}'.format(
-                self.image_link) if self.image_link else '',
+            'image_url': self.get_image_url(),
             'question_count': len(self.questions),
             'links': [link.get_json() for link in self.links],
             'questions': [q.get_json() for q in self.questions],
@@ -61,16 +71,27 @@ class Link(db.Model):
     title = db.Column(db.String(200), nullable=False)
     description = db.Column(db.String(1000), nullable=False)
     link = db.Column(db.String(200), nullable=False)
-    image_link = db.Column(db.String(300))
+
+    image_file = db.Column(db.LargeBinary)
+    image_type = db.Column(db.String(4))
+
     survey_id = db.Column(db.Integer, db.ForeignKey('survey.id'))
+
+    def get_image_url(self):
+        url = '/api/images/get_image/filler/fill.png'
+        if self.image_file:
+            url = "/api/images/get_image/survey_link/{}.{}".format(
+                self.id,
+                self.image_type
+            )
+        return url
 
     def get_json(self):
         return {
             'title': self.title,
             'description': self.description,
             'link': self.link,
-            'image_url': '/api/images/get_image/{}'.format(
-                self.image_link) if self.image_link else ''
+            'image_url': self.get_image_url()
         }
 
 
@@ -169,9 +190,21 @@ class Summary(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(150), nullable=False)
     description = db.Column(db.String(500))
-    image_link = db.Column(db.String(300))
+
+    image_file = db.Column(db.LargeBinary)
+    image_type = db.Column(db.String(4))
+
     info_groups = db.relationship('SummaryInfoGroup', backref='summary')
     survey_id = db.Column(db.Integer, db.ForeignKey('survey.id'))
+
+    def get_image_url(self):
+        url = '/api/images/get_image/filler/fill.png'
+        if self.image_file:
+            url = "/api/images/get_image/survey_link/{}.{}".format(
+                self.id,
+                self.image_type
+            )
+        return url
 
     def __repr__(self):
         return "<Summary '{}'>".format(self.title)
@@ -181,8 +214,7 @@ class Summary(db.Model):
             'id': self.id,
             'title': self.title,
             'description': self.description,
-            'image_url': '/api/images/get_image/{}'.format(self.image_link
-                                                           or ''),
+            'image_url': self.get_image_url(),
             'info_groups': [g.get_json() for g in self.info_groups]
         }
 

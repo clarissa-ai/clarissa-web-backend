@@ -21,7 +21,10 @@ class UserList(Resource):
 
 @api.route('/register')
 class Registration(Resource):
-    @api.response(201, 'User successfully registered.')
+    @api.doc(responses={
+        201: 'User successfully registered.',
+        400: 'Failed to validate payload.'
+    })
     @api.doc('create a new user')
     @api.expect(_user, validate=True)
     def post(self):

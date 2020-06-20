@@ -1,192 +1,153 @@
 <!doctype html>
 <html>
 
-<head>
+  <head>
     <title>{{ title }}</title>
-    {%block pre_script%}{%endblock%}
+    {% block pre_script %}{% endblock %}
 
     <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
-        integrity="sha256-9mbkOfVho3ZPXfM7W8sV2SndrGDuh7wuyLjtsWeTI1Q=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" integrity="sha256-9mbkOfVho3ZPXfM7W8sV2SndrGDuh7wuyLjtsWeTI1Q=" crossorigin="anonymous" />
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
-        integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous" />
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Calendar field -->
-    <link rel="stylesheet" href="{{ url_for('admin.static', filename='css/calendar.min.css') }}"/>
-</head>
+    <link rel="stylesheet" href="{{ url_for('admin.static', filename='css/calendar.min.css') }}" />
+  </head>
 
-<body>
+  <body>
     <style>
-        @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap");
+      @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap");
 
-        :root {
-            --tablet: 768px;
-            --smallMonitor: 992px;
-            --largeMonitor: 1200px;
-            --font-family: 'Open Sans', sans-serif;
-        }
+      :root {
+        --tablet: 768px;
+        --smallMonitor: 992px;
+        --largeMonitor: 1200px;
+        --font-family: 'Open Sans', sans-serif;
+      }
 
-        body {
-            font-family: var(--font-family) !important;
-        }
+      body {
+        font-family: var(--font-family) !important;
+      }
 
-        body ::-webkit-scrollbar {
-            width: 6px;
-        }
+      body ::-webkit-scrollbar {
+        width: 6px;
+      }
 
+      .ui.vertical.menu.sidebar-menu {
+        margin-top: 40px !important;
+        max-height: calc(100% - 40px) !important;
+        height: calc(100% - 40px) !important;
+      }
+
+      .ui.vertical.menu.sidebar-menu .item i.icon {
+        float: left;
+        margin: 0em 0.5em 0em 0em;
+      }
+
+      .main-content {
+        margin-top: 40px;
+      }
+
+      @media (min-width: 768px) {
         .ui.vertical.menu.sidebar-menu {
-            margin-top: 40px !important;
-            max-height: calc(100% - 40px) !important;
-            height: calc(100% - 40px) !important;
-        }
-
-        .ui.vertical.menu.sidebar-menu .item i.icon {
-            float: left;
-            margin: 0em 0.5em 0em 0em;
+          visibility: visible;
+          -webkit-transform: translate3d(0, 0, 0);
+          transform: translate3d(0, 0, 0);
+          width: 15rem !important;
         }
 
         .main-content {
-            margin-top: 40px;
+          margin-left: 15rem;
         }
 
-        @media (min-width: 768px) {
-            .ui.vertical.menu.sidebar-menu {
-                visibility: visible;
-                -webkit-transform: translate3d(0, 0, 0);
-                transform: translate3d(0, 0, 0);
-                width: 15rem !important;
-            }
-
-            .main-content {
-                margin-left: 15rem;
-            }
-
-            .sidebar-menu-toggler {
-                display: none !important;
-            }
+        .sidebar-menu-toggler {
+          display: none !important;
         }
+      }
     </style>
 
     {% block sidebar %}
     {% if not current_user.is_anonymous %}
     <!-- sidebar -->
     <div class="ui sidebar inverted vertical menu sidebar-menu" id="sidebar" style="border-top:1px solid rgb(59, 59, 59);">
-        <div class="item">
-            <div class="header">General</div>
-            <div class="menu">
-                <a class="item" href="{{ url_for('admin.index') }}">
-                    <div>
-                        <i class="home icon"></i>
-                        Home
-                    </div>
-                </a>
-                <a class="item" href="{{ url_for('admin.dashboard') }}">
-                    <div>
-                        <i class="icon tachometer alternate"></i>
-                        Dashboard
-                    </div>
-                </a>
-            </div>
-        </div>
-
-        <div class="item">
-            <div class="header">Tools</div>
-            <div class="menu">
-                <a href="{{ url_for('admin.survey_home') }}" class="item">
-                    <div>
-                        <i class="clipboard outline icon"></i>
-                        Surveys
-                    </div>
-                </a>
-                <a class="item" href="{{ url_for('admin.development_home') }}">
-                    <div>
-                        <i class="code icon"></i>      
-                        Development Status
-                    </div>
-                </a>
-                <a class="item" href="">
-                    <div>
-                        <i class="location arrow icon"></i>
-                        Custom Route
-                    </div>
-                </a>
-            </div>
-        </div>
-        
-        <div class="item">
-            <div class="header">
-                Dashboard Administration
-            </div>
-            <div class="menu">
-                <a class="item">
-                    <div><i class="users icon"></i>Admin Users</div>
-                </a>
-                <a class="item">
-                    <div><i class="cogs icon"></i>Settings</div>
-                </a>
-            </div>
-        </div>
-
-        
-        <div class="item">
-            <div class="header">Server Status</div>
-            <div class="ui tiny olive inverted progress">
-                <div class="bar" style="width: 54%"></div>
-                <div class="label">Processor</div>
-            </div>
-
-            <div class="ui tiny teal inverted progress">
-                <div class="bar" style="width:78%"></div>
-                <div class="label">RAM Usage</div>
-            </div>
-
-            <div class="ui tiny green inverted progress">
-                <div class="bar" style="width:72%"></div>
-                <div class="label">Disk Usage</div>
-            </div>
-
-            <div class="ui tiny orange inverted progress">
-                <div class="bar" style="width:25%"></div>
-                <div class="label">Network Usage</div>
-            </div>
-        </div>
-        <!-- 
-
-            <a href="#" class="item">
+      <div class="item">
+        <div class="header">General</div>
+        <div class="menu">
+          <a class="item" href="{{ url_for('admin.index') }}">
             <div>
-                <i class="icon chart line"></i>
-                Charts
+              <i class="home icon"></i>
+              Home
             </div>
-        </a>
-
-        <a class="item">
+          </a>
+          <a class="item" href="{{ url_for('admin.dashboard') }}">
             <div>
-                <i class="icon lightbulb"></i>
-                Apps
+              <i class="icon tachometer alternate"></i>
+              Dashboard
             </div>
-        </a>
-        <div class="item">
-            <div class="header">Other</div>
-            <div class="menu">
-                <a href="#" class="item">
-                    <div>
-                        <i class="icon envelope"></i>
-                        Messages
-                    </div>
-                </a>
+          </a>
+        </div>
+      </div>
 
-                <a href="#" class="item">
-                    <div>
-                        <i class="icon calendar alternate"></i>
-                        Calendar
-                    </div>
-                </a>
+      <div class="item">
+        <div class="header">Tools</div>
+        <div class="menu">
+          <a href="{{ url_for('admin.survey_home') }}" class="item">
+            <div>
+              <i class="clipboard outline icon"></i>
+              Surveys
             </div>
+          </a>
+          <a class="item" href="{{ url_for('admin.development_home') }}">
+            <div>
+              <i class="code icon"></i>
+              Development Status
+            </div>
+          </a>
+          <a class="item" href="{{ url_for('admin.routes_home') }}">
+            <div>
+              <i class="location arrow icon"></i>
+              Custom Route
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="header">
+          Dashboard Administration
+        </div>
+        <div class="menu">
+          <a class="item" href="{{ url_for('admin.user_list') }}">
+            <div><i class="users icon"></i>Admin Users</div>
+          </a>
+          <a class="item">
+            <div><i class="cogs icon"></i>Settings</div>
+          </a>
+        </div>
+      </div>
+
+
+      <div class="item">
+        <div class="header">Server Status
+          <i class="spinner icon" id="status_icon_sidebar"></i>
+        </div>
+        <div class="ui tiny olive inverted progress">
+          <div class="bar" style="width: 0%" id="process_sidebar"></div>
+          <div class="label">Processor</div>
         </div>
 
-         -->
+        <div class="ui tiny teal inverted progress">
+          <div class="bar" style="width:0%" id="mem_sidebar"></div>
+          <div class="label">RAM Usage</div>
+        </div>
+
+        <div class="ui tiny green inverted progress">
+          <div class="bar" style="width:0%" id="disk_sidebar"></div>
+          <div class="label">Disk Usage</div>
+        </div>
+      </div>
+
     </div>
 
     {% endif %}
@@ -194,90 +155,101 @@
 
     <div class="content col" style="padding-left:0px;">
 
-        {% block navbar %}
-        {% if not current_user.is_anonymous %}
-        <!-- top nav -->
+      {% block navbar %}
+      {% if not current_user.is_anonymous %}
+      <!-- top nav -->
 
-        <nav class="ui top fixed inverted menu">
-            <div class="left menu">
-                <a href="#" class="sidebar-menu-toggler item" data-target="#sidebar">
-                    <i class="sidebar icon"></i>
-                </a>
-                <a href="{{ url_for('admin.index') }}" class="header item" style="padding:0px; padding-left:4px;" >
-                    <img class="ui avatar image"src="{{url_for('admin.static', filename='images/monochrome_white_logo.png')}}"/>
-                </a>
-                <a href="{{ url_for('admin.index') }}" class="header item">
-                    Admin Dashboard
-                </a>
-            </div>
-
-            <div class="right menu">
-                <a href="#" class="item">
-                    <i class="bell icon"></i>
-                </a>
-                <div class="ui dropdown item">
-                    <i class="user cirlce icon"></i>
-                    <div class="menu">
-                        <a href="{{ url_for('admin.profile') }}" class="item">
-                            <i class="info circle icon"></i> Profile</a>
-                        <a href="{{ url_for('admin.edit_profile') }}" class="item">
-                            <i class="wrench icon"></i>
-                            Settings</a>
-                        <a href="{{ url_for('admin.logout') }}" class="item">
-                            <i class="sign-out icon"></i>
-                            Logout
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </nav>
-
-        {% endif %}
-        {% endblock %}
-
-        <div class="container padded" style="margin-bottom:0px;">
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                {% for message in messages %}
-                <div class="ui message transition container" style="margin-top:5vh; padding-bottom:5px; margin-bottom:0px;">
-                    <p>{{ message }}</p>
-                    <i class="close icon"></i>
-                </div>
-                {% endfor %}
-            {% endif %}
-            {% endwith %}
-
-            {% block content %}{% endblock %}
+      <nav class="ui top fixed inverted menu">
+        <div class="left menu">
+          <a href="#" class="sidebar-menu-toggler item" data-target="#sidebar">
+            <i class="sidebar icon"></i>
+          </a>
+          <a href="{{ url_for('admin.index') }}" class="header item" style="padding:0px; padding-left:4px;">
+            <img class="ui avatar image" src="{{url_for('admin.static', filename='images/monochrome_white_logo.png')}}" />
+          </a>
+          <a href="{{ url_for('admin.index') }}" class="header item">
+            Admin Dashboard
+          </a>
         </div>
+
+        <div class="right menu">
+          <a href="#" class="item">
+            <i class="bell icon"></i>
+          </a>
+          <div class="ui dropdown item">
+            <i class="user cirlce icon"></i>
+            <div class="menu">
+              <a href="{{ url_for('admin.profile') }}" class="item">
+                <i class="info circle icon"></i> Profile</a>
+              <a href="{{ url_for('admin.edit_profile') }}" class="item">
+                <i class="wrench icon"></i>
+                Settings</a>
+              <a href="{{ url_for('admin.logout') }}" class="item">
+                <i class="sign-out icon"></i>
+                Logout
+              </a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {% endif %}
+      {% endblock %}
+
+      <div class="container padded" style="margin-bottom:0px;">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="ui message transition container" style="margin-top:5vh; padding-bottom:5px; margin-bottom:0px;">
+          <p>{{ message }}</p>
+          <i class="close icon"></i>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+      </div>
     </div>
 
     <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
-        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"
-        integrity="sha256-t8GepnyPmw9t+foMh3mKNvcorqNHamSKtKRxxpUEgFI=" crossorigin="anonymous"></script>
-        <script type="text/javascript" src="{{ url_for('admin.static', filename='js/calendar.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js" integrity="sha256-t8GepnyPmw9t+foMh3mKNvcorqNHamSKtKRxxpUEgFI=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{{ url_for('admin.static', filename='js/calendar.min.js') }}"></script>
     <script>
-        $(document).ready(function () {
-            $('.ui.dropdown').dropdown();
-            $('.sidebar-menu-toggler').on('click', function () {
-                var target = $(this).data('target');
-                $(target)
-                    .sidebar({
-                        dinPage: true,
-                        transition: 'overlay',
-                        mobileTransition: 'overlay'
-                    })
-                    .sidebar('toggle');
-            });
+      $(document).ready(function() {
+        $('.ui.dropdown').dropdown();
+        $('.sidebar-menu-toggler').on('click', function() {
+          var target = $(this).data('target');
+          $(target)
+            .sidebar({
+              dinPage: true,
+              transition: 'overlay',
+              mobileTransition: 'overlay'
+            })
+            .sidebar('toggle');
         });
-        $('.message .close')
-        .on('click', function () {
-            $(this).closest('.message').transition('fade');
-        });    
+      });
+
+      $('.message .close')
+        .on('click', function() {
+          $(this).closest('.message').transition('fade');
+        });
+
+      const url_side = "/admin/sys_stats";
+
+      setInterval(function() {
+        $('#status_icon_sidebar').attr('class', 'yellow spinner icon')
+        $.get(url_side, function(data, status) {
+          $('#process_sidebar').attr('style', 'width:' + (10 + data['cpu_percent'] * 5) + '%');
+          $('#mem_sidebar').attr('style', 'width:' + data['mem_percent'] + '%');
+          $('#disk_sidebar').attr('style', 'width:' + data['disk_percent'] + '%');
+          $('#status_icon_sidebar').attr('class', 'green check icon')
+        })
+      }, 2000)
     </script>
     {% block post_script %}
     {% endblock %}
-</body>
+  </body>
 
 </html>

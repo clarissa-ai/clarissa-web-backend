@@ -5,12 +5,14 @@ from ..util.dto import SurveyDTO
 from ..service.survey_service import (
     get_active_surveys,
     get_survey,
-    get_main_survey
+    get_main_survey,
+    post_survey_response
 )
 
 
 api = SurveyDTO.api
 _get_survey = SurveyDTO.get_survey
+_post_survey_response = SurveyDTO.post_survey_response
 
 
 @api.route('/get_active_surveys')
@@ -40,3 +42,17 @@ class MainSurvey(Resource):
     def get(self):
         """Get info about the main published survey"""
         return get_main_survey()
+
+
+@api.route('/submit_response')
+class SubmitResponse(Resource):
+    @api.doc('submit a response to a survey')
+    @api.doc(responses={
+        400: 'Failed to submit survey',
+        200: 'Response successfully submitted.'
+    })
+    @api.expect(_post_survey_response, validate=True)
+    def post(self):
+        """Submit survey response JSON"""
+        data = request.json
+        return post_survey_response(data)
