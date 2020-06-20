@@ -1,1 +1,1 @@
-web: gunicorn --workers 8 manage:app
+web: gunicorn --workers 9 manage:app
