@@ -7,7 +7,6 @@ from app.main.model.user import User
 from sqlalchemy import exc as exceptions
 
 
-
 def save_model(data):
     db.session.add(data)
     db.session.commit(data)

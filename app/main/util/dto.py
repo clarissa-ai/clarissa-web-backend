@@ -56,7 +56,7 @@ class SurveyDTO:
             example=1
         ),
         'user_email': fields.String(
-            description='Email of the user submitting the report (Optional)', 
+            description='Email of the user submitting the report (Optional)',
             example='korra@dogmail.com'
         ),
         'json_body': fields.Raw(
