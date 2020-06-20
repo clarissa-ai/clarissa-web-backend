@@ -1,0 +1,1 @@
+migrate: ./migrate.sh
