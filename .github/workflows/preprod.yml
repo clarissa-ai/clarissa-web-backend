@@ -8,7 +8,7 @@ name: Preprod-Deploy
 env:
   S3_BUCKET_NAME: "clarissa.preprod"
   EB_APPLICATION_NAME: "Clarissa-Preprod"
-  EB_ENVIRONMENT_NAME: "ClarissaPreprod"
+  EB_ENVIRONMENT_NAME: "preprod-clarissa-web"
   DEPLOY_PACKAGE_NAME: "flask-app-${{ github.sha }}.zip"
   AWS_REGION_NAME: "us-east-2"
 
