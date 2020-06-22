@@ -1,6 +1,7 @@
 import os
 from .model.user import AdminUser
 from flask_migrate import upgrade
+import datetime
 
 
 def root_user_setup(db, curr_env):
@@ -17,7 +18,8 @@ def root_user_setup(db, curr_env):
         a = AdminUser(
             username="Clarissa Root Admin",
             email=admin_user,
-            password=admin_pwd
+            password=admin_pwd, 
+            registered_on=datetime.datetime.utcnow()
         )
     else:
         a.password = admin_pwd
