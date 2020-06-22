@@ -1,5 +1,6 @@
 import os
 from .model.user import AdminUser
+from flask_migrate import upgrade
 
 
 def root_user_setup(db, curr_env):
@@ -22,3 +23,9 @@ def root_user_setup(db, curr_env):
         a.password = admin_pwd
     db.session.add(a)
     db.session.commit()
+
+
+def db_setup(app):
+    # apply current flask migrations
+    with app.app_context():
+        upgrade(directory="migrations")
