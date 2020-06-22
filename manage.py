@@ -14,7 +14,7 @@ from flask_cors import CORS
 from app import blueprint as app_blueprint
 from app.admin import admin_bp as admin_blueprint
 
-from app.main.app_init_utilities import root_user_setup
+from app.main.app_init_utilities import root_user_setup, db_setup
 
 # Get current environemnt from environment variable, defaults to dev
 ENVIRONMENT_VAR = os.getenv('DEPLOY_ENV') or 'DEV'
@@ -49,6 +49,7 @@ migrate = Migrate(app, db)
 manager.add_command('db', MigrateCommand)
 
 with app.app_context():
+    db_setup(app)
     root_user_setup(db, ENVIRONMENT_VAR)
 
 
@@ -66,11 +67,6 @@ def test():
     if result.wasSuccessful():
         return 0
     return 1
-
-
-@manager.command
-def reset_alembic_ver():
-    print(db.session.connection().execute("DROP TABLE alembic_version;"))
 
 
 # Always should be at end of file:
