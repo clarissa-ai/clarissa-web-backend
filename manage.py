@@ -16,11 +16,16 @@ from app.admin import admin_bp as admin_blueprint
 
 from app.main.app_init_utilities import root_user_setup
 
+from werkzeug.middleware.proxy_fix import ProxyFix
+
 # Get current environemnt from environment variable, defaults to dev
 ENVIRONMENT_VAR = os.getenv('DEPLOY_ENV') or 'DEV'
 
 # Use application factory to create app based on environment
 app = create_app(ENVIRONMENT_VAR)
+
+if ENVIRONMENT_VAR == 'PRODUCTION':
+    app = ProxyFix(app)
 
 # Register API and Admin blueprints to Flask app instance
 app.register_blueprint(admin_blueprint)
