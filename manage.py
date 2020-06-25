@@ -16,17 +16,11 @@ from app.admin import admin_bp as admin_blueprint
 
 from app.main.app_init_utilities import root_user_setup
 
-# from werkzeug.middleware.proxy_fix import ProxyFix
-from flask import _request_ctx_stack
-
 # Get current environemnt from environment variable, defaults to dev
 ENVIRONMENT_VAR = os.getenv('DEPLOY_ENV') or 'DEV'
 
 # Use application factory to create app based on environment
 app = create_app(ENVIRONMENT_VAR)
-
-# if ENVIRONMENT_VAR == 'PRODUCTION':
-#     app = ProxyFix(app)
 
 # Register API and Admin blueprints to Flask app instance
 app.register_blueprint(admin_blueprint)
@@ -34,18 +28,6 @@ app.register_blueprint(app_blueprint)
 
 # Register CORS manager with app instance
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
-
-
-def _force_https():
-    # my local dev is set on debug, but on AWS it's not (obviously)
-    # I don't need HTTPS on local, change this to whatever condition you want.
-    if ENVIRONMENT_VAR == 'PRODUCTION':
-        if _request_ctx_stack is not None:
-            reqctx = _request_ctx_stack.top
-            reqctx.url_adapter.url_scheme = 'https'
-
-
-app.before_request(_force_https)
 
 
 @app.after_request
@@ -60,6 +42,7 @@ def after_request(response):
 
 
 app.app_context().push
+
 
 manager = Manager(app)
 migrate = Migrate(app, db)

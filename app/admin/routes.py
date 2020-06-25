@@ -64,6 +64,10 @@ def record_action(text, type):
     db.session.commit()
 
 
+external = True
+scheme = 'https'
+
+
 @bp.route('/sys_stats')
 def sys_stats():
     return get_system_stats()
@@ -83,7 +87,11 @@ def index():
 def login():
     if current_user.is_authenticated:
         flash("User is already logged in.")
-        return redirect(url_for('admin.index'))
+        return redirect(url_for(
+            'admin.index',
+            _external=external,
+            _scheme=scheme
+        ))
     login_form = LoginForm()
     if login_form.validate_on_submit():
         user = AdminUser.query.filter_by(email=login_form.email.data).first()
