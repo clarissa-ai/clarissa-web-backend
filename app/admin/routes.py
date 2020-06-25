@@ -493,8 +493,13 @@ def question_view(survey_id, question_id):
                 survey_id=option.question.survey.id,
                 question_id=option.question.default_next_id
             )
-        option_data[option.id]["next_title"] = next_q.title if next_q else "No \
-            next question assigned (uses default next)"
+        if next_q:
+            option_data[option.id]["next_title"] = next_q.title
+        elif option.next_id == -1:
+            option_data[option.id]["next_title"] = "Direct to summary"
+        else:
+            option_data[option.id]["next_title"] = ("No next question assigned"
+                                                    " (uses default next)")
         option_summary = Summary.query.filter_by(id=option.summary_id).first()
         option_data[option.id]["summary_link"] = url_for(
             'admin.view_summary',
@@ -537,7 +542,7 @@ def add_option(survey_id, question_id):
             question_id=q.id
         )
         if add_option_form.next_question.data:
-            if add_option_form.next_question.data != -1:
+            if add_option_form.next_question.data != -2:
                 o.next_id = add_option_form.next_question.data
         if add_option_form.summary.data:
             o.summary_id = add_option_form.summary.data
@@ -690,7 +695,7 @@ def delete_question(survey_id, question_id):
             q.title,
             q.survey.title
         ),
-        "create"
+        "destroy"
     )
     return redirect(url_for('admin.survey_view', id=survey_id))
 

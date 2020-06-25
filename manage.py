@@ -14,7 +14,7 @@ from flask_cors import CORS
 from app import blueprint as app_blueprint
 from app.admin import admin_bp as admin_blueprint
 
-from app.main.app_init_utilities import root_user_setup, db_setup
+from app.main.app_init_utilities import root_user_setup
 
 # Get current environemnt from environment variable, defaults to dev
 ENVIRONMENT_VAR = os.getenv('DEPLOY_ENV') or 'DEV'
@@ -49,7 +49,6 @@ migrate = Migrate(app, db)
 manager.add_command('db', MigrateCommand)
 
 with app.app_context():
-    db_setup(app)
     root_user_setup(db, ENVIRONMENT_VAR)
 
 
@@ -71,5 +70,6 @@ def test():
 
 # Always should be at end of file:
 # actually runs the file when "python manage.py" is run from CLI
+# (Like Java's SPVM)
 if __name__ == '__main__':
     manager.run()

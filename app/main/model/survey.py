@@ -11,8 +11,12 @@ class Survey(db.Model):
     created_on = db.Column(db.DateTime, nullable=False)
     expiration_date = db.Column(db.DateTime, nullable=False)
 
-    author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    author = db.relationship('User', foreign_keys='Survey.author_id')
+    author_id = db.Column(
+        db.Integer,
+        db.ForeignKey('adminuser.id'),
+        nullable=False
+    )
+    author = db.relationship('AdminUser', foreign_keys='Survey.author_id')
 
     title = db.Column(db.String(120), nullable=False)
     description = db.Column(db.String(1000), nullable=False)

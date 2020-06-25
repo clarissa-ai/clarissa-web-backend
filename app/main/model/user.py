@@ -19,7 +19,6 @@ class User(db.Model):
     admin = db.Column(db.Boolean, nullable=False, default=False)
     first_name = db.Column(db.String(50))
     password_hash = db.Column(db.String(100))
-    surveys = db.relationship('Survey', backref='user')
 
     @property
     def password(self):
@@ -85,6 +84,7 @@ class AdminUser(UserMixin, db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     actions = db.relationship('Action', backref='user')
+    surveys = db.relationship('Survey', backref='user')
     email = db.Column(db.String(255), unique=True, nullable=False)
     username = db.Column(db.String(255))
     registered_on = db.Column(db.DateTime, nullable=False)

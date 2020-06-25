@@ -76,7 +76,8 @@ def post_survey_response(data):
                 data['survey_id']
             )
         }, 400
-    if data['user_email']:
+    u = None
+    if 'user_email' in data.keys():
         u = User.query.filter_by(email=data['user_email']).first()
         if not u:
             return {
