@@ -1,7 +1,7 @@
 # app/__init__.py
 import os
 from flask_restplus import Api
-from flask import Blueprint
+from flask import Blueprint, url_for
 
 from .main.controller.user_controller import api as user_ns
 from .main.controller.auth_controller import api as auth_ns
