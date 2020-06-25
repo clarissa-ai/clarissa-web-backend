@@ -80,5 +80,5 @@ jobs:
       with:
         task-definition: ${{ steps.task-def.outputs.task-definition }}
         service: preprod-backend-service
-        cluster: default
+        cluster: clarissa-preprod
         wait-for-service-stability: true
