@@ -12,4 +12,6 @@ RUN pipenv install
 
 CMD pipenv run python manage.py db upgrade
 
+EXPOSE 5000
+
 CMD pipenv run python manage.py run
