@@ -6,11 +6,79 @@
   <div class="main-content">
     <div class="ui stackable grid padded">
 
-      
+      <div class="two wide column">
+
+        <a class="ui button fluid labeled icon" href="{{ url_for('admin.index') }}">
+          <i class="home icon"></i>
+          Admin Home
+        </a><br />
+
+        <a class="ui button fluid labeled icon" href="{{ url_for('admin.survey_home') }}">
+          <i class="clipboard icon"></i>
+          Surveys Home
+        </a><br />
+
+        <a class="ui button fluid labeled icon" href="{{ url_for('admin.all_surveys') }}">
+          <i class="list alternate icon"></i>
+          Surveys List
+        </a>
+
+      </div>
 
 
+      <div class="ten wide column center aligned">
+
+        <h1>List of Responses</h1>
+
+        <table class="ui celled table fluid">
+
+          <thead>
+            <th>Survey</th>
+            <th>Created on</th>
+            <th>User ID</th>
+            <th>JSON</th>
+          </thead>
+
+          <tbody>
+            {% for r in responses %}
+            <tr>
+              <td>
+                <a href="{{ url_for('admin.survey_view', id=r.survey_id) }}">{{ r.survey.title }}</a>
+              </td>
+              <td>No FIELD</td>
+              <td>{{ r.user_id }}</td>
+              <td>{{ r.json_response }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+
+        </table>
+
+        <div class="ui buttons">
+          <a class="ui {%if prev_url%}disabled{%endif%} button" {%if prev_url%}href="{{ prev_url }}" {%endif%}>
+            <i class="left chevron icon"></i>
+          </a>
+          <a class="ui {%if next_url%}disabled{%endif%} button" {%if prev_url%}href="{{ next_url}}" {%endif%}>
+            <i class="right chevron icon"></i>
+          </a>
+        </div>
+
+      </div>
+
+      <div class="four wide column">
+
+        <div class="ui segments">
+
+          <div class="ui segment center aligned">
+            <h2>
+              Table Filters
+            </h2>
+          </div>
+
+        </div>
+
+      </div>
     </div>
   </div>
-</div>
 
-{% endblock %}
+  {% endblock %}

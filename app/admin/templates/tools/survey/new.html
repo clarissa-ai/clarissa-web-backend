@@ -7,19 +7,19 @@
     <div class="ui aligned centered grid stackable padded">
 
       <div class="five wide column">
-        
+
         {% if form.errors %}
-          <div class="ui message red">
-            <i class="close icon"></i>
-            <b>Form errors:</b>
-            <ul>  
-              {% for err in form.errors %}
-                <li><b>Target: </b>{{err}},<b> Message: </b>{{ form.errors[err][0] }}</li>
-              {% endfor %}
-            </ul>
-          </div>
+        <div class="ui message red">
+          <i class="close icon"></i>
+          <b>Form errors:</b>
+          <ul>
+            {% for err in form.errors %}
+            <li><b>Target: </b>{{err}},<b> Message: </b>{{ form.errors[err][0] }}</li>
+            {% endfor %}
+          </ul>
+        </div>
         {% endif %}
-        
+
         <form class="ui large form" method="post" novalidate enctype="multipart/form-data">
           {{ form.hidden_tag() }}
 
@@ -62,13 +62,13 @@
             </div>
 
             <div class="ui horizontal segments">
-              
+
               <div class="ui segment center aligned">
                 <div class="inline required field center aligned">
                   {{ form.main(class="form-check-input") }}
                   <div class="ui left pointing label">
                     Main survey
-                </div>
+                  </div>
                 </div>
               </div>
 
@@ -77,10 +77,10 @@
                   {{ form.active(class="form-check-input") }}
                   <div class="ui left pointing label">
                     Active survey (published)
-                </div>
+                  </div>
                 </div>
               </div>
-              
+
             </div>
 
             <div class="ui segment center aligned">

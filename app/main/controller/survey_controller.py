@@ -1,19 +1,19 @@
 from flask import request
 from flask_restplus import Resource
-from flask_cors import cross_origin
 
 from ..util.dto import SurveyDTO
 from ..service.survey_service import (
-    save_model,
-    get_active_surveys, 
+    get_active_surveys,
     get_survey,
-    get_main_survey
+    get_main_survey,
+    post_survey_response
 )
 
-from ..util.decorator import token_required, admin_token_required
 
 api = SurveyDTO.api
 _get_survey = SurveyDTO.get_survey
+_post_survey_response = SurveyDTO.post_survey_response
+
 
 @api.route('/get_active_surveys')
 class ActiveSurveys(Resource):
@@ -22,6 +22,7 @@ class ActiveSurveys(Resource):
     def get(self):
         """Get list of all active surveys"""
         return get_active_surveys()
+
 
 @api.route('/get_survey_by_id')
 class Survey(Resource):
@@ -33,6 +34,7 @@ class Survey(Resource):
         data = request.json
         return get_survey(data['id'])
 
+
 @api.route('/get_main_survey')
 class MainSurvey(Resource):
     @api.doc('get information about the main survey')
@@ -40,3 +42,17 @@ class MainSurvey(Resource):
     def get(self):
         """Get info about the main published survey"""
         return get_main_survey()
+
+
+@api.route('/submit_response')
+class SubmitResponse(Resource):
+    @api.doc('submit a response to a survey')
+    @api.doc(responses={
+        400: 'Failed to submit survey',
+        200: 'Response successfully submitted.'
+    })
+    @api.expect(_post_survey_response, validate=True)
+    def post(self):
+        """Submit survey response JSON"""
+        data = request.json
+        return post_survey_response(data)

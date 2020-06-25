@@ -7,7 +7,7 @@
     <div class="ui stackable grid padded">
 
       <!-- AVAILABLE TOOLS -->
-      <div class="four wide column">
+      <div class="three wide column">
 
         <div class="ui segments stacked raised">
 
@@ -68,7 +68,7 @@
               </div>
               <div class="ui segment">
                 <a href="">
-                  <i class="terminal icon"></i>  
+                  <i class="terminal icon"></i>
                   Check Github Status
                 </a>
               </div>
@@ -104,12 +104,8 @@
       </div>
 
       <!-- Middle section  -->
-      <div class="four wide column">
+      <div class="six wide column">
         <div class="ui segments stacked raised">
-
-          <div class="ui segment negative message">
-            This feature is still under development. The data is fake and does not reflect the actual statistics.
-          </div>
 
           <div class="ui segment">
             <h2>Summary</h2>
@@ -118,6 +114,9 @@
           <div class="ui segment black">
             <h3>Usage Statistics</h3>
             <div class="ui segments">
+              <div class="ui segment negative message">
+                This feature is still under development. The data is fake and does not reflect the actual statistics.
+              </div>
               <div class="ui segment card fluid">
                 <div class="content">
                   <div class="ui right floated header green">
@@ -125,7 +124,7 @@
                   </div>
                   <div class="header">
                     <div class="ui green header">
-                      5627
+                      X,XXX
                     </div>
                   </div>
                   <div class="meta">
@@ -141,7 +140,7 @@
                   </div>
                   <div class="header">
                     <div class="ui teal header">
-                      30,567
+                      XX,XXX
                     </div>
                   </div>
                   <div class="meta">
@@ -157,7 +156,7 @@
                   </div>
                   <div class="header">
                     <div class="ui blue header">
-                      2,438
+                      X,XXX
                     </div>
                   </div>
                   <div class="meta">
@@ -169,162 +168,76 @@
           </div>
 
           <div class="ui segment grey">
-            <h3>Server Status</h3>
+            <h3>Server Status
+              <i class="spinner icon" id="status_icon"></i>
+            </h3>
 
             <div class="ui segments">
-              <div class="ui segment black">
-                <h4>Production server:</h4>
-              </div>
               <div class="ui segment">
-                <div class="ui tiny olive progress">
-                  <div class="bar" style="width:58%"></div>
+                <div class="ui tiny yellow progress">
+                  <div class="bar" id="process_main" style="width:0%"></div>
                   <div class="label">Processor</div>
                 </div>
               </div>
               <div class="ui segment">
-                <div class="ui tiny teal progress">
-                  <div class="bar" style="width:78%"></div>
+                <div class="ui tiny blue progress">
+                  <div class="bar" id="ram_main" style="width:0%"></div>
                   <div class="label">RAM Usage</div>
                 </div>
               </div>
 
               <div class="ui segment">
                 <div class="ui tiny green progress">
-                  <div class="bar" style="width:72%"></div>
+                  <div class="bar" id="disk_main" style="width:0%"></div>
                   <div class="label">Disk Usage</div>
-                </div>
-              </div>
-
-              <div class="ui segment">
-                <div class="ui tiny orange progress">
-                  <div class="bar" style="width:25%"></div>
-                  <div class="label">Network Usage</div>
-                </div>
-              </div>
-
-              <div class="ui segment grey">
-                <h4>Development server:</h4>
-              </div>
-              <div class="ui segment">
-                <div class="ui tiny olive progress">
-                  <div class="bar" style="width:28%"></div>
-                  <div class="label">Processor</div>
-                </div>
-              </div>
-              <div class="ui segment">
-                <div class="ui tiny teal progress">
-                  <div class="bar" style="width:28%"></div>
-                  <div class="label">RAM Usage</div>
-                </div>
-              </div>
-
-              <div class="ui segment">
-                <div class="ui tiny green progress">
-                  <div class="bar" style="width:22%"></div>
-                  <div class="label">Disk Usage</div>
-                </div>
-              </div>
-
-              <div class="ui segment">
-                <div class="ui tiny orange progress">
-                  <div class="bar" style="width:15%"></div>
-                  <div class="label">Network Usage</div>
                 </div>
               </div>
             </div>
+
 
           </div>
         </div>
       </div>
 
       <!-- RECENT ACTIONS -->
-      <div class="eight wide column">
+      <div class="seven wide column">
 
-        <div class="ui segments stacked raised">
+        <table class="ui celled table" style="margin-top: 0%;">
+          <thead>
+            <tr>
+              <th class="center aligned" colspan="4">
+                <h2>Recent Actions</h2>
+              </th>
+            </tr>
+            <tr>
+              <th>Time</th>
+              <th>User</th>
+              <th>Description</th>
+              <th>Type</th>
+            </tr>
+          </thead>
 
-          <div class="ui segment negative message">
-            This feature is still under development. The actions are fake and does not reflect the actual recent actions.
-          </div>
+          <tbody>
+            {% for action in actions %}
+            <tr class="
+                {% if action.type == "create" %}
+                  positive
+                {% elif action.type == "edit" %}
+                  warning
+                {% elif action.type == "destroy" %}
+                  negative
+                {% endif %}
+                ">
+              <td>{{ action.datetime.strftime("%b %d, %Y %I:%M %p") }}</td>
+              <td>{{ action.user.username }}</td>
+              <td>{{ action.text }}</td>
+              <td>{{ action.type }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
 
-          <div class="ui segment">
-            <h2><b>
-                Recent Actions:
-              </b></h2>
-          </div>
+        </table>
 
-          <div class="ui segment black">
-            <p>5/24 10:32 AM: COVID-19 Survey released</p>
-          </div>
-
-          <div class="ui segment">
-            <p>5/22 11:32 AM: Admin user "teo@clarissa.ai" joined.</p>
-          </div>
-
-          <div class="ui segment warning message">
-            <p>5/22 9:11 AM: Processor usage above 90%!</p>
-          </div>
-
-          <div class="ui segment">
-            <p>5/21 12:45 PM: Server restarting for resource recycling</p>
-          </div>
-
-          <div class="ui segment">
-            <p>5/24 10:32 AM: COVID-19 Survey released</p>
-          </div>
-
-          <div class="ui segment">
-            <p>5/22 11:32 AM: Admin user "teo@clarissa.ai" joined.</p>
-          </div>
-
-          <div class="ui segment warning message">
-            <p>5/22 9:11 AM: Processor usage above 75%!</p>
-          </div>
-
-          <div class="ui segment">
-            <p>5/21 12:45 PM: Server restarting for resource recycling</p>
-          </div>
-
-          <div class="ui segment">
-            <p>5/21 12:45 PM: Server restarting for resource recycling</p>
-          </div>
-
-          <div class="ui segment">
-            <p>5/24 10:32 AM: COVID-19 Survey released</p>
-          </div>
-
-          <div class="ui segment">
-            <p>5/22 11:32 AM: Admin user "teo@clarissa.ai" joined.</p>
-          </div>
-
-          <div class="ui segment warning message">
-            <p>5/22 9:11 AM: Processor usage above 75%!</p>
-          </div>
-
-          <div class="ui segment">
-            <p>5/21 12:45 PM: Server restarting for resource recycling</p>
-          </div>
-
-          <div class="ui segment">
-            <p>5/21 12:45 PM: Server restarting for resource recycling</p>
-          </div>
-
-          <div class="ui segment">
-            <p>5/24 10:32 AM: COVID-19 Survey released</p>
-          </div>
-
-          <div class="ui segment">
-            <p>5/22 11:32 AM: Admin user "teo@clarissa.ai" joined.</p>
-          </div>
-
-          <div class="ui segment warning message">
-            <p>5/22 9:11 AM: Processor usage above 75%!</p>
-          </div>
-
-          <div class="ui segment">
-            <p>5/21 12:45 PM: Server restarting for resource recycling</p>
-          </div>
-
-        </div>
 
       </div>
 
@@ -332,4 +245,20 @@
 
   </div>
 </div>
+
+<script>
+  const url = "/admin/sys_stats";
+
+  setInterval(function() {
+    $('#status_icon').attr('class', 'yellow spinner icon')
+    $.get(url, function(data, status) {
+      $('#process_main').attr('style', 'width:' + (10 + data['cpu_percent'] * 10) + '%');
+      $('#ram_main').attr('style', 'width:' + data['mem_percent'] + '%');
+      $('#disk_main').attr('style', 'width:' + data['disk_percent'] + '%');
+      $('#status_icon').attr('class', 'green check icon')
+    })
+  }, 1200)
+</script>
+
+
 {% endblock %}

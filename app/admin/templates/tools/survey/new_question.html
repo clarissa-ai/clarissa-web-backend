@@ -47,7 +47,7 @@
                 {{ form.type(class="ui dropdown") }}
               </div>
             </div>
-            
+
             <div class="ui segment">
               <div class="required field">
                 {{ form.default_next.label }}
@@ -63,8 +63,8 @@
                 {{ form.root(class="form-check-input") }}
                 {% endif %}
                 <div class="ui left pointing label">
-                Root question
-              </div>
+                  Root question
+                </div>
               </div>
             </div>
 
@@ -85,7 +85,6 @@
 {% block post_script %}
 <script>
   $('.ui.dropdown')
-    .dropdown()
-  ;
+    .dropdown();
 </script>
 {% endblock %}
