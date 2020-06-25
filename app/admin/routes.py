@@ -97,7 +97,10 @@ def login():
         user = AdminUser.query.filter_by(email=login_form.email.data).first()
         if user is None or not user.check_password(login_form.password.data):
             flash('Invalid username or password')
-            return redirect(url_for('admin.login'))
+            return redirect(url_for(
+                'admin.login',
+                _external=external,
+                _scheme=scheme))
         login_user(user, remember=login_form.remember_me.data)
         flash("Successfully logged into admin dashboard!")
         record_action("{} logged in.".format(current_user.username), "login")
