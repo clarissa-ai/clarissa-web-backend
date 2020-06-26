@@ -20,6 +20,9 @@ class User(db.Model):
     first_name = db.Column(db.String(50))
     password_hash = db.Column(db.String(100))
 
+    ilnesses = db.relationship('Illness', backref='user')
+    symptoms = db.relationship('Symptom', backref='user')
+
     @property
     def password(self):
         raise AttributeError('password: write-only field')
