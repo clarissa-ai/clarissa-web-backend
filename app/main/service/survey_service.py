@@ -26,7 +26,8 @@ def get_main_survey():
         'message': 'Successfully retrieved main published survey.',
         'survey': {
             'id': s.id,
-            'title': s.title
+            'title': s.title,
+            'description': s.description
         }
     }
     return response_object, 200
@@ -35,12 +36,14 @@ def get_main_survey():
 def get_active_surveys():
     surveys = []
     for s in Survey.query.all():
-        if s.expiration_date < datetime.datetime.utcnow() and s.active:
+        if s.expiration_date > datetime.datetime.utcnow() and s.active:
+            s.active = False
             save_model(s)
         elif s.active:
             surveys.append({
                 'id': str(s.id),
-                'title': s.title
+                'title': s.title,
+                'description': s.description
             })
     response_object = {
         'status': 'success',
