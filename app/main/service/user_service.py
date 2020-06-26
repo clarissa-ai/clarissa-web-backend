@@ -1,7 +1,10 @@
 import datetime
-
+import os
 from app.main import db
 from app.main.model.user import User
+
+curr_env = os.environ.get('DEPLOY_ENV', 'DEV')
+cookie_secure = curr_env == 'PRODUCTION'
 
 
 def save_new_user(data):
@@ -14,11 +17,7 @@ def save_new_user(data):
             registered_on=datetime.datetime.utcnow(),
         )
         save_changes(new_user)
-        response_object = {
-            'status': 'success',
-            'message': 'Successfully',
-        }
-        return generate_token(new_user)
+        return register_user(new_user)
     else:
         response_object = {
             'status': 'fail',
@@ -27,8 +26,26 @@ def save_new_user(data):
         return response_object, 409
 
 
+def set_cookie(response, data):
+    user = User.query.filter_by(email=data['email']).first()
+    if not user:
+        return response
+    elif user.check_password(data['password']):
+        token = user.encode_auth_token(user.id)
+        response.set_cookie(
+            'auth_token', value=token,
+            secure=cookie_secure,
+            httponly=True
+        )
+        return response
+    return response
+
+
 def get_all_users():
-    return User.query.all()
+    return {
+        'users': User.query.all(),
+        'status': 'success'
+    }, 200
 
 
 def get_user_by_id(id):
@@ -40,14 +57,11 @@ def save_changes(data):
     db.session.commit()
 
 
-def generate_token(user):
+def register_user(user):
     try:
-        # generate the auth token
-        auth_token = user.encode_auth_token(user.id)
         response_object = {
             'status': 'success',
-            'message': 'Successfully registered.',
-            'Authorization': auth_token.decode()
+            'message': 'Successfully registered.'
         }
         return response_object, 201
     except Exception as e:
