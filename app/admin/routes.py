@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 
+import os
 import datetime
 from sqlalchemy import desc
 
@@ -64,8 +65,13 @@ def record_action(text, type):
     db.session.commit()
 
 
-external = True
-scheme = 'https'
+# Setting https redirect patterns based on environment
+external = False
+scheme = 'http'
+if os.environ.get('DEPLOY_ENV') == 'PRODUCTION':
+    external = True
+    scheme = 'https'
+
 
 
 @bp.route('/sys_stats')
@@ -104,7 +110,11 @@ def login():
         login_user(user, remember=login_form.remember_me.data)
         flash("Successfully logged into admin dashboard!")
         record_action("{} logged in.".format(current_user.username), "login")
-        return redirect(url_for("admin.index"))
+        return redirect(url_for(
+            "admin.index",
+            _external=external,
+            _scheme=scheme
+        ))
     return render_template(
         'user/login.html',
         title="Admin Login",
@@ -116,7 +126,11 @@ def login():
 def logout():
     record_action("{} logged out.".format(current_user.username), "login")
     logout_user()
-    return redirect(url_for('admin.index'))
+    return redirect(url_for(
+        'admin.index',
+        _external=external,
+        _scheme=scheme
+    ))
 
 
 @bp.route('/dashboard')
@@ -166,10 +180,18 @@ def all_surveys():
     page = request.args.get('page', 1, type=int)
     survey_query = Survey.query
     surveys = survey_query.paginate(page, 20)
-    next_url = url_for('all_surveys', page=surveys.next_num) \
-        if surveys.has_next else None
-    prev_url = url_for('all_surveys', page=surveys.prev_num) \
-        if surveys.has_prev else None
+    next_url = url_for(
+        'all_surveys',
+        page=surveys.next_num,
+        _external=external,
+        _scheme=scheme
+    ) if surveys.has_next else None
+    prev_url = url_for(
+        'all_surveys',
+        page=surveys.prev_num,
+        _external=external,
+        _scheme=scheme
+    ) if surveys.has_prev else None
     return render_template(
         'tools/survey/list.html',
         title="Survey List",
@@ -185,10 +207,18 @@ def all_responses():
     page = request.args.get('page', 1, type=int)
     response_query = Response.query
     responses = response_query.paginate(page, 20)
-    next_url = url_for('all_surveys', page=responses.next_num) \
-        if responses.has_next else None
-    prev_url = url_for('all_surveys', page=responses.prev_num) \
-        if responses.has_prev else None
+    next_url = url_for(
+        'all_surveys',
+        page=responses.next_num,
+        _external=external,
+        _scheme=scheme
+    ) if responses.has_next else None
+    prev_url = url_for(
+        'all_surveys',
+        page=responses.prev_num,
+        _external=external,
+        _scheme=scheme
+    ) if responses.has_prev else None
     return render_template(
         'tools/survey/list_responses.html',
         title="Survey Responses",
@@ -241,7 +271,12 @@ def create_survey():
             "\"{}\" survey created (id: {})".format(s.title, s.id),
             "create"
         )
-        return redirect(url_for('admin.survey_view', id=s.id))
+        return redirect(url_for(
+            'admin.survey_view',
+            id=s.id,
+            _external=external,
+            _scheme=scheme
+        ))
     return render_template(
         'tools/survey/new.html',
         title="New Survey",
@@ -255,10 +290,19 @@ def create_link(survey_id):
     s = Survey.query.filter_by(id=survey_id).first()
     if not s:
         flash("Requested survey doesn't exist.")
-        return redirect(url_for('admin.survey_home'))
+        return redirect(url_for(
+            'admin.survey_home',
+            _external=external,
+            _scheme=scheme
+        ))
     if len(s.links) == 4:
         flash('No more than 4 links are allowed per survey.')
-        return redirect(url_for('admin.survey_view', id=s.id))
+        return redirect(url_for(
+            'admin.survey_view',
+            id=s.id,
+            _external=external,
+            _scheme=scheme
+        ))
     create_link_form = CreateLinkForm()
     if create_link_form.validate_on_submit():
         link = Link(
@@ -283,7 +327,12 @@ def create_link(survey_id):
             link.survey.title),
             "create"
         )
-        return redirect(url_for('admin.survey_view', id=s.id))
+        return redirect(url_for(
+            'admin.survey_view',
+            id=s.id,
+            _external=external,
+            _scheme=scheme
+        ))
     return render_template(
         'tools/survey/new_link.html',
         title="Create a new link",
@@ -299,7 +348,11 @@ def edit_link(survey_id, link_id):
     link = Link.query.filter_by(id=link_id).first()
     if not s or not link:
         flash("Requested item doesn't exist.")
-        return redirect(url_for('admin.survey_home'))
+        return redirect(url_for(
+            'admin.survey_home',
+            _external=external,
+            _scheme=scheme
+        ))
     edit_link_form = EditLinkForm()
     if edit_link_form.validate_on_submit():
         link.title = edit_link_form.title.data
@@ -319,7 +372,12 @@ def edit_link(survey_id, link_id):
             link.survey.title),
             "edit"
         )
-        return redirect(url_for('admin.survey_view', id=s.id))
+        return redirect(url_for(
+            'admin.survey_view',
+            id=s.id,
+            _external=external,
+            _scheme=scheme
+        ))
     return render_template(
         'tools/survey/edit_link.html',
         title="Editing link",
@@ -335,11 +393,20 @@ def delete_link(survey_id, link_id):
     s = Survey.query.filter_by(id=id).first()
     if not s:
         flash("Requested survey doesn't exist.")
-        return redirect(url_for('admin.survey_home'))
+        return redirect(url_for(
+            'admin.survey_home',
+            _external=external,
+            _scheme=scheme
+        ))
     link = Link.query.filter_by(id=link_id).first()
     if not link:
         flash("Requested link doesn't exist.")
-        return redirect(url_for('admin.survey_view', id=survey_id))
+        return redirect(url_for(
+            'admin.survey_view',
+            id=survey_id,
+            _external=external,
+            _scheme=scheme
+        ))
     db.session.delete(link)
     db.session.commit()
     record_action(
@@ -349,7 +416,12 @@ def delete_link(survey_id, link_id):
         ),
         "destroy"
     )
-    return redirect(url_for('admin.survey_view', id=survey_id))
+    return redirect(url_for(
+        'admin.survey_view',
+        id=survey_id,
+        _external=external,
+        _scheme=scheme
+    ))
 
 
 @bp.route('/survey/<id>')
@@ -358,7 +430,11 @@ def survey_view(id):
     s = Survey.query.filter_by(id=id).first()
     if not s:
         flash("Requested survey doesn't exist.")
-        return redirect(url_for('admin.survey_home'))
+        return redirect(url_for(
+            'admin.survey_home',
+            _external=external,
+            _scheme=scheme
+        ))
     root = Question.query.filter_by(id=s.root_id).first()
     return render_template(
         'tools/survey/view.html',
@@ -374,14 +450,23 @@ def deactivate_survey(id):
     s = Survey.query.filter_by(id=id).first()
     if not s:
         flash("Requested survey doesn't exist.")
-        return redirect(url_for('admin.survey_home'))
+        return redirect(url_for(
+            'admin.survey_home',
+            _external=external,
+            _scheme=scheme
+        ))
     if s.main:
         s.main = False
     s.active = False
     db.session.add(s)
     db.session.commit()
     record_action("Deactivated survey \"{}\".".format(s.title), "destroy")
-    return redirect(url_for('admin.survey_view', id=s.id))
+    return redirect(url_for(
+        'admin.survey_view',
+        id=s.id,
+        _external=external,
+        _scheme=scheme
+    ))
 
 
 @bp.route('/survey/<id>/activate')
@@ -390,12 +475,21 @@ def activate_survey(id):
     s = Survey.query.filter_by(id=id).first()
     if not s:
         flash("Requested survey doesn't exist.")
-        return redirect(url_for('admin.survey_home'))
+        return redirect(url_for(
+            'admin.survey_home',
+            _external=external,
+            _scheme=scheme
+        ))
     s.active = True
     db.session.add(s)
     db.session.commit()
     record_action("Activated survey \"{}\".".format(s.title), "create")
-    return redirect(url_for('admin.survey_view', id=s.id))
+    return redirect(url_for(
+        'admin.survey_view',
+        id=s.id,
+        _external=external,
+        _scheme=scheme
+    ))
 
 
 @bp.route('/survey/<id>/pub_main_survey')
@@ -404,7 +498,11 @@ def pub_main_survey(id):
     s = Survey.query.filter_by(id=id).first()
     if not s:
         flash("Requested survey doesn't exist.")
-        return redirect(url_for('admin.survey_home'))
+        return redirect(url_for(
+            'admin.survey_home',
+            _external=external,
+            _scheme=scheme
+        ))
     main_survey = Survey.query.filter_by(main=True).first()
     if main_survey:
         main_survey.main = False
@@ -413,7 +511,12 @@ def pub_main_survey(id):
     db.session.add(s)
     db.session.commit()
     record_action("Published survey \"{}\".".format(s.title), "create")
-    return redirect(url_for('admin.survey_view', id=s.id))
+    return redirect(url_for(
+        'admin.survey_view',
+        id=s.id,
+        _external=external,
+        _scheme=scheme
+    ))
 
 
 @bp.route('/survey/<id>/depub_main_survey')
@@ -422,12 +525,21 @@ def depub_main_survey(id):
     s = Survey.query.filter_by(id=id).first()
     if not s:
         flash("Requested survey doesn't exist.")
-        return redirect(url_for('admin.survey_home'))
+        return redirect(url_for(
+            'admin.survey_home',
+            _external=external,
+            _scheme=scheme
+        ))
     s.main = False
     db.session.add(s)
     db.session.commit()
     record_action("Unpublished survey \"{}\".".format(s.title), "destroy")
-    return redirect(url_for('admin.survey_view', id=s.id))
+    return redirect(url_for(
+        'admin.survey_view',
+        id=s.id,
+        _external=external,
+        _scheme=scheme
+    ))
 
 
 @bp.route('/surveys/new/<survey_id>/question', methods=['GET', 'POST'])
@@ -437,7 +549,11 @@ def add_question(survey_id):
     s = Survey.query.filter_by(id=survey_id).first()
     if not s:
         flash("Requested survey doesn't exist.")
-        return redirect(url_for('admin.survey_home'))
+        return redirect(url_for(
+            'admin.survey_home',
+            _external=external,
+            _scheme=scheme
+        ))
 
     add_question_form = AddQuestionForm(s.questions)
     if add_question_form.validate_on_submit():
@@ -459,7 +575,13 @@ def add_question(survey_id):
             "create"
         )
         return redirect(
-            url_for('admin.question_view', survey_id=s.id, question_id=q.id)
+            url_for(
+                'admin.question_view',
+                survey_id=s.id,
+                question_id=q.id,
+                _external=external,
+                _scheme=scheme
+            )
         )
     return render_template(
         'tools/survey/new_question.html',
@@ -476,18 +598,29 @@ def question_view(survey_id, question_id):
     s = Survey.query.filter_by(id=survey_id).first()
     if not s:
         flash("Requested survey doesn't exist.")
-        return redirect(url_for('admin.survey_home'))
+        return redirect(url_for(
+            'admin.survey_home',
+            _external=external,
+            _scheme=scheme
+        ))
     q = Question.query.filter_by(id=question_id).first()
     if not q:
         flash("Requested question doesn't exist.")
-        return redirect(url_for('admin.survey_view', id=survey_id))
+        return redirect(url_for(
+            'admin.survey_view',
+            id=survey_id,
+            _external=external,
+            _scheme=scheme
+        ))
     d_n = Question.query.filter_by(id=q.default_next_id).first()
     if d_n:
         q.default_next_title = d_n.title
         q.default_next_link = url_for(
             'admin.question_view',
             survey_id=s.id,
-            question_id=d_n.id
+            question_id=d_n.id,
+            _external=external,
+            _scheme=scheme
         )
     else:
         q.default_next_title = "Final Question (directs to summary)"
@@ -497,12 +630,17 @@ def question_view(survey_id, question_id):
         next_q = Question.query.filter_by(id=option.next_id).first()
         option_data[option.id] = {}
         option_data[option.id]["next_link"] = url_for(
-            "admin.question_view",
-            survey_id=option.question.survey.id,
-            question_id=option.next_id) if next_q else url_for(
                 "admin.question_view",
                 survey_id=option.question.survey.id,
-                question_id=option.question.default_next_id
+                question_id=option.next_id,
+                _external=external,
+                _scheme=scheme
+            ) if next_q else url_for(
+                "admin.question_view",
+                survey_id=option.question.survey.id,
+                question_id=option.question.default_next_id,
+                _external=external,
+                _scheme=scheme
             )
         if next_q:
             option_data[option.id]["next_title"] = next_q.title
@@ -515,7 +653,9 @@ def question_view(survey_id, question_id):
         option_data[option.id]["summary_link"] = url_for(
             'admin.view_summary',
             survey_id=option.question.survey.id,
-            summary_id=option_summary.id
+            summary_id=option_summary.id,
+            _external=external,
+            _scheme=scheme
         ) if option_summary else ""
         option_data[option.id]["summary_title"] = option_summary.title or "No \
             associated summary exists"
@@ -536,11 +676,20 @@ def add_option(survey_id, question_id):
     s = Survey.query.filter_by(id=survey_id).first()
     if not s:
         flash("Requested survey doesn't exist.")
-        return redirect(url_for('admin.survey_home'))
+        return redirect(url_for(
+            'admin.survey_home',
+            _external=external,
+            _scheme=scheme
+        ))
     q = Question.query.filter_by(id=question_id).first()
     if not q:
         flash("Requested question doesn't exist.")
-        return redirect(url_for('admin.survey_view', id=survey_id))
+        return redirect(url_for(
+            'admin.survey_view',
+            id=survey_id,
+            _external=external,
+            _scheme=scheme
+        ))
     # vvv THIS WHOLE SECTION CAN BE OPTIMIZED WITH ANOTHER SQL QUERY vvv
     questions = []
     for sq in s.questions:
@@ -564,7 +713,9 @@ def add_option(survey_id, question_id):
         return redirect(url_for(
             'admin.question_view',
             survey_id=s.id,
-            question_id=q.id
+            question_id=q.id,
+            _external=external,
+            _scheme=scheme
         ))
     return render_template(
         '/tools/survey/new_option.html',
@@ -583,25 +734,38 @@ def delete_option(survey_id, question_id, option_id):
     s = Survey.query.filter_by(id=survey_id).first()
     if not s:
         flash("Requested survey doesn't exist.")
-        return redirect(url_for('admin.survey_home'))
+        return redirect(url_for(
+            'admin.survey_home',
+            _external=external,
+            _scheme=scheme
+        ))
     q = Question.query.filter_by(id=question_id).first()
     if not q:
         flash("Requested question could not be found in database.")
-        return redirect(url_for('admin.survey_view', id=survey_id))
+        return redirect(url_for(
+            'admin.survey_view',
+            id=survey_id,
+            _external=external,
+            _scheme=scheme
+        ))
     o = Option.query.filter_by(id=option_id).first()
     if not o:
         flash("Requested option could not be found in database.")
         return redirect(url_for(
             'admin.question_view',
             survey_id=survey_id,
-            question_id=question_id
+            question_id=question_id,
+            _external=external,
+            _scheme=scheme
         ))
     db.session.delete(o)
     db.session.commit()
     return redirect(url_for(
         'admin.question_view',
         survey_id=survey_id,
-        question_id=question_id
+        question_id=question_id,
+        _external=external,
+        _scheme=scheme
     ))
 
 
@@ -611,7 +775,11 @@ def edit_survey(survey_id):
     s = Survey.query.filter_by(id=survey_id).first()
     if not s:
         flash("Requested survey doesn't exist.")
-        return redirect(url_for('admin.survey_home'))
+        return redirect(url_for(
+            'admin.survey_home',
+            _external=external,
+            _scheme=scheme
+        ))
     edit_survey_form = EditSurveyForm()
     if edit_survey_form.validate_on_submit():
         expiration_date_datetime = datetime.datetime.strptime(
@@ -631,7 +799,12 @@ def edit_survey(survey_id):
         db.session.add(s)
         db.session.commit()
         record_action("Edited survey \"{}\".".format(s.title), "edit")
-        return redirect(url_for('admin.survey_view', id=s.id))
+        return redirect(url_for(
+            'admin.survey_view',
+            id=s.id,
+            _external=external,
+            _scheme=scheme
+        ))
     return render_template(
         'tools/survey/edit.html',
         title="Edit Survey",
@@ -649,11 +822,20 @@ def edit_question(survey_id, question_id):
     s = Survey.query.filter_by(id=survey_id).first()
     if not s:
         flash("Requested survey doesn't exist.")
-        return redirect(url_for('admin.survey_home'))
+        return redirect(url_for(
+            'admin.survey_home',
+            _external=external,
+            _scheme=scheme
+        ))
     q = Question.query.filter_by(id=question_id).first()
     if not q:
         flash("Requested question could not be found in database.")
-        return redirect(url_for('admin.survey_view', id=survey_id))
+        return redirect(url_for(
+            'admin.survey_view',
+            id=survey_id,
+            _external=external,
+            _scheme=scheme
+        ))
     edit_question_form = EditQuestionForm(
         Question.query.filter_by(survey_id=survey_id).filter(
             Question.id != question_id
@@ -675,7 +857,12 @@ def edit_question(survey_id, question_id):
         )
         back_link = request.args.get('back_link')
         return redirect(
-            url_for('admin.survey_view', id=s.id)
+            url_for(
+                'admin.survey_view',
+                id=s.id,
+                _external=external,
+                _scheme=scheme
+            )
         ) if not back_link else redirect(back_link)
     edit_question_form.type.data = q.type
     edit_question_form.default_next.data = q.default_next_id
@@ -694,11 +881,20 @@ def delete_question(survey_id, question_id):
     s = Survey.query.filter_by(id=survey_id).first()
     if not s:
         flash("Requested survey doesn't exist.")
-        return redirect(url_for('admin.survey_home'))
+        return redirect(url_for(
+            'admin.survey_home',
+            _external=external,
+            _scheme=scheme
+        ))
     q = Question.query.filter_by(id=question_id).first()
     if not q:
         flash("Requested question could not be found in database.")
-        return redirect(url_for('admin.survey_view', id=survey_id))
+        return redirect(url_for(
+            'admin.survey_view',
+            id=survey_id,
+            _external=external,
+            _scheme=scheme
+        ))
     db.session.delete(q)
     db.session.commit()
     record_action(
@@ -708,7 +904,12 @@ def delete_question(survey_id, question_id):
         ),
         "destroy"
     )
-    return redirect(url_for('admin.survey_view', id=survey_id))
+    return redirect(url_for(
+        'admin.survey_view',
+        id=survey_id,
+        _external=external,
+        _scheme=scheme
+    ))
 
 
 @bp.route(
@@ -720,18 +921,29 @@ def edit_option(survey_id, question_id, option_id):
     s = Survey.query.filter_by(id=survey_id).first()
     if not s:
         flash("Requested survey doesn't exist.")
-        return redirect(url_for('admin.survey_home'))
+        return redirect(url_for(
+            'admin.survey_home',
+            _external=external,
+            _scheme=scheme
+        ))
     q = Question.query.filter_by(id=question_id).first()
     if not q:
         flash("Requested question could not be found in database.")
-        return redirect(url_for('admin.survey_view', id=survey_id))
+        return redirect(url_for(
+            'admin.survey_view',
+            id=survey_id,
+            _external=external,
+            _scheme=scheme
+        ))
     o = Option.query.filter_by(id=option_id).first()
     if not o:
         flash("Requested option could not be found in database.")
         return redirect(url_for(
             'admin.question_view',
             survey_id=survey_id,
-            question_id=question_id
+            question_id=question_id,
+            _external=external,
+            _scheme=scheme
         ))
     edit_option_form = EditOptionForm(
         Question.query.filter(Question.survey_id == survey_id).filter(
@@ -753,7 +965,9 @@ def edit_option(survey_id, question_id, option_id):
         return redirect(url_for(
             'admin.question_view',
             survey_id=survey_id,
-            question_id=question_id
+            question_id=question_id,
+            _external=external,
+            _scheme=scheme
         ))
     edit_option_form.summary.data = o.summary_id
     edit_option_form.next_question.data = o.next_id
@@ -772,7 +986,11 @@ def create_summary(survey_id):
     s = Survey.query.filter_by(id=survey_id).first()
     if not s:
         flash("Requested survey doesn't exist.")
-        return redirect(url_for('admin.survey_home'))
+        return redirect(url_for(
+            'admin.survey_home',
+            _external=external,
+            _scheme=scheme
+        ))
     form = CreateSummaryForm()
     if form.validate_on_submit():
         summary = Summary(
@@ -799,7 +1017,12 @@ def create_summary(survey_id):
             ),
             "create"
         )
-        return redirect(url_for('admin.survey_view', id=survey_id))
+        return redirect(url_for(
+            'admin.survey_view',
+            id=survey_id,
+            _external=external,
+            _scheme=scheme
+        ))
     return render_template(
         '/tools/survey/new_summary.html',
         title="Creating Summary",
@@ -817,11 +1040,20 @@ def view_summary(survey_id, summary_id):
     survey = Survey.query.filter_by(id=survey_id).first()
     if not survey:
         flash("Requested survey doesn't exist.")
-        return redirect(url_for('admin.survey_home'))
+        return redirect(url_for(
+            'admin.survey_home',
+            _external=external,
+            _scheme=scheme
+        ))
     summary = Summary.query.filter_by(id=summary_id).first()
     if not summary:
         flash("Requested summary doesn't exist.")
-        return redirect(url_for('admin.survey_view', id=survey_id))
+        return redirect(url_for(
+            'admin.survey_view',
+            id=survey_id,
+            _external=external,
+            _scheme=scheme
+        ))
     return render_template(
         '/tools/survey/view_summary.html',
         title="Viewing summary",
@@ -839,11 +1071,20 @@ def edit_summary(survey_id, summary_id):
     s = Survey.query.filter_by(id=survey_id).first()
     if not s:
         flash("Requested survey doesn't exist.")
-        return redirect(url_for('admin.survey_home'))
+        return redirect(url_for(
+            'admin.survey_home',
+            _external=external,
+            _scheme=scheme
+        ))
     summary = Summary.query.filter_by(id=summary_id).first()
     if not summary:
         flash("Requested summary doesn't exist.")
-        return redirect(url_for('admin.survey_view', id=survey_id))
+        return redirect(url_for(
+            'admin.survey_view',
+            id=survey_id,
+            _external=external,
+            _scheme=scheme
+        ))
     form = EditSummaryForm()
     if form.validate_on_submit():
         summary.title = form.title.data
@@ -864,7 +1105,12 @@ def edit_summary(survey_id, summary_id):
             ),
             "edit"
         )
-        return redirect(url_for('admin.survey_view', id=survey_id))
+        return redirect(url_for(
+            'admin.survey_view',
+            id=survey_id,
+            _external=external,
+            _scheme=scheme
+        ))
     return render_template(
         '/tools/survey/edit_summary.html',
         survey=s,
@@ -882,11 +1128,20 @@ def delete_summary(survey_id, summary_id):
     survey = Survey.query.filter_by(id=survey_id).first()
     if not survey:
         flash("Requested survey doesn't exist.")
-        return redirect(url_for('admin.survey_home'))
+        return redirect(url_for(
+            'admin.survey_home',
+            _external=external,
+            _scheme=scheme
+        ))
     summary = Summary.query.filter_by(id=summary_id).first()
     if not summary:
         flash("Requested summary doesn't exist.")
-        return redirect(url_for('admin.survey_view', id=survey_id))
+        return redirect(url_for(
+            'admin.survey_view',
+            id=survey_id,
+            _external=external,
+            _scheme=scheme
+        ))
     db.session.delete(summary)
     db.session.commit()
     record_action(
@@ -896,7 +1151,12 @@ def delete_summary(survey_id, summary_id):
         ),
         "destroy"
     )
-    return redirect(url_for('admin.survey_view', id=survey_id))
+    return redirect(url_for(
+        'admin.survey_view',
+        id=survey_id,
+        _external=external,
+        _scheme=scheme
+    ))
 
 
 @bp.route(
@@ -908,11 +1168,20 @@ def create_info_group(survey_id, summary_id):
     survey = Survey.query.filter_by(id=survey_id).first()
     if not survey:
         flash("Requested survey doesn't exist.")
-        return redirect(url_for('admin.survey_home'))
+        return redirect(url_for(
+            'admin.survey_home',
+            _external=external,
+            _scheme=scheme
+        ))
     summary = Summary.query.filter_by(id=summary_id).first()
     if not summary:
         flash("Requested summary doesn't exist.")
-        return redirect(url_for('admin.survey_view', id=survey_id))
+        return redirect(url_for(
+            'admin.survey_view',
+            id=survey_id,
+            _external=external,
+            _scheme=scheme
+        ))
     form = CreateInfoGroupForm()
 
     # Complex form logic
@@ -938,7 +1207,9 @@ def create_info_group(survey_id, summary_id):
         return redirect(url_for(
             'admin.view_summary',
             survey_id=survey_id,
-            summary_id=summary_id
+            summary_id=summary_id,
+            _external=external,
+            _scheme=scheme
         ))
 
     return render_template(
@@ -958,18 +1229,29 @@ def delete_info_group(survey_id, summary_id, infogroup_id):
     survey = Survey.query.filter_by(id=survey_id).first()
     if not survey:
         flash("Requested survey doesn't exist.")
-        return redirect(url_for('admin.survey_home'))
+        return redirect(url_for(
+            'admin.survey_home',
+            _external=external,
+            _scheme=scheme
+        ))
     summary = Summary.query.filter_by(id=summary_id).first()
     if not summary:
         flash("Requested summary doesn't exist.")
-        return redirect(url_for('admin.survey_view', id=survey_id))
+        return redirect(url_for(
+            'admin.survey_view',
+            id=survey_id,
+            _external=external,
+            _scheme=scheme
+        ))
     infogroup = SummaryInfoGroup.query.filter_by(id=infogroup_id).first()
     if not infogroup:
         flash("Requested info group doesn't exist.")
         return redirect(url_for(
             'admin.view_summary',
             survey_id=survey.id,
-            summary_id=summary.id
+            summary_id=summary.id,
+            _external=external,
+            _scheme=scheme
         ))
     db.session.delete(infogroup)
     db.session.commit()
@@ -983,7 +1265,9 @@ def delete_info_group(survey_id, summary_id, infogroup_id):
     return redirect(url_for(
         'admin.view_summary',
         survey_id=survey.id,
-        summary_id=summary.id
+        summary_id=summary.id,
+        _external=external,
+        _scheme=scheme
     ))
 
 
