@@ -43,6 +43,7 @@ class ProductionConfig(Config):
     DEBUG = False
     ENV = 'production'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    PREFERRED_URL_SCHEME = 'https'
     SQLALCHEMY_DATABASE_URI = 'postgresql://{}:{}@{}:5432/postgres'.format(
         os.getenv('RDS_DB_USER'),
         os.getenv('RDS_DB_PWD'),

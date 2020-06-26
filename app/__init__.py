@@ -1,7 +1,7 @@
 # app/__init__.py
-
+import os
 from flask_restplus import Api
-from flask import Blueprint
+from flask import Blueprint, url_for
 
 from .main.controller.user_controller import api as user_ns
 from .main.controller.auth_controller import api as auth_ns
@@ -11,6 +11,13 @@ from .main.controller.routes_controller import api as route_ns
 
 blueprint = Blueprint('api', __name__)
 
+
+if os.environ.get('DEPLOY_ENV') == 'PRODUCTION':
+    @property
+    def specs_url(self):
+        return url_for(self.endpoint('specs'), _external=True, _scheme='https')
+    Api.specs_url = specs_url
+
 api = Api(
     blueprint,
     title='CLARISSA API REFERENCE',
@@ -18,6 +25,7 @@ api = Api(
     description='''Documentation for Clarissa.ai API:
                     A flask restplus web service'''
 )
+
 
 api.add_namespace(user_ns, path='/api/user')
 api.add_namespace(auth_ns, path='/api')

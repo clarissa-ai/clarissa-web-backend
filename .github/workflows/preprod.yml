@@ -2,20 +2,20 @@
 # GITHUB ACTIONS pipeline to deploy to preprod server
 #------------------------------------------------------------------
 
-name: Prod-Deploy
+name: Preprod-Deploy
 
 # Configuring some global environment variables that we will use in our jobs
 env:
   S3_BUCKET_NAME: "clarissa.preprod"
   EB_APPLICATION_NAME: "Clarissa-Production"
-  EB_ENVIRONMENT_NAME: "ClarissaProduction-env"
+  EB_ENVIRONMENT_NAME: "Clarissa-Preprod"
   DEPLOY_PACKAGE_NAME: "flask-app-${{ github.sha }}.zip"
   AWS_REGION_NAME: "us-east-2"
 
 # This action will only run when the preprod branch is pushed to
 on:
   push:
-    branches: [ prod ]
+    branches: [ preprod ]
 
 # These jobs will run in chronological order
 jobs:

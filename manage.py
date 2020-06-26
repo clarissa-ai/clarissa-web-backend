@@ -43,6 +43,7 @@ def after_request(response):
 
 app.app_context().push
 
+
 manager = Manager(app)
 migrate = Migrate(app, db)
 
