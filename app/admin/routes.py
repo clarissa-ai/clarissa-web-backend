@@ -73,7 +73,6 @@ if os.environ.get('DEPLOY_ENV') == 'PRODUCTION':
     scheme = 'https'
 
 
-
 @bp.route('/sys_stats')
 def sys_stats():
     return get_system_stats()
