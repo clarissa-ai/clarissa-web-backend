@@ -4,6 +4,7 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from .config import config_by_name
 import psutil
+import os
 
 db = SQLAlchemy()
 flask_bcrypt = Bcrypt()
@@ -12,7 +13,12 @@ login_manager = LoginManager()
 
 @login_manager.unauthorized_handler
 def unauthorized_callback():
-    return redirect(url_for('admin.login'))
+    curr_env = os.environ.get('DEPLOY_ENV', 'DEV')
+    return redirect(url_for(
+        'admin.login',
+        _external=True,
+        _scheme='https' if curr_env == 'PRODUCTION' else 'http'
+    ))
 
 
 def create_app(config_name):

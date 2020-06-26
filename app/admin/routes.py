@@ -66,10 +66,9 @@ def record_action(text, type):
 
 
 # Setting https redirect patterns based on environment
-external = False
+external = True
 scheme = 'http'
 if os.environ.get('DEPLOY_ENV') == 'PRODUCTION':
-    external = True
     scheme = 'https'
 
 
