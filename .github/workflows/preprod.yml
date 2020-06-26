@@ -15,7 +15,7 @@ env:
 # This action will only run when the preprod branch is pushed to
 on:
   push:
-    branches: [ prod ]
+    branches: [ preprod ]
 
 # These jobs will run in chronological order
 jobs:
