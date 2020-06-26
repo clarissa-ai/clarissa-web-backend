@@ -26,7 +26,8 @@ def get_main_survey():
         'message': 'Successfully retrieved main published survey.',
         'survey': {
             'id': s.id,
-            'title': s.title
+            'title': s.title,
+            'description': s.description
         }
     }
     return response_object, 200
@@ -40,7 +41,8 @@ def get_active_surveys():
         elif s.active:
             surveys.append({
                 'id': str(s.id),
-                'title': s.title
+                'title': s.title,
+                'description': s.description
             })
     response_object = {
         'status': 'success',
