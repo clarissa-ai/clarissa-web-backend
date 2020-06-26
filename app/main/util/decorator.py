@@ -9,34 +9,16 @@ def token_required(f):
     def decorated(*args, **kwargs):
 
         data, status = Auth.get_logged_in_user(request)
-        token = data.get('data')
-
-        if not token:
-            return data, status
-
+        data_status = data.get('status')
+        if data_status == 'failure':
+            return token_return_fail()
         return f(*args, **kwargs)
 
     return decorated
 
 
-def admin_token_required(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-
-        data, status = Auth.get_logged_in_user(request)
-        token = data.get('data')
-
-        if not token:
-            return data, status
-
-        admin = token.get('admin')
-        if not admin:
-            response_object = {
-                'status': 'fail',
-                'message': 'admin token required'
-            }
-            return response_object, 401
-
-        return f(*args, **kwargs)
-
-    return decorated
+def token_return_fail():
+    return {
+        'status': 'failure',
+        'message': 'Failed to validate log in information.'
+    }, 400
