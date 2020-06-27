@@ -41,7 +41,7 @@ def get_active_surveys():
             save_model(s)
         elif s.active:
             surveys.append({
-                'id': str(s.id),
+                'id': s.id,
                 'title': s.title,
                 'description': s.description
             })
