@@ -9,7 +9,7 @@ from sqlalchemy import exc as exceptions
 
 def save_model(data):
     db.session.add(data)
-    db.session.commit(data)
+    db.session.commit()
 
 
 def get_main_survey():
@@ -36,7 +36,7 @@ def get_main_survey():
 def get_active_surveys():
     surveys = []
     for s in Survey.query.all():
-        if s.expiration_date > datetime.datetime.utcnow() and s.active:
+        if s.expiration_date < datetime.datetime.utcnow() and s.active:
             s.active = False
             save_model(s)
         elif s.active:
