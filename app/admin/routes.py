@@ -53,18 +53,7 @@ from ..main.model.action import Action
 from .utilities import get_system_stats
 
 
-# Utility function for recording admin actions
-def record_action(text, type):
-    a = Action(
-        user_id=current_user.id,
-        datetime=datetime.datetime.utcnow(),
-        text=text,
-        type=type
-    )
-    db.session.add(a)
-    db.session.commit()
-
-
+# Force requests to be https if environment is production
 # Setting https redirect patterns based on environment
 external = True
 scheme = 'http'
@@ -72,19 +61,10 @@ if os.environ.get('DEPLOY_ENV') == 'PRODUCTION':
     scheme = 'https'
 
 
-@bp.route('/sys_stats')
-def sys_stats():
-    return get_system_stats()
-
-
-@bp.route('/')
-@login_required
-def index():
-    return render_template(
-        'dashboard/index.html',
-        title="Admin Home",
-        actions=Action.query.order_by(Action.id.desc()).limit(10)
-    )
+# ---------------------------------------------------------------- #
+#                       AUTHORIZATION ROUTES                       #
+#          Logic to allow admin users to login and logout          #
+# ---------------------------------------------------------------- #
 
 
 @bp.route('/login', methods=['GET', 'POST'])
@@ -131,22 +111,73 @@ def logout():
     ))
 
 
+# ---------------------------------------------------------------- #
+#                      DASHBOARD BASE PAGES                        #
+#           Core set of pages for the admin dashboard              #
+# ---------------------------------------------------------------- #
+
+
+# Utility function for recording admin actions
+def record_action(text, type):
+    a = Action(
+        user_id=current_user.id,
+        datetime=datetime.datetime.utcnow(),
+        text=text,
+        type=type
+    )
+    db.session.add(a)
+    db.session.commit()
+
+
+@bp.route('/sys_stats')
+def sys_stats():
+    return get_system_stats()
+
+
+@bp.route('/')
+@login_required
+def index():
+    return render_template(
+        'dashboard/index.html',
+        title="Admin Home"
+    )
+
+
 @bp.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard/dashboard.html', title="Admin Dashboard")
+    return render_template(
+        'dashboard/dashboard.html',
+        title="Admin Dashboard",
+        actions=Action.query.order_by(Action.id.desc()).limit(10)
+    )
+
+
+@bp.route('/actions')
+@login_required
+def actions():
+    return render_template(
+        'dashboard/actions.html',
+        title='Actions History'
+    )
 
 
 @bp.route('/profile')
 @login_required
 def profile():
-    return render_template('user/profile.html')
+    return render_template(
+        'user/profile.html',
+        title="User Profile"
+    )
 
 
 @bp.route('/profile/edit')
 @login_required
 def edit_profile():
-    return render_template('user/settings.html')
+    return render_template(
+        'user/settings.html',
+        title="User Settings"
+    )
 
 
 # ------------------------------------------------------------------ #
