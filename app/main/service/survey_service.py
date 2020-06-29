@@ -27,7 +27,8 @@ def get_main_survey():
         'survey': {
             'id': s.id,
             'title': s.title,
-            'description': s.description
+            'description': s.description,
+            'question_count': len(s.questions)
         }
     }
     return response_object, 200
@@ -43,7 +44,8 @@ def get_active_surveys():
             surveys.append({
                 'id': s.id,
                 'title': s.title,
-                'description': s.description
+                'description': s.description,
+                'question_count': len(s.questions)
             })
     response_object = {
         'status': 'success',
