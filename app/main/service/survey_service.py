@@ -1,8 +1,10 @@
 import datetime
+from flask import request
 
 from app.main import db
 from app.main.model.survey import Survey, Response
 from app.main.model.user import User
+from app.main.service.auth_helper import Auth
 
 from sqlalchemy import exc as exceptions
 
@@ -21,16 +23,21 @@ def get_main_survey():
             'message': 'Failed to retreive main survey, \
                 main survey not published.'
         }
-    response_object = {
-        'status': 'success',
-        'message': 'Successfully retrieved main published survey.',
-        'survey': {
-            'id': s.id,
-            'title': s.title,
-            'description': s.description,
-            'question_count': len(s.questions)
+    else:
+        response_obj, response_code = Auth.get_logged_in_user(request)
+        response_object = {
+            'status': 'success',
+            'message': 'Successfully retrieved main published survey.',
+            'survey': {
+                'id': s.id,
+                'title': s.title,
+                'description': s.description,
+                'question_count': len(s.questions)
+            }
         }
-    }
+        if response_code == 200:
+            user = response_obj.get('data')
+            response_object['survey']['completed'] = Response.query.filter_by(survey_id=s.id, user_id=user.get('user_id')).first() != None
     return response_object, 200
 
 
@@ -41,12 +48,16 @@ def get_active_surveys():
             s.active = False
             save_model(s)
         elif s.active:
+            response_obj, response_code = Auth.get_logged_in_user(request)
             surveys.append({
                 'id': s.id,
                 'title': s.title,
                 'description': s.description,
                 'question_count': len(s.questions)
             })
+            if response_code == 200:
+                user = response_obj.get('data')
+                response_object[-1]['completed'] = Response.query.filter_by(survey_id=s.id, user_id=user.get('user_id')).first() != None
     response_object = {
         'status': 'success',
         'message': 'Successfully retrieved surveys.',
