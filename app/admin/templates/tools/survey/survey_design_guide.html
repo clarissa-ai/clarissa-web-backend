@@ -25,7 +25,7 @@
         </a><br />
 
         <a class="ui button fluid labeled icon" href="{{ url_for('admin.all_responses') }}">
-          <i class="list alternate icon"></i>
+          <i class="clipboard list icon"></i>
           Responses List
         </a><br />
 
@@ -82,7 +82,7 @@
         </div>
       </div>
 
-      <div class="four wide column">
+      <div class="five wide column">
         <div class="ui segments raised">
 
           <div class="ui segment center aligned violet inverted">
@@ -91,20 +91,49 @@
 
           <div class="ui segment">
             <b>Question Core Elements</b><br />
-            <i>Title: </i> The title of each question <br />
-            <i>Description: </i> A description that gives the survey-taker a better understanding of th<br />
+            <u>Title:</u> The title of each question <br />
+            <u>Description:</u> A description that gives the survey-taker a better understanding of the objective of the survey and what kind of information they can get from it.<br />
           </div>
 
           <div class="ui segment">
-            <b>Default next:</b><br />
+            <b>Default next:</b> <br />
+            The survey designer can provide a default "next question" that a survey taker will be directed to after this question. The default next can also be set to
+            send the user to the summary page.
           </div>
 
           <div class="ui segment">
-            <b>Question type:</b><br />
+            <b>Question type:</b><br/>
+            The survey designer may chose from several different question types, that change how the user can input their response to the question. The current question types
+            are: multiple select (user can select multiple options from a list), single select (user can only chose one option from a list, max 7 options), dropdown (same as 
+            single select except allows for more options), and short answer (text area input).
           </div>
           
           <div class="ui segment">
-            <b>Options</b>
+            <b>Options:</b><br/>
+            For certain types of questions, the user is presented a set of options that they can chose from. When adding an option the survey designer can also add 3 additional details 
+            that are used to determine what the user is presented after selecting that option:
+            <ul style="margin-bottom:0px; margin-top:5px;">
+              
+              <li>
+                <u>Next question:</u> 
+                The question the user is directed to after selecting this option. If no next question is selected, the option will default to using current question's
+                "default next" question. In a multiple select question, all the user's selected options are tallied, and the user is directed to the most frequent next question.
+              </li>
+              
+              <li>
+                <u>Associated Summary:</u>
+                The associated summary represents the summary that the user should be led to for selecting that option. For example, in a question where the user is presented a set of 
+                symptoms, where different symptoms are associated with different conditions, you can make summaries for each of the conditions and set those options to be associated
+                with the summaries for those conditions.
+              </li>
+              
+              <li>
+                <u>Associated Summary Weight:</u>
+                With the associated summary, you can (and should) also assign a numeric weight that determines how significant that option is to it's associated summary. When the user gets
+                to a question that directs them to the summary page (indicating the end of the survey), 
+              </li>
+            
+            </ul>
           </div>
 
         </div>
@@ -118,7 +147,20 @@
           </div>
 
           <div class="ui segment">
-            <i>Title: </i> <br/>
+            <b>Basic Elements:</b><br/>
+            <u>Title:</u> 
+            The title of the summary is the final result that the user sees after completing the survey. It should be intentionally designed to be a culmination of the options
+            the user selected.
+            <br/>
+            <u>Description:</u>
+            A short quote that supplements the title (usually only a few words). Some examples could be "Recommendation", "Healthy Tips", and "Urgent".
+            <br/>
+          </div>
+
+          <div class="ui segment">
+            <b>Info Groups:</b><br/>
+            Info groups are groups of information presented to the user that give the user more details to act on regarding the results of their survey. Info groups have a title,
+            a link (the title is a hyperlink), and a group of details (text bullet points supplementing the title of the info group).
           </div>
 
         </div>
