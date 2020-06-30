@@ -204,7 +204,7 @@ class Summary(db.Model):
     def get_image_url(self):
         url = '/api/images/get_image/filler/fill.png'
         if self.image_file:
-            url = "/api/images/get_image/survey_link/{}.{}".format(
+            url = "/api/images/get_image/survey_summary/{}.{}".format(
                 self.id,
                 self.image_type
             )
