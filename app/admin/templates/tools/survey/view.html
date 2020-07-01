@@ -68,6 +68,12 @@
                 <td colspan="1"><b>Responses:</b></td>
                 <td colspan="1">{{ survey.responses|length }}</td>
               </tr>
+              <tr>
+                <td colspan="2"><b>Cover Image:</b></td>
+                <td colspan="6">
+                  <img class="ui image" src="{{ survey.get_cover_image_url() }}" />
+                </td>
+              </tr>
             </tbody>
           </table>
 
@@ -82,8 +88,6 @@
             </a>
           </div>
         </div>
-
-
 
         <!-- INTRO RESOURCES START -->
         <div class="ui segments stacked">
@@ -152,11 +156,9 @@
 
       <div class="five wide column">
 
-
-
         <div class="ui segments raised">
 
-          <div class="ui segment">
+          <div class="ui segment teal inverted">
             <h2>Configurations</h2>
           </div>
 
@@ -267,18 +269,12 @@
                 <i class="eye icon"></i>
                 Survey Design Guide
               </a>
-
             </div>
-
-
-
-
-
           </div>
         </div>
 
         <!-- ROOT QUESTION SEGMENT START -->
-        <div class="ui segments stacked">
+        <div class="ui segments raised">
 
           <div class="ui segment center aligned">
             <h4>
@@ -402,7 +398,7 @@
       <div class="five wide column">
         <div class="ui segments stacked">
 
-          <div class="ui segment">
+          <div class="ui segment teal inverted">
             <h2>Final Summaries</h2>
           </div>
 

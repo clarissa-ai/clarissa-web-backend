@@ -26,6 +26,9 @@ class Survey(db.Model):
 
     root_id = db.Column(db.Integer)
 
+    cover_image_file = db.Column(db.LargeBinary)
+    cover_image_type = db.Column(db.String(4))
+
     questions = db.relationship('Question', backref='survey')
     responses = db.relationship('Response', backref='survey')
     links = db.relationship('Link', backref='survey')
@@ -40,6 +43,15 @@ class Survey(db.Model):
             )
         return url
 
+    def get_cover_image_url(self):
+        url = '/api/images/get_image/filler/fill.png'
+        if self.cover_image_file:
+            url = '/api/images/get_image/survey_cover/{}.{}'.format(
+                self.id,
+                self.cover_image_type
+            )
+        return url
+
     def get_json(self):
         r_id = -1
         if self.root_id:
@@ -49,6 +61,7 @@ class Survey(db.Model):
             'description': self.description,
             'root_id': r_id,
             'image_url': self.get_image_url(),
+            'cover_image_url': self.get_cover_image_url(),
             'question_count': len(self.questions),
             'links': [link.get_json() for link in self.links],
             'questions': [q.get_json() for q in self.questions],

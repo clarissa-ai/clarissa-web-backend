@@ -34,6 +34,10 @@ class CreateSurveyForm(FlaskForm):
         'Title Image',
         validators=[FileAllowed(['jpg', 'png'], 'Images only!')]
     )
+    cover_image_upload = FileField(
+        'Cover Image',
+        validators=[FileAllowed(['jpg', 'png'], 'Images only!')]
+    )
     active = BooleanField('Active')
     main = BooleanField('Main')
     expiration_date = StringField(
@@ -48,6 +52,10 @@ class EditSurveyForm(FlaskForm):
     description = TextAreaField('Description', validators=[DataRequired()])
     image_upload = FileField(
         'Title Image',
+        validators=[FileAllowed(['jpg', 'png'], 'Images only!')]
+    )
+    cover_image_upload = FileField(
+        'Cover Image',
         validators=[FileAllowed(['jpg', 'png'], 'Images only!')]
     )
     active = BooleanField('Active')

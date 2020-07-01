@@ -276,11 +276,20 @@ def create_survey():
         )
         db.session.add(s)
         db.session.commit()
+
         # IMAGE UPLOADING LOGIC
         if create_survey_form.image_upload.data:
             f = create_survey_form.image_upload.data
             s.image_file = f.read()
             s.image_type = f.filename.split(".")[-1]
+            db.session.add(s)
+            db.session.commit()
+
+        # COVER IMAGE UPLOADING LOGIC
+        if create_survey_form.cover_image_upload.data:
+            f = create_survey_form.cover_image_upload.data
+            s.cover_image_file = f.read()
+            s.cover_image_type = f.filename.split(".")[-1]
             db.session.add(s)
             db.session.commit()
 
@@ -824,6 +833,12 @@ def edit_survey(survey_id):
             f = edit_survey_form.image_upload.data
             s.image_file = f.read()
             s.image_type = f.filename.split(".")[-1]
+
+        # COVER IMAGE UPLOADING LOGIC
+        if edit_survey_form.cover_image_upload.data:
+            f = edit_survey_form.cover_image_upload.data
+            s.cover_image_file = f.read()
+            s.cover_image_type = f.filename.split(".")[-1]
 
         db.session.add(s)
         db.session.commit()
