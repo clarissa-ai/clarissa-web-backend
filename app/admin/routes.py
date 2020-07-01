@@ -162,12 +162,14 @@ def actions():
     )
 
 
-@bp.route('/profile')
+@bp.route('/profile/<id>')
 @login_required
-def profile():
+def profile(id):
+    u = AdminUser.query.filter_by(id=id).first()
     return render_template(
         'user/profile.html',
-        title="User Profile"
+        title="{}'s profile".format(u.username),
+        user=u
     )
 
 
@@ -1359,7 +1361,12 @@ def development_home():
 @bp.route('/user_list')
 @login_required
 def user_list():
+    admin_users = AdminUser.query.all()
+    for u in admin_users:
+        a = Action.query.filter_by(user_id=u.id).order_by(-Action.id).first()
+        u.most_recent_action = a
     return render_template(
         'dashboard/administration/user_list.html',
-        title="Admin User List"
+        title="Admin User List",
+        admin_users=admin_users
     )

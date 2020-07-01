@@ -180,11 +180,11 @@
             <i class="bell icon"></i>
           </a>
           <div class="ui dropdown item">
-            <i class="user cirlce icon"></i>
+            <i class="user icon"></i>
             <div class="menu">
-              <a href="{{ url_for('admin.profile') }}" class="item">
+              <a href="{{ url_for('admin.profile', id=current_user.id) }}" class="item">
                 <i class="info circle icon"></i> Profile</a>
-              <a href="{{ url_for('admin.edit_profile') }}" class="item">
+              <a href="{{ url_for('admin.edit_profile', id=current_user.id) }}" class="item">
                 <i class="wrench icon"></i>
                 Settings</a>
               <a href="{{ url_for('admin.logout') }}" class="item">
