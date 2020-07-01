@@ -57,7 +57,7 @@ def get_active_surveys():
             })
             if response_code == 200:
                 user = response_obj.get('data')
-                response_object[-1]['completed'] = Response.query.filter_by(survey_id=s.id, user_id=user.get('user_id')).first() != None
+                surveys[-1]['completed'] = Response.query.filter_by(survey_id=s.id, user_id=user.get('user_id')).first() != None
     response_object = {
         'status': 'success',
         'message': 'Successfully retrieved surveys.',
