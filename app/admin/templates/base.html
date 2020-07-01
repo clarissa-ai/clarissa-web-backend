@@ -151,6 +151,23 @@
         </div>
       </div>
 
+      <div class="item">
+        <div class="header">
+          User Options
+        </div>
+        <div class="menu">
+          <a class="item" href="{{ url_for('admin.profile', id=current_user.id)}}">
+            <div><i class="user alt icon"></i>User Profile</div>
+          </a>
+          <a class="item" href="{{ url_for('admin.edit_profile', id=current_user.id) }}">
+            <div><i class="sliders h icon"></i>Preferences</div>
+          </a>
+          <a class="item" href="{{ url_for('admin.logout') }}">
+            <div><i class="sign out icon"></i>Logout</div>
+          </a>
+        </div>
+      </div>
+
     </div>
 
     {% endif %}
