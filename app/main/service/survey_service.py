@@ -24,7 +24,6 @@ def get_main_survey():
                 main survey not published.'
         }
     else:
-        response_obj, response_code = Auth.get_logged_in_user(request)
         response_object = {
             'status': 'success',
             'message': 'Successfully retrieved main published survey.',
@@ -35,8 +34,9 @@ def get_main_survey():
                 'question_count': len(s.questions)
             }
         }
-        if response_code == 200:
-            user = response_obj.get('data')
+        auth_response, auth_response_code = Auth.get_logged_in_user(request)
+        if auth_response_code == 200:
+            user = auth_response.get('data')
             response_object['survey']['completed'] = Response.query.filter_by(survey_id=s.id, user_id=user.get('user_id')).first() != None
     return response_object, 200
 
@@ -48,15 +48,15 @@ def get_active_surveys():
             s.active = False
             save_model(s)
         elif s.active:
-            response_obj, response_code = Auth.get_logged_in_user(request)
             surveys.append({
                 'id': s.id,
                 'title': s.title,
                 'description': s.description,
                 'question_count': len(s.questions)
             })
-            if response_code == 200:
-                user = response_obj.get('data')
+            auth_response, auth_response_code = Auth.get_logged_in_user(request)
+            if auth_response_code == 200:
+                user = auth_response.get('data')
                 surveys[-1]['completed'] = Response.query.filter_by(survey_id=s.id, user_id=user.get('user_id')).first() != None
     response_object = {
         'status': 'success',
@@ -120,3 +120,6 @@ def post_survey_response(data):
         'status': 'success',
         'message': 'Successfully submitted survey response.'
     }, 200
+
+
+
