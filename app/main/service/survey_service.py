@@ -139,7 +139,6 @@ def get_survey_results():
                             'title': Question.query.filter_by(id=q['id']).first().title,
                             'choices': q['choices']
                         })
-                print(question_responses)
                 summary = Summary.query.filter_by(id=json_body['summary']['id']).first()
                 surveys_answers.append({
                     'title': s.title,
