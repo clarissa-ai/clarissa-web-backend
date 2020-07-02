@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="pusher">
+  <div class="main-content">
+    <div class="ui aligned centered grid stackable padded">
+
+      <div class="five wide column">
+
+        {% if form.errors %}
+        <div class="ui message red">
+          <i class="close icon"></i>
+          <b>Form errors:</b>
+          <ul>
+            {% for err in form.errors %}
+            <li><b>Target: </b>{{err}},<b> Message: </b>{{ form.errors[err][0] }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+
+        <form class="ui large form" method="post" novalidate enctype="multipart/form-data">
+          {{ form.hidden_tag() }}
+
+          <div class="ui segments stackable">
+
+            <div class="ui segment">
+              <h2>Edit Route: {{ route.title}}</h2>
+            </div>
+
+            <div class="ui segment">
+              <div class="required field">
+                {{ form.title.label }}
+                {{ form.title(size=32, value=route.title) }}
+
+              </div>
+            </div>
+
+            <div class="ui segment">
+              <div class="required field">
+                {{ form.origin.label }}
+                {{ form.origin(size=32, value=route.origin) }}
+
+              </div>
+            </div>
+
+            <div class="ui segment">
+              <div class="required field">
+                {{ form.target.label }}
+                {{ form.target(size=32, value=route.target) }}
+
+              </div>
+            </div>
+
+            <div class="ui segment center aligned">
+              <div class="inline required field center aligned">
+                {% if route.active %}
+                {{ form.active(class="form-check-input", checked=True) }}
+                {% else %}
+                {{ form.active(class="form-check-input") }}
+                {% endif %}
+                <div class="ui left pointing label">
+                  Active Route (published)
+                </div>
+              </div>
+            </div>
+
+            <div class="ui segment center aligned">
+              {{ form.submit(class_="ui fluid large teal submit button") }}
+            </div>
+
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

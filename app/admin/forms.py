@@ -212,3 +212,31 @@ class EditOptionForm(FlaskForm):
         )
         self.summary.choices = [(s.id, s.title) for s in summaries]
         self.summary.choices.insert(0, (0, "None"))
+
+
+class CreateRouteForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    origin = StringField(
+        'Origin (user requested URL)',
+        validators=[DataRequired()]
+    )
+    target = StringField(
+        'Target (redirected URL)',
+        validators=[DataRequired()]
+    )
+    active = BooleanField('Active')
+    submit = SubmitField('Create Route')
+
+
+class EditRouteForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    origin = StringField(
+        'Origin (user requested URL)',
+        validators=[DataRequired()]
+    )
+    target = StringField(
+        'Target (redirected URL)',
+        validators=[DataRequired()]
+    )
+    active = BooleanField('Active')
+    submit = SubmitField('Confirm Changes')

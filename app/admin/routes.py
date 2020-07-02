@@ -33,7 +33,9 @@ from .forms import (
     EditSummaryForm,
     CreateInfoGroupForm,
     AddOptionForm,
-    EditOptionForm
+    EditOptionForm,
+    CreateRouteForm,
+    EditRouteForm
 )
 
 from ..main import db
@@ -49,6 +51,7 @@ from ..main.model.survey import (
     Response
 )
 from ..main.model.action import Action
+from ..main.model.route import Route
 
 from .utilities import get_system_stats
 
@@ -1336,10 +1339,110 @@ def survey_design_guide(survey_id, survey_title):
 @bp.route('/custom_routes')
 @login_required
 def routes_home():
+    routes = Route.query.all()
+    print(routes)
     return render_template(
         '/tools/route/home.html',
-        title='Custom Routing'
+        title='Custom Routing',
+        routes=routes
     )
+
+
+@bp.route('/custom_routes/new', methods=['GET', 'POST'])
+@login_required
+def create_route():
+    form = CreateRouteForm()
+    if form.validate_on_submit():
+        r = Route(
+            title=form.title.data,
+            origin=form.origin.data,
+            target=form.target.data,
+            created_on=datetime.datetime.utcnow(),
+            active=form.active.data
+        )
+        db.session.add(r)
+        db.session.commit()
+        record_action('Created new custom route "{}"'.format(r.title), 'create')
+        return redirect(url_for('admin.routes_home'))
+    return render_template(
+        '/tools/route/new.html',
+        title="Create Route",
+        form=form
+    )
+
+
+@bp.route('/custom_routes/edit/<id>', methods=['GET', 'POST'])
+@login_required
+def edit_route(id):
+    r = Route.query.filter_by(id=id).first()
+    if not r:
+        flash('Requested route does not exist.')
+        return redirect(url_for('admin.routes_home'))
+    form = EditRouteForm()
+    if form.validate_on_submit():
+        r.title = form.title.data
+        r.origin = form.origin.data
+        r.target = form.target.data
+        r.active = form.active.data
+        db.session.add(r)
+        db.session.commit()
+        record_action('Edited custom route "{}"'.format(r.title), 'edit')
+        return redirect(url_for('admin.routes_home'))
+    return render_template(
+        '/tools/route/edit.html',
+        title="Edit Route",
+        form=form,
+        route=r
+    )
+
+
+@bp.route('/custom_routes/delete/<id>')
+@login_required
+def delete_route(id):
+    r = Route.query.filter_by(id=id).first()
+    if not r:
+        flash('Requested route does not exist.')
+        return redirect(url_for('admin.routes_home'))
+    db.session.delete(r)
+    db.session.commit()
+    record_action('Deleted custom route "{}"'.format(r.title), 'destroy')
+    return redirect(url_for('admin.routes_home'))
+
+
+@bp.route('/custom_routes/deactivate/<id>')
+@login_required
+def deactivate_route(id):
+    r = Route.query.filter_by(id=id).first()
+    if r.active:
+        r.active = False
+        db.session.add(r)
+        db.session.commit()
+        record_action(
+            'Deactivated custom route "{}"'.format(r.title),
+            'destroy'
+        )
+        flash('Route "{}" successfully deactivated.'.format(r.title))
+    else:
+        flash('Route "{}" already deactivated.'.format(r.title))
+    return redirect(url_for('admin.routes_home'))
+
+
+@bp.route('/custom_routes/activate/<id>')
+@login_required
+def activate_route(id):
+    r = Route.query.filter_by(id=id).first()
+    if r.active:
+        flash('Route "{}" already active.'.format(r.title))
+    else:
+        r.active = True
+        db.session.add(r)
+        db.session.commit()
+        record_action(
+            'Activated custom route "{}"'.format(r.title),
+            'create'
+        )
+        flash('Route "{}" successfully activated.'.format(r.title))
+    return redirect(url_for('admin.routes_home'))
 
 
 # ---------------------------------------------------------------- #
