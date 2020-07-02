@@ -34,6 +34,10 @@ class CreateSurveyForm(FlaskForm):
         'Title Image',
         validators=[FileAllowed(['jpg', 'png'], 'Images only!')]
     )
+    cover_image_upload = FileField(
+        'Cover Image',
+        validators=[FileAllowed(['jpg', 'png'], 'Images only!')]
+    )
     active = BooleanField('Active')
     main = BooleanField('Main')
     expiration_date = StringField(
@@ -48,6 +52,10 @@ class EditSurveyForm(FlaskForm):
     description = TextAreaField('Description', validators=[DataRequired()])
     image_upload = FileField(
         'Title Image',
+        validators=[FileAllowed(['jpg', 'png'], 'Images only!')]
+    )
+    cover_image_upload = FileField(
+        'Cover Image',
         validators=[FileAllowed(['jpg', 'png'], 'Images only!')]
     )
     active = BooleanField('Active')
@@ -204,3 +212,31 @@ class EditOptionForm(FlaskForm):
         )
         self.summary.choices = [(s.id, s.title) for s in summaries]
         self.summary.choices.insert(0, (0, "None"))
+
+
+class CreateRouteForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    origin = StringField(
+        'Origin (user requested URL)',
+        validators=[DataRequired()]
+    )
+    target = StringField(
+        'Target (redirected URL)',
+        validators=[DataRequired()]
+    )
+    active = BooleanField('Active')
+    submit = SubmitField('Create Route')
+
+
+class EditRouteForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    origin = StringField(
+        'Origin (user requested URL)',
+        validators=[DataRequired()]
+    )
+    target = StringField(
+        'Target (redirected URL)',
+        validators=[DataRequired()]
+    )
+    active = BooleanField('Active')
+    submit = SubmitField('Confirm Changes')

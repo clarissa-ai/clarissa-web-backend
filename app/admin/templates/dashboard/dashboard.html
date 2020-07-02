@@ -11,11 +11,11 @@
 
         <div class="ui segments stacked raised">
 
-          <div class="ui segment">
-            <h2><b>Available Tools:</b></h2>
+          <div class="ui segment violet inverted center aligned">
+            <h2><b>Available Tools</b></h2>
           </div>
 
-          <div class="ui segment black">
+          <div class="ui segment">
             <h3>Surveys</h3>
             <div class="ui segments">
               <div class="ui segment">
@@ -107,11 +107,11 @@
       <div class="six wide column">
         <div class="ui segments stacked raised">
 
-          <div class="ui segment">
+          <div class="ui segment purple inverted center aligned">
             <h2>Summary</h2>
           </div>
 
-          <div class="ui segment black">
+          <div class="ui segment">
             <h3>Usage Statistics</h3>
             <div class="ui segments">
               <div class="ui segment negative message">
@@ -173,12 +173,14 @@
             </h3>
 
             <div class="ui segments">
+              
               <div class="ui segment">
                 <div class="ui tiny yellow progress">
                   <div class="bar" id="process_main" style="width:0%"></div>
                   <div class="label">Processor</div>
                 </div>
               </div>
+
               <div class="ui segment">
                 <div class="ui tiny blue progress">
                   <div class="bar" id="ram_main" style="width:0%"></div>
@@ -192,6 +194,12 @@
                   <div class="label">Disk Usage</div>
                 </div>
               </div>
+
+              <div class="ui segment warning message">
+                This table is updated every second. Please keep in mind, the resources are only displayed for the instance 
+                you are connected to, not the whole system.
+              </div>
+
             </div>
 
 
@@ -205,7 +213,7 @@
         <table class="ui celled table" style="margin-top: 0%;">
           <thead>
             <tr>
-              <th class="center aligned" colspan="4">
+              <th class="center aligned" colspan="4" style="background-color:blueviolet; color: white;">
                 <h2>Recent Actions</h2>
               </th>
             </tr>

@@ -6,10 +6,105 @@
   <div class="main-content">
     <div class="ui grid stackable padded centered">
 
-      <div class="eight wide column">
-        <div class="ui segment red inverted">
-          This feature is still under development and will be available in the next version of the dashboard.
+      <div class="five wide column">
+        
+        <div class="ui segments raised">
+          
+          <div class="ui segment blue inverted center aligned">
+            <h2>Custom Routes Configuration</h2>
+          </div>
+
+          <div class="ui segment">
+            This page allows the admin user to configure custom redirect routes.<br/><br/>
+            The origin is the route that the user will request on the frontend (ex. "/covid-19-survey"), while the target
+            is the route that they will be redirected to on the frontend (ex. "/survey/1").
+          </div>
+
+          <div class="ui segment">
+            <a class="ui button fluid green" href="{{ url_for('admin.create_route') }}">
+              <i class="circle plus icon"></i>
+              Add a route
+            </a>
+          </div>
+
         </div>
+
+      </div>
+
+      <div class="ten wide column">
+                
+        <table class="ui celled table">
+          
+          <thead>
+            <th>Title</th>
+            <th>From (origin)</th>
+            <th><i class="right arrow icon"></i></th>
+            <th>To (target)</th>
+            <th class="center aligned">Active</th>
+            <th class="center aligned">Activate?</th>
+            <th>Options</th>
+          </thead>
+
+          <tbody>
+            {% for route in routes %}
+            <tr>
+              <td>{{ route.title }}</td>
+              <td>
+                <a href="https://clarissa.ai{{route.origin}}">
+                {{ route.origin }}
+                </a>
+              </td>
+              <td><i class="right arrow icon"></i></td>
+              <td>
+                <a href="https://clarissa.ai{{route.target}}">
+                {{ route.target }}
+                </a>
+              </td>
+              <td
+              class="center aligned
+              {% if route.active %}
+              positive
+              {% else %}
+              negative
+              {% endif %}"
+              >
+              {% if route.active %}
+              <i class="check circle big icon"></i>
+              {% else %}
+              <i class="x big icon"></i>
+              {% endif %}
+              </td>
+              <td class="center aligned">
+                {% if route.active %}
+                <a href="{{ url_for('admin.deactivate_route', id=route.id) }}" class="ui button red labeled icon">
+                  <i class="x icon"></i>
+                  Deactivate
+                </a>
+                {% else %}
+                <a href="{{ url_for('admin.activate_route', id=route.id) }}" class="ui button green labeled icon">
+                  <i class="check icon"></i>
+                  Activate
+                </a>
+                {% endif %}
+              </td>
+              <td class="center aligned">
+                <div class="ui buttons fluid">
+                  <a class="ui button yellow" href="{{ url_for('admin.edit_route', id=route.id)}}">
+                    <i class="pencil icon"></i>
+                    Edit
+                  </a>
+                  <a class="ui button red" href="{{ url_for('admin.delete_route', id=route.id)}}">
+                    <i class="trash icon"></i>
+                    Delete
+                  </a>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+
+        </table>
+
       </div>
 
     </div>
