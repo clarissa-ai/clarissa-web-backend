@@ -1,6 +1,9 @@
 # import User model and change function params according
 # to User model storage
 import requests
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 
 def post_user_response_to_api(user_json, user_sex, user_age):
@@ -21,17 +24,16 @@ def post_user_response_to_api(user_json, user_sex, user_age):
     data = dict([('sex', user_sex), ('age', user_age)])
     data_syms = []
     headers = {
-      'App-Id': 'bdc52fd6',
-      'App-Key': 'c74d2f5d9ed5f8d81f887bb446bc9934',
+      'App-Id': os.getenv('API_APP_ID'),
+      'App-Key': os.getenv('API_APP_KEY'),
       'Content-Type': 'application/json'
     }
     url1 = "https://api.infermedica.com/v2/parse"
-    symptoms = requests.post(url1, headers=headers, json=user_json)
-    sym_json = symptoms.json()
-    for i in range(0, len(sym_json['mentions'])):
-        data_syms.append
-        ({'id': sym_json['mentions'][i]['id'], 'choice_id': 'present'})
+    symptoms = requests.post(url1, headers=headers, json=user_json).json()
+    for i in range(0, len(symptoms['mentions'])):
+        data_syms.append({'id': symptoms['mentions'][i]['id'],'choice_id': 'present'})
     data.update([('evidence', data_syms)])
     url2 = "https://api.infermedica.com/v2/diagnosis"
+    print(data)
     diagnosis = requests.post(url2, headers=headers, json=data).json()
     return symptoms, diagnosis
