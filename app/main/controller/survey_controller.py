@@ -6,7 +6,8 @@ from ..service.survey_service import (
     get_active_surveys,
     get_survey,
     get_main_survey,
-    post_survey_response
+    post_survey_response,
+    get_survey_results
 )
 
 
@@ -56,3 +57,11 @@ class SubmitResponse(Resource):
         """Submit survey response JSON"""
         data = request.json
         return post_survey_response(data)
+
+@api.route('/get_response')
+class GetResponse(Resource):
+    @api.doc('get a list of all submitted surveys by user')
+    @api.response(200, 'Submitted surveys results retrieved')
+    def get(self):
+        """Get list of all submitted survey results"""
+        return get_survey_results()
