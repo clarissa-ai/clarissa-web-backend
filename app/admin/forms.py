@@ -240,3 +240,9 @@ class EditRouteForm(FlaskForm):
     )
     active = BooleanField('Active')
     submit = SubmitField('Confirm Changes')
+
+
+class EditProfileForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired()])
+    submit = SubmitField('Confirm Changes')

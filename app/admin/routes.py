@@ -35,7 +35,8 @@ from .forms import (
     AddOptionForm,
     EditOptionForm,
     CreateRouteForm,
-    EditRouteForm
+    EditRouteForm,
+    EditProfileForm
 )
 
 from ..main import db
@@ -169,19 +170,50 @@ def actions():
 @login_required
 def profile(id):
     u = AdminUser.query.filter_by(id=id).first()
+    if not u:
+        flash('Requested user with id {} does not exist.'.format(id))
+        return redirect(url_for('admin.index'))
+    u.last_action = Action.query.filter_by(
+        user_id=u.id
+    ).order_by(-Action.id).first().datetime
+    actions = Action.query.filter_by(
+        user_id=u.id
+    ).order_by(-Action.id).limit(10)
     return render_template(
         'user/profile.html',
         title="{}'s profile".format(u.username),
-        user=u
+        user=u,
+        actions=actions
     )
 
 
-@bp.route('/profile/edit')
+@bp.route('/profile/edit/<id>', methods=['GET', 'POST'])
 @login_required
-def edit_profile():
+def edit_profile(id):
+    u = AdminUser.query.filter_by(id=id).first()
+    if not u:
+        flash('Requested user with id {} does not exist.'.format(id))
+        return redirect(url_for('admin.index'))
+    if u != current_user:
+        flash("You are not authenticated to access this user's settings.")
+        return redirect(url_for('admin.profile', id=id))
+    form = EditProfileForm()
+    if form.validate_on_submit():
+        u.username = form.username.data
+        u.email = form.email.data
+        db.session.add(u)
+        db.session.commit()
+        flash('Successfully edited user settings!')
+        record_action(
+            '{} edited their user profile.'.format(u.username),
+            'edit'
+        )
+        return redirect(url_for('admin.profile', id=u.id))
     return render_template(
         'user/settings.html',
-        title="User Settings"
+        title="User Settings",
+        user=u,
+        form=form
     )
 
 
@@ -1362,7 +1394,10 @@ def create_route():
         )
         db.session.add(r)
         db.session.commit()
-        record_action('Created new custom route "{}"'.format(r.title), 'create')
+        record_action(
+            'Created new custom route "{}"'.format(r.title),
+            'create'
+        )
         return redirect(url_for('admin.routes_home'))
     return render_template(
         '/tools/route/new.html',

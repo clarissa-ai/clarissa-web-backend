@@ -6,10 +6,58 @@
   <div class="main-content">
     <div class="ui grid stackable padded centered">
 
-      <div class="eight wide column">
-        <div class="ui segment red inverted">
-          This feature is still under development and will be available in the next version of the dashboard.
+      <div class="six wide column">
+        {% if form.errors %}
+        <div class="ui message red">
+          <i class="close icon"></i>
+          <b>Form errors:</b>
+          <ul>
+            {% for err in form.errors %}
+            <li><b>Target: </b>{{err}},<b> Message: </b>{{ form.errors[err][0] }}</li>
+            {% endfor %}
+          </ul>
         </div>
+        {% endif %}
+
+        <div class="ui segments">
+
+          <div class="ui segment center aligned blue inverted">
+             <h3>Editing <u>{{ user.username }}</u>'s Profile</h3>
+          </div>
+        </div>
+
+          <form class="ui large form" method="post" novalidate enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+  
+            <div class="ui segments stackable">
+  
+              
+  
+              <div class="ui segment">
+                <div class="required field">
+                  {{ form.username.label }}
+                  {{ form.username(value=user.username) }}
+  
+                </div>
+              </div>
+  
+              <div class="ui segment">
+                <div class="required field">
+                  {{ form.email.label }}
+                  {{ form.email(value=user.email) }}
+                </div>
+              </div>
+  
+              <div class="ui segment center aligned">
+                {{ form.submit(class_="ui fluid large teal submit button") }}
+              </div>
+  
+            </div>
+  
+          </form>
+
+      
+
       </div>
 
     </div>
