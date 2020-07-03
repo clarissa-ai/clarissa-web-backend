@@ -31,6 +31,7 @@ def get_main_survey():
                 'id': s.id,
                 'title': s.title,
                 'description': s.description,
+                'cover_image_url': s.get_cover_image_url(),
                 'question_count': len(s.questions)
             }
         }
@@ -52,6 +53,7 @@ def get_active_surveys():
                 'id': s.id,
                 'title': s.title,
                 'description': s.description,
+                'cover_image_url': s.get_cover_image_url(),
                 'question_count': len(s.questions)
             })
             auth_response, auth_response_code = Auth.get_logged_in_user(request)
@@ -141,6 +143,7 @@ def get_survey_results():
             surveys_answers.append({
                 'title': s.title,
                 'description': s.description,
+                'cover_image_url': s.get_cover_image_url(),
                 'answered_questions': question_responses,
                 'summary_title': summary.title,
                 'summary_description': summary.description
