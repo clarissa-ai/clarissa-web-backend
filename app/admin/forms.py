@@ -246,3 +246,19 @@ class EditProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired()])
     submit = SubmitField('Confirm Changes')
+
+
+class EditPasswordForm(FlaskForm):
+    current_password = PasswordField(
+        'Enter Current Password',
+        validators=[DataRequired()]
+    )
+    new_password = PasswordField(
+        'Enter New Password',
+        validators=[DataRequired()]
+    )
+    confirm_password = PasswordField(
+        'Confirm New Password',
+        validators=[DataRequired()]
+    )
+    submit = SubmitField('Confirm Changes')

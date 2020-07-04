@@ -36,7 +36,8 @@ from .forms import (
     EditOptionForm,
     CreateRouteForm,
     EditRouteForm,
-    EditProfileForm
+    EditProfileForm,
+    EditPasswordForm
 )
 
 from ..main import db
@@ -166,6 +167,11 @@ def actions():
     )
 
 
+# ------------------------------------------------------------------ #
+#                        USER PROFILE ROUTES                         #
+#   Pages allowing admin users to view profiles and edit settings    #
+# ------------------------------------------------------------------ #
+
 @bp.route('/profile/<id>')
 @login_required
 def profile(id):
@@ -214,6 +220,40 @@ def edit_profile(id):
         title="User Settings",
         user=u,
         form=form
+    )
+
+
+@bp.route('/profile/edit/<id>/password', methods=['GET', 'POST'])
+@login_required
+def edit_password(id):
+    u = AdminUser.query.filter_by(id=id).first()
+    if not u:
+        flash('Requested user does not exist.')
+        return redirect(url_for('admin.index'))
+    if u.id != current_user.id:
+        flash('User does not have permissions to access this page.')
+        return redirect(url_for('admin.profile', id))
+    form = EditPasswordForm()
+    if form.validate_on_submit():
+        if u.check_password(form.current_password.data):
+            if form.new_password.data == form.confirm_password.data:
+                u.password = form.new_password.data
+                db.session.add(u)
+                db.session.commit()
+                flash('Successfully changed user\'s password')
+                record_action('"{}" edited settings.'.format(u.username), 'edit')
+                return redirect(url_for('admin.profile', id=id))
+            else:
+                flash('Passwords did not match')
+                return redirect(url_for('admin.edit_password', id=id))
+        else:
+            flash('Failed to confirm current user password')
+            return redirect(url_for('admin.edit_password', id=id))
+    return render_template(
+        'user/edit_password.html',
+        title="Editiing Password",
+        form=form,
+        user=u
     )
 
 

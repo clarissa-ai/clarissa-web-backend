@@ -50,6 +50,10 @@
                   <i class="pencil icon"></i>
                   Edit Profile
                 </a>
+                <a class="ui button orange" href="{{ url_for('admin.edit_password', id=user.id) }}">
+                  <i class="key icon"></i>
+                  Change Password
+                </a>
               </td>
             </tr>
             {% endif %}
