@@ -139,7 +139,10 @@ def get_survey_results():
     if auth_response_code == 200:
         user = auth_response.get('data')
         for s in Survey.query.all():
-            response_json = Response.query.filter_by(survey_id=s.id, user_id=user.get('user_id')).order_by(-Response.id).first()
+            response_json = Response.query.filter_by(
+                survey_id=s.id,
+                user_id=user.get('user_id')
+            ).order_by(-Response.id).first()
             if response_json:
                 json_body = response_json.json_response
                 questions = json_body['questions']
@@ -147,10 +150,14 @@ def get_survey_results():
                 for q in questions:
                     if q['choices'] != []:
                         question_responses.append({
-                            'title': Question.query.filter_by(id=q['id']).first().title,
+                            'title': Question.query.filter_by(
+                                id=q['id']
+                            ).first().title,
                             'choices': q['choices']
                         })
-                summary = Summary.query.filter_by(id=json_body['summary']['id']).first()
+                summary = Summary.query.filter_by(
+                    id=json_body['summary']['id']
+                ).first()
                 surveys_answers.append({
                     'title': s.title,
                     'description': s.description,
