@@ -41,7 +41,6 @@ class Registration(Resource):
         return save_new_user(data=data)
 
 
-@token_required
 @api.route('/get_user_info')
 class GetUserInfo(Resource):
     @api.doc(responses={

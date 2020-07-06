@@ -6,7 +6,8 @@
   <div class="main-content">
     <div class="ui grid stackable padded centered">
 
-      <div class="five wide column">
+      <!-- START OF CORE PAGES MENU SECTION -->
+      <div class="five wide column center">
         
         <div class="ui segments">
 
@@ -20,8 +21,31 @@
 
         </div>
 
-      </div>
 
+        <div class="ui vertical menu fluid">
+
+          <a class="item" href="{{ url_for('admin.dashboard') }}">
+            <h4 class="ui header">Admin Dashboard</h4>
+            <p>View a summary of statistics from features across the application.</p>
+          </a>
+
+          <a class="item" href="{{ url_for('admin.profile', id=current_user.id) }}">
+            <h4 class="ui header">User Profile</h4>
+            <p>View your user profile and all of your account information.</p>
+          </a>
+          
+          <a class="item" href="{{ url_for('admin.edit_profile', id=current_user.id) }}">
+            <h4 class="ui header">Edit Profile</h4>
+            <p>Edit your user profile settings.</p>
+          </a>
+
+        </div>
+
+      </div>
+      <!-- END OF CORE PAGES SECTION -->
+      
+
+      <!-- START OF FRONTEND MANAGEMENT SECTION -->
       <div class="five wide column" style="margin-left:2%; margin-right:2%;">
         
         <div class="ui segments">
@@ -36,8 +60,24 @@
 
         </div>
 
+        <div class="ui vertical menu fluid">
+          <a class="item" href="{{ url_for('admin.survey_home') }}">
+            <h4 class="ui header">Surveys</h4>
+            <p>Create and publish surveys for the main Clarissa application. </p>
+            Monitor responses and manage active surveys.
+          </a>
+          <a class="item" href="{{ url_for('admin.routes_home') }}">
+            <h4 class="ui header">Custom Routes</h4>
+            <p>Create custom routes that redirect front-end users.</p>
+            Edit, activate, and delete existing routes.
+          </a>
+        </div>
+
       </div>
+      <!-- END OF FRONTEND MANAGEMENT SECTION -->
       
+
+      <!-- START OF DASHBOARD ADMINISTRATION SECTION -->
       <div class="five wide column">
         
         <div class="ui segments">
@@ -52,8 +92,19 @@
 
         </div>
 
-      </div>
+        <div class="ui vertical menu fluid">
+          <a class="item" href="{{ url_for('admin.actions') }}">
+            <h4 class="ui header">Actions History</h4>
+            <p>Review a history of actions done by admin users.</p>
+          </a>
+          <a class="item" href="{{ url_for('admin.user_list') }}">
+            <h4 class="ui header">Admin Users</h4>
+            <p>View and manage a list of existing admin users.</p>
+          </a>
+        </div>
 
+      </div>
+      <!-- END OF SECTION -->
 
     </div>
   </div>

@@ -58,6 +58,7 @@ class SubmitResponse(Resource):
         data = request.json
         return post_survey_response(data)
 
+
 @api.route('/get_response')
 class GetResponse(Resource):
     @api.doc('get a list of all submitted surveys by user')

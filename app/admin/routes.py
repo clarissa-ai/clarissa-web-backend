@@ -35,7 +35,9 @@ from .forms import (
     AddOptionForm,
     EditOptionForm,
     CreateRouteForm,
-    EditRouteForm
+    EditRouteForm,
+    EditProfileForm,
+    EditPasswordForm
 )
 
 from ..main import db
@@ -165,23 +167,96 @@ def actions():
     )
 
 
+# ------------------------------------------------------------------ #
+#                        USER PROFILE ROUTES                         #
+#   Pages allowing admin users to view profiles and edit settings    #
+# ------------------------------------------------------------------ #
+
 @bp.route('/profile/<id>')
 @login_required
 def profile(id):
     u = AdminUser.query.filter_by(id=id).first()
+    if not u:
+        flash('Requested user with id {} does not exist.'.format(id))
+        return redirect(url_for('admin.index'))
+    u.last_action = Action.query.filter_by(
+        user_id=u.id
+    ).order_by(-Action.id).first().datetime
+    actions = Action.query.filter_by(
+        user_id=u.id
+    ).order_by(-Action.id).limit(10)
     return render_template(
         'user/profile.html',
         title="{}'s profile".format(u.username),
-        user=u
+        user=u,
+        actions=actions
     )
 
 
-@bp.route('/profile/edit')
+@bp.route('/profile/edit/<id>', methods=['GET', 'POST'])
 @login_required
-def edit_profile():
+def edit_profile(id):
+    u = AdminUser.query.filter_by(id=id).first()
+    if not u:
+        flash('Requested user with id {} does not exist.'.format(id))
+        return redirect(url_for('admin.index'))
+    if u != current_user:
+        flash("You are not authenticated to access this user's settings.")
+        return redirect(url_for('admin.profile', id=id))
+    form = EditProfileForm()
+    if form.validate_on_submit():
+        u.username = form.username.data
+        u.email = form.email.data
+        db.session.add(u)
+        db.session.commit()
+        flash('Successfully edited user settings!')
+        record_action(
+            '{} edited their user profile.'.format(u.username),
+            'edit'
+        )
+        return redirect(url_for('admin.profile', id=u.id))
     return render_template(
         'user/settings.html',
-        title="User Settings"
+        title="User Settings",
+        user=u,
+        form=form
+    )
+
+
+@bp.route('/profile/edit/<id>/password', methods=['GET', 'POST'])
+@login_required
+def edit_password(id):
+    u = AdminUser.query.filter_by(id=id).first()
+    if not u:
+        flash('Requested user does not exist.')
+        return redirect(url_for('admin.index'))
+    if u.id != current_user.id:
+        flash('User does not have permissions to access this page.')
+        return redirect(url_for('admin.profile', id))
+    form = EditPasswordForm()
+    if form.validate_on_submit():
+        if u.check_password(form.current_password.data):
+            if form.new_password.data == form.confirm_password.data:
+                u.password = form.new_password.data
+                db.session.add(u)
+                db.session.commit()
+                flash('Successfully changed user\'s password')
+                record_action(
+                    '{} edited their User Settings.'.format(u.username),
+                    'edit'
+                )
+                return redirect(url_for('admin.profile', id=id))
+            else:
+                flash('Passwords did not match')
+                return redirect(url_for('admin.edit_password', id=id))
+        else:
+            flash('Failed to confirm current user password')
+            return redirect(url_for('admin.edit_password', id=id))
+    return render_template(
+        'user/edit_password.html',
+        title="Editiing Password",
+        form=form,
+        user=u
     )
 
 
@@ -1340,7 +1415,6 @@ def survey_design_guide(survey_id, survey_title):
 @login_required
 def routes_home():
     routes = Route.query.all()
-    print(routes)
     return render_template(
         '/tools/route/home.html',
         title='Custom Routing',
@@ -1362,8 +1436,15 @@ def create_route():
         )
         db.session.add(r)
         db.session.commit()
-        record_action('Created new custom route "{}"'.format(r.title), 'create')
-        return redirect(url_for('admin.routes_home'))
+        record_action(
+            'Created new custom route "{}"'.format(r.title),
+            'create'
+        )
+        return redirect(url_for(
+            'admin.routes_home',
+            _external=external,
+            _scheme=scheme
+        ))
     return render_template(
         '/tools/route/new.html',
         title="Create Route",
@@ -1387,7 +1468,11 @@ def edit_route(id):
         db.session.add(r)
         db.session.commit()
         record_action('Edited custom route "{}"'.format(r.title), 'edit')
-        return redirect(url_for('admin.routes_home'))
+        return redirect(url_for(
+            'admin.routes_home',
+            _external=external,
+            _scheme=scheme
+        ))
     return render_template(
         '/tools/route/edit.html',
         title="Edit Route",
@@ -1406,7 +1491,11 @@ def delete_route(id):
     db.session.delete(r)
     db.session.commit()
     record_action('Deleted custom route "{}"'.format(r.title), 'destroy')
-    return redirect(url_for('admin.routes_home'))
+    return redirect(url_for(
+        'admin.routes_home',
+        _external=external,
+        _scheme=scheme
+    ))
 
 
 @bp.route('/custom_routes/deactivate/<id>')
@@ -1424,7 +1513,11 @@ def deactivate_route(id):
         flash('Route "{}" successfully deactivated.'.format(r.title))
     else:
         flash('Route "{}" already deactivated.'.format(r.title))
-    return redirect(url_for('admin.routes_home'))
+    return redirect(url_for(
+        'admin.routes_home',
+        _external=external,
+        _scheme=scheme
+    ))
 
 
 @bp.route('/custom_routes/activate/<id>')
@@ -1442,7 +1535,11 @@ def activate_route(id):
             'create'
         )
         flash('Route "{}" successfully activated.'.format(r.title))
-    return redirect(url_for('admin.routes_home'))
+    return redirect(url_for(
+        'admin.routes_home',
+        _external=external,
+        _scheme=scheme
+    ))
 
 
 # ---------------------------------------------------------------- #
