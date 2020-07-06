@@ -15,6 +15,12 @@ class UserDTO:
             description='user first name',
             example='Korra'
         ),
+        'birthdate': fields.String(
+            required=True,
+            description='user date of birth',
+            example='08/26/1992',
+            pattern=r"^\d{2}/\d{2}/\d{4}$"
+        ),
         'password': fields.String(
             required=True,
             description='user password',

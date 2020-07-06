@@ -15,6 +15,7 @@ def save_new_user(data):
             first_name=data['first_name'],
             password=data['password'],
             registered_on=datetime.datetime.utcnow(),
+            birthdate=datetime.date.strptime(data['birthdate'], "%m/%d/%Y")
         )
         save_changes(new_user)
         return register_user(new_user)
