@@ -241,7 +241,10 @@ def edit_password(id):
                 db.session.add(u)
                 db.session.commit()
                 flash('Successfully changed user\'s password')
-                record_action('"{}" edited settings.'.format(u.username), 'edit')
+                record_action(
+                    '{} edited their User Settings.'.format(u.username),
+                    'edit'
+                )
                 return redirect(url_for('admin.profile', id=id))
             else:
                 flash('Passwords did not match')
@@ -1412,7 +1415,6 @@ def survey_design_guide(survey_id, survey_title):
 @login_required
 def routes_home():
     routes = Route.query.all()
-    print(routes)
     return render_template(
         '/tools/route/home.html',
         title='Custom Routing',
@@ -1438,7 +1440,11 @@ def create_route():
             'Created new custom route "{}"'.format(r.title),
             'create'
         )
-        return redirect(url_for('admin.routes_home'))
+        return redirect(url_for(
+            'admin.routes_home',
+            _external=external,
+            _scheme=scheme
+        ))
     return render_template(
         '/tools/route/new.html',
         title="Create Route",
@@ -1462,7 +1468,11 @@ def edit_route(id):
         db.session.add(r)
         db.session.commit()
         record_action('Edited custom route "{}"'.format(r.title), 'edit')
-        return redirect(url_for('admin.routes_home'))
+        return redirect(url_for(
+            'admin.routes_home',
+            _external=external,
+            _scheme=scheme
+        ))
     return render_template(
         '/tools/route/edit.html',
         title="Edit Route",
@@ -1481,7 +1491,11 @@ def delete_route(id):
     db.session.delete(r)
     db.session.commit()
     record_action('Deleted custom route "{}"'.format(r.title), 'destroy')
-    return redirect(url_for('admin.routes_home'))
+    return redirect(url_for(
+        'admin.routes_home',
+        _external=external,
+        _scheme=scheme
+    ))
 
 
 @bp.route('/custom_routes/deactivate/<id>')
@@ -1499,7 +1513,11 @@ def deactivate_route(id):
         flash('Route "{}" successfully deactivated.'.format(r.title))
     else:
         flash('Route "{}" already deactivated.'.format(r.title))
-    return redirect(url_for('admin.routes_home'))
+    return redirect(url_for(
+        'admin.routes_home',
+        _external=external,
+        _scheme=scheme
+    ))
 
 
 @bp.route('/custom_routes/activate/<id>')
@@ -1517,7 +1535,11 @@ def activate_route(id):
             'create'
         )
         flash('Route "{}" successfully activated.'.format(r.title))
-    return redirect(url_for('admin.routes_home'))
+    return redirect(url_for(
+        'admin.routes_home',
+        _external=external,
+        _scheme=scheme
+    ))
 
 
 # ---------------------------------------------------------------- #
