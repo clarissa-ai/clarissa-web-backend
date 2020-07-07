@@ -7,6 +7,7 @@ from ..config import key
 from .. import login_manager
 from flask_login import UserMixin
 from .action import Action  # noqa: F401
+from .illness import Illness, Symptom  # noqa: F401
 
 
 class User(db.Model):
@@ -20,6 +21,10 @@ class User(db.Model):
     birthdate = db.Column(db.Date, nullable=False)
     first_name = db.Column(db.String(50))
     password_hash = db.Column(db.String(100))
+    symptoms = db.relationship('Symptom', backref='user')
+    illnesses = db.relationship('Illness', backref='user')
+    # sex can be Male, Female or None
+    sex = db.Column(db.String(50), nullable=False, default="None")
 
     @property
     def password(self):

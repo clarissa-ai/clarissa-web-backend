@@ -26,6 +26,11 @@ class UserDTO:
             description='user password',
             example='Bark2020'
         ),
+        'sex': fields.String(
+            required=True,
+            description='user sex',
+            example='Male'
+        ),
     })
     settings = api.model('user_settings', {
         'email': fields.String(
@@ -45,7 +50,7 @@ class UserDTO:
         'password': fields.String(
             description='user password',
             example='Bark2020'
-        ),
+        )
     })
 
 
@@ -100,3 +105,39 @@ class ImageDTO:
 
 class RouteDTO:
     api = Namespace('route', description='custom route retrieval')
+
+
+class IllnessDTO:
+    api = Namespace('illness', description='illness operations')
+    get_by_id = api.model('get_illness_by_id', {
+        'id': fields.Integer(
+            required=True,
+            description='ID of the illness which is being retrieved',
+            example=1
+        )
+    })
+    check_symptoms = api.model('check_symptoms', {
+        'text': fields.String(
+            required=True,
+            description='The string to by process by NLP entered by the user',
+            example='I have a mild stomach ache'
+        )
+    })
+    save_symptoms = api.model('save_symptoms', {
+        'symptoms': fields.Raw(
+            required=True,
+            description='Symptoms selected by the user to save to the illness',
+            example=[{
+                "id": "s_1782",
+                "name": "Abdominal pain, mild",
+                "common_name": "Mild stomach pain",
+                "orth": "mild stomach ache",
+                "choice_id": "present",
+                "type": "symptom"
+            }]
+        )
+    })
+
+
+class DashboardDTO:
+    api = Namespace('dashboard', description='dashboard operations')

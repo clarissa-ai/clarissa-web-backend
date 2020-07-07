@@ -23,9 +23,9 @@ if not os.environ.get('DEPLOY_ENV') == 'PRODUCTION':
         @token_required
         @api.doc('List of registered users, only available in development')
         @api.marshal_list_with(_user, envelope='data')
-        def get(self):
+        def get(self, auth_object):
             """List all registered users"""
-            return get_all_users()
+            return get_all_users(auth_object)
 
 
 @api.route('/register')

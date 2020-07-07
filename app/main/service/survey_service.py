@@ -56,7 +56,7 @@ def get_active_surveys():
                 'id': s.id,
                 'title': s.title,
                 'description': s.description,
-                'cover_image_url': s.get_cover_image_url(),
+                'image_url': s.get_image_url(),
                 'question_count': len(s.questions)
             })
             auth_response, auth_response_code = Auth.get_logged_in_user(
