@@ -2,8 +2,7 @@
 # to User model storage
 import requests
 import os
-from dotenv import load_dotenv
-load_dotenv()
+import pipenv
 
 
 def post_user_response_to_api(user_json, user_sex, user_age):
@@ -34,6 +33,6 @@ def post_user_response_to_api(user_json, user_sex, user_age):
         data_syms.append({'id': symptoms['mentions'][i]['id'],'choice_id': 'present'})
     data.update([('evidence', data_syms)])
     url2 = "https://api.infermedica.com/v2/diagnosis"
-    print(data)
     diagnosis = requests.post(url2, headers=headers, json=data).json()
     return symptoms, diagnosis
+    
