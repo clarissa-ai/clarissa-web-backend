@@ -92,7 +92,15 @@ def edit_user_settings(json, auth_object):
         return response_object, 404
     try:
         if json.get('email'):
-            user.email = json['email']
+            u = User.query.filter_by(email=json['email']).first()
+            if not u:
+                user.email = json['email']
+            else:
+                response_object = {
+                    'status': 'failure',
+                    'message': 'User with email already exists'
+                }
+                return response_object, 409
         if json.get('first_name'):
             user.first_name = json['first_name']
         if json.get('birthdate'):

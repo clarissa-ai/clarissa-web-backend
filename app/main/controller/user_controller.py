@@ -63,7 +63,8 @@ class GetUserInfo(Resource):
 class GetEditSettings(Resource):
     @api.doc(responses={
         200: 'Successfully edited user settings',
-        404: 'Failed to find user by id'
+        404: 'Failed to find user by id',
+        409: 'User with given email exists.'
     })
     @api.doc('edit a logged in user\'s settings')
     @token_required
