@@ -12,8 +12,10 @@ def token_required(f):
         data_status = data.get('status')
         if data_status == 'failure':
             return token_return_fail()
-        kwargs['auth_data'] = data
-        kwargs['auth_code'] = status
+        kwargs['auth_object'] = {
+            'auth_object': data,
+            'resp_code': status
+        }
         return f(*args, **kwargs)
 
     return decorated

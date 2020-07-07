@@ -27,6 +27,26 @@ class UserDTO:
             example='Bark2020'
         ),
     })
+    settings = api.model('user_settings', {
+        'email': fields.String(
+            description='user email address',
+            example='korra@dogmail.com',
+            pattern=r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
+        ),
+        'first_name': fields.String(
+            description='user first name',
+            example='Korra'
+        ),
+        'birthdate': fields.String(
+            description='user date of birth',
+            example='08/26/1992',
+            pattern=r"^\d{2}/\d{2}/\d{4}$"
+        ),
+        'password': fields.String(
+            description='user password',
+            example='Bark2020'
+        ),
+    })
 
 
 class AuthDTO:
