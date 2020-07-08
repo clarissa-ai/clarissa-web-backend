@@ -31,6 +31,8 @@ def get_illness(id):
 
 
 def check_symptoms(data):
+    print(data)
+    print()
     response_object = {}
     headers = {
       'App-Id': os.getenv('API_APP_ID'),
