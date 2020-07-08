@@ -171,12 +171,11 @@ def save_symptoms(data, user_id):
             headers=headers,
             json=c_json
         ).json()
+        print(explanation)
         c['supporting_symptoms'] = explanation.get('supporting_evidence') or []
         c['opposing_symptoms'] = (explanation.get('conflicting_evidence') or []) + (explanation.get('unconfirmed_evidence') or [])  # noqa: E501
-        print(idx)
         # update active_diagnosis with data for condition
         conditions[idx] = c
-    print(conditions)
     # save diagnosis to db
     d = Diagnosis(
         user_id=user_id,
@@ -191,7 +190,8 @@ def save_symptoms(data, user_id):
 def get_illness_history(user_id):
     illnesses = []
     for i in Illness.query.filter_by(
-        user_id=user_id
+        user_id=user_id,
+        active=False
     ).order_by(-Illness.id).all():
         illnesses.append(i.get_json())
     response_object = {

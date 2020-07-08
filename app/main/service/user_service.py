@@ -80,7 +80,6 @@ def register_user(user):
 
 def edit_user_settings(json, auth_object):
     response_object = {}
-    print(auth_object)
     user = User.query.filter_by(
         id=auth_object['auth_object']['data']['user_id']
     ).first()
@@ -105,9 +104,19 @@ def edit_user_settings(json, auth_object):
             user.first_name = json['first_name']
         if json.get('birthdate'):
             user.birthdate = json['birthdate']
-        if json.get('password') and json.get('current_password'):
-            if user.check_password(json.get('current_password')):
+        if json.get('current_password') and user.check_password(json.get('current_password')):  # noqa: E501
+            if json.get('password'):
                 user.password = json['password']
+            else:
+                return {
+                    'status': 'success',
+                    'message': 'Successfully checked current password.'
+                }, 200
+        else:
+            return {
+                'status': 'failure',
+                'message': 'Incorrect password entered.'
+            }, 401
         if json.get('sex'):
             user.sex = json['sex']
         db.session.add(user)

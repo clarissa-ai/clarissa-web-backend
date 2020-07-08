@@ -25,7 +25,7 @@ class Illness(db.Model):
             'created_on': self.created_on.strftime("%m/%d/%Y %I:%M:%S%p"),
             'updated_on': self.updated_on.strftime("%m/%d/%Y %I:%M:%S%p"),
             'symptoms': [s.get_json() for s in self.symptoms],
-            'diagnosis': self.diagnoses[-1].data[0:3] if self.diagnoses else []
+            'diagnosis': self.diagnoses[-1].data[0:3] if self.diagnoses and type(self.diagnoses[-1].data) is list else []  # noqa: E501
         }
 
 

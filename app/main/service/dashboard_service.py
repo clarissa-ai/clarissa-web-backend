@@ -12,6 +12,9 @@ def get_dashboard(auth_object):
         user_id=user_id,
         active=True
     ).first() != None  # noqa: E711
+    active_surveys = Survey.get_active_surveys()
+    if len(active_surveys) > 2:
+        active_surveys = active_surveys[0:2]
     response_object = {
         'active_illness': active_illness,
         'symptom_count': len(user.symptoms),
@@ -20,15 +23,17 @@ def get_dashboard(auth_object):
         'active_surveys': [{
             'id': s.id,
             'title': s.title,
-        } for s in Survey.get_active_surveys()],
+        } for s in active_surveys],
     }
     response_object['completed_surveys'] = []
+    completed_counter = 0
     for s in Survey.query.all():
         if Response.query.filter_by(user_id=user_id, survey_id=s.id).first():
             response_object['completed_surveys'].append({
                 'id': s.id,
                 'title': s.title
             })
+            completed_counter = completed_counter + 1
     response_object['recent_illnesses'] = [
         {
             'id': i.id,
