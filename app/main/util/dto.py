@@ -33,6 +33,14 @@ class UserDTO:
         ),
     })
     settings = api.model('user_settings', {
+        'current_password': fields.String(
+            description='user\'s current password',
+            example='Bark2020'
+        ),
+        'password': fields.String(
+            description='user\'s new password',
+            example='Bark2020'
+        ),
         'email': fields.String(
             description='user email address',
             example='korra@dogmail.com',
@@ -47,10 +55,10 @@ class UserDTO:
             example='08/26/1992',
             pattern=r"^\d{2}/\d{2}/\d{4}$"
         ),
-        'password': fields.String(
-            description='user password',
-            example='Bark2020'
-        )
+        'sex': fields.String(
+            description='user\'s current sex',
+            example='Female'
+        ),
     })
 
 

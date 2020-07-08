@@ -25,8 +25,7 @@ class Illness(db.Model):
             'created_on': self.created_on.strftime("%m/%d/%Y %I:%M:%S%p"),
             'updated_on': self.updated_on.strftime("%m/%d/%Y %I:%M:%S%p"),
             'symptoms': [s.get_json() for s in self.symptoms],
-            'diagnosis': self.diagnoses[-1].get_json(
-            )['diagnosis_json']['conditions'] if self.diagnoses else []
+            'diagnosis': self.diagnoses[-1].data[0:3] if self.diagnoses else []
         }
 
 
@@ -81,6 +80,11 @@ class Diagnosis(db.Model):
     datetime = db.Column(db.DateTime, server_default=db.func.now())
 
     data = db.Column(db.JSON)
+
+    def update_data(self, data):
+        self.data = data
+        db.session.add(self)
+        db.session.commit
 
     def get_json(self):
         return {

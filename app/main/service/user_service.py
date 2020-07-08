@@ -105,8 +105,9 @@ def edit_user_settings(json, auth_object):
             user.first_name = json['first_name']
         if json.get('birthdate'):
             user.birthdate = json['birthdate']
-        if json.get('password'):
-            user.password = json['password']
+        if json.get('password') and json.get('current_password'):
+            if user.check_password(json.get('current_password')):
+                user.password = json['password']
         if json.get('sex'):
             user.sex = json['sex']
         db.session.add(user)

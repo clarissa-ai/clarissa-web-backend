@@ -52,11 +52,23 @@ def get_active_illness(user_id):
         user_id=user_id,
         active=True
     ).first()
+    if not active_illness:
+        return {
+            'status': 'success',
+            'message': 'Successfully retrieved active illness',
+            'illness': {}
+        }, 200
     response_object = {
         'status': 'success',
         'message': 'Successfully retrieved active illness',
-        'illness': active_illness.get_json() if active_illness else {}
+        'illness': Illness.query.filter_by(
+            user_id=user_id,
+            active=True
+        ).first().get_json()
     }
+    response_object['illness']['analysis'] = response_object['illness'].pop(
+        'diagnosis'
+    )
     return response_object, 200
 
 
@@ -141,10 +153,35 @@ def save_symptoms(data, user_id):
         headers=headers,
         json=diagnosis_json
     ).json()
+    # add explanations for each condition
+    conditions = diagnosis['conditions']
+    explanation_URL = "https://api.infermedica.com/v2/explain"
+    for idx, c in enumerate(conditions):
+        c_json = {
+            'sex': user.sex.lower() if user.sex != "None" else 'male',
+            'age': calculate_age(user.birthdate),
+            'target': c['id'],
+            'evidence': [{
+                'id': s.data['id'],
+                'choice_id': 'present'
+            } for s in active_illness.symptoms]
+        }
+        explanation = requests.post(
+            explanation_URL,
+            headers=headers,
+            json=c_json
+        ).json()
+        c['supporting_symptoms'] = explanation.get('supporting_evidence') or []
+        c['opposing_symptoms'] = (explanation.get('conflicting_evidence') or []) + (explanation.get('unconfirmed_evidence') or [])  # noqa: E501
+        print(idx)
+        # update active_diagnosis with data for condition
+        conditions[idx] = c
+    print(conditions)
+    # save diagnosis to db
     d = Diagnosis(
         user_id=user_id,
         illness_id=active_illness.id,
-        data=diagnosis
+        data=conditions
     )
     db.session.add(d)
     db.session.commit()
