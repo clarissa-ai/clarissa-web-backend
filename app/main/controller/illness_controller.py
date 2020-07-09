@@ -21,14 +21,17 @@ _save_symptoms = IllnessDTO.save_symptoms
 @api.route('/get_illness_by_id')
 class GetIllness(Resource):
     @api.doc(responses={
-        200: 'Successfully retrieved illness'
+        200: 'Successfully retrieved illness',
+        401: 'Failed to authenticate.'
     })
     @api.doc('get illness information by its id')
     @api.expect(_get_by_id, validate=True)
-    def post(self):
+    @token_required
+    def post(self, auth_object):
         """Get Illness by ID"""
         data = request.json
-        return get_illness(data['id'])
+        user_id = auth_object['auth_object']['data']['user_id']
+        return get_illness(data['id'], user_id)
 
 
 @api.route('/check_symptoms')

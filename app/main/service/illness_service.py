@@ -6,7 +6,7 @@ import datetime
 from app.main import db
 
 
-def get_illness(id):
+def get_illness(id, user_id):
     response_object = {}
     try:
         illness = Illness.query.filter_by(id=id).first()
@@ -16,7 +16,7 @@ def get_illness(id):
             'status': 'failure',
             'message': 'Failed to fetch'
         }, 400
-    if not illness:
+    if not illness or user_id != illness.user_id:
         response_object = {
             'status': 'failure',
             'message': 'Failed to retrieve illness with given id.'
