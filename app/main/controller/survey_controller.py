@@ -2,6 +2,7 @@ from flask import request
 from flask_restplus import Resource
 
 from ..util.dto import SurveyDTO
+from ..util.decorator import token_required
 from ..service.survey_service import (
     get_active_surveys,
     get_survey,
@@ -62,7 +63,11 @@ class SubmitResponse(Resource):
 @api.route('/get_response')
 class GetResponse(Resource):
     @api.doc('get a list of all submitted surveys by user')
-    @api.response(200, 'Submitted surveys results retrieved')
-    def get(self):
+    @api.doc(responses={
+        200: 'Successfully retrieved user\'s survey responses',
+        401: 'Failed to authenticate user'
+    })
+    @token_required
+    def get(self, auth_object):
         """Get list of all submitted survey results"""
-        return get_survey_results()
+        return get_survey_results(auth_object)

@@ -31,8 +31,6 @@ def get_illness(id):
 
 
 def check_symptoms(data):
-    print(data)
-    print()
     response_object = {}
     headers = {
       'App-Id': os.getenv('API_APP_ID'),
@@ -130,6 +128,9 @@ def save_symptoms(data, user_id):
         )
         db.session.add(new_symptom)
         db.session.commit()
+    active_illness.updated_on = datetime.datetime.now()
+    db.session.add(active_illness)
+    db.session.commit()
     # Symptoms are saved to illness, starting diagnosis
     headers = {
       'App-Id': os.getenv('API_APP_ID'),
