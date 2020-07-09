@@ -22,7 +22,7 @@
               All Surveys
             </a>
           </div>
-          <div class="five wide column">
+          <div class="six wide column">
             <a class="ui labeled icon button fluid" href="{{ url_for('admin.all_responses') }}">
               <i class="clipboard list icon"></i>
               Responses
@@ -71,7 +71,7 @@
               <tr>
                 <td colspan="2"><b>Cover Image:</b></td>
                 <td colspan="6">
-                  <img class="ui image" src="{{ survey.get_cover_image_url() }}" />
+                  <img class="ui small bordered image" src="{{ survey.get_cover_image_url() }}" />
                 </td>
               </tr>
             </tbody>

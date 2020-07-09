@@ -83,7 +83,7 @@ def get_survey(id):
             'status': 'failure',
             'message': 'Failed to retrieve survey with id: {}'.format(id)
         }
-        return response_object, 200
+        return response_object, 404
     else:
         response_object = {
             'status': 'success',
