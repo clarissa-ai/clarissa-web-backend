@@ -23,9 +23,9 @@ if not os.environ.get('DEPLOY_ENV') == 'PRODUCTION':
         @token_required
         @api.doc('List of registered users, only available in development')
         @api.marshal_list_with(_user, envelope='data')
-        def get(self):
+        def get(self, auth_object):
             """List all registered users"""
-            return get_all_users()
+            return get_all_users(auth_object)
 
 
 @api.route('/register')
@@ -63,7 +63,8 @@ class GetUserInfo(Resource):
 class GetEditSettings(Resource):
     @api.doc(responses={
         200: 'Successfully edited user settings',
-        404: 'Failed to find user by id'
+        404: 'Failed to find user by id',
+        409: 'User with given email exists.'
     })
     @api.doc('edit a logged in user\'s settings')
     @token_required

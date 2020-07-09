@@ -15,7 +15,11 @@ def save_new_user(data):
             first_name=data['first_name'],
             password=data['password'],
             registered_on=datetime.datetime.utcnow(),
-            birthdate=datetime.date.strptime(data['birthdate'], "%m/%d/%Y")
+            birthdate=datetime.datetime.strptime(
+                data['birthdate'],
+                "%m/%d/%Y"
+            ).date(),
+            sex=data['sex']
         )
         save_changes(new_user)
         return register_user(new_user)
@@ -42,7 +46,7 @@ def set_cookie(response, data):
     return response
 
 
-def get_all_users():
+def get_all_users(auth_object):
     return {
         'users': User.query.all(),
         'status': 'success'
@@ -76,7 +80,6 @@ def register_user(user):
 
 def edit_user_settings(json, auth_object):
     response_object = {}
-    print(auth_object)
     user = User.query.filter_by(
         id=auth_object['auth_object']['data']['user_id']
     ).first()
@@ -88,13 +91,34 @@ def edit_user_settings(json, auth_object):
         return response_object, 404
     try:
         if json.get('email'):
-            user.email = json['email']
+            u = User.query.filter_by(email=json['email']).first()
+            if not u:
+                user.email = json['email']
+            else:
+                response_object = {
+                    'status': 'failure',
+                    'message': 'User with email already exists'
+                }
+                return response_object, 409
         if json.get('first_name'):
             user.first_name = json['first_name']
         if json.get('birthdate'):
-            user.first_name = json['birthdate']
-        if json.get('password'):
-            user.password = json['password']
+            user.birthdate = json['birthdate']
+        if json.get('current_password') and user.check_password(json.get('current_password')):  # noqa: E501
+            if json.get('password'):
+                user.password = json['password']
+            else:
+                return {
+                    'status': 'success',
+                    'message': 'Successfully checked current password.'
+                }, 200
+        else:
+            return {
+                'status': 'failure',
+                'message': 'Incorrect password entered.'
+            }, 401
+        if json.get('sex'):
+            user.sex = json['sex']
         db.session.add(user)
         db.session.commit()
         response_object = {

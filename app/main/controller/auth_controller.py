@@ -36,6 +36,10 @@ class LogoutAPI(Resource):
     Logout Resource
     """
     @api.doc('logout a user')
+    @api.doc(responses={
+        200: 'Successfully logged out user.',
+        401: 'Token validation failed. User already logged out.'
+    })
     def post(self):
         # get auth token
         auth_cookies = request.cookies

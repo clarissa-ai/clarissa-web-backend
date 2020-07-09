@@ -67,7 +67,8 @@ class Auth:
                         'birthdate': user.birthdate.strftime("%m/%d/%Y"),
                         'registered_on': user.registered_on.strftime(
                             "%m/%d/%Y %I:%M:%S%p"
-                        )
+                        ),
+                        'sex': user.sex
                     }
                 }
                 return response_object, 200

@@ -8,6 +8,9 @@ from .main.controller.auth_controller import api as auth_ns
 from .main.controller.survey_controller import api as survey_ns
 from .main.controller.image_controller import api as image_ns
 from .main.controller.routes_controller import api as route_ns
+from .main.controller.dashboard_controller import api as dashboard_ns
+from .main.controller.illness_controller import api as illness_ns
+
 
 blueprint = Blueprint('api', __name__)
 
@@ -32,3 +35,5 @@ api.add_namespace(auth_ns, path='/api')
 api.add_namespace(survey_ns, path='/api/survey')
 api.add_namespace(image_ns, path='/api/images')
 api.add_namespace(route_ns, path='/api')
+api.add_namespace(dashboard_ns, path='/api/dashboard')
+api.add_namespace(illness_ns, path='/api/illness')

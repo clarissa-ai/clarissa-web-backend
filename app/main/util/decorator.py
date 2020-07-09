@@ -25,4 +25,4 @@ def token_return_fail():
     return {
         'status': 'failure',
         'message': 'Failed to validate log in information.'
-    }, 400
+    }, 401
