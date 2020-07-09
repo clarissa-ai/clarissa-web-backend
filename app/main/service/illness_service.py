@@ -82,6 +82,7 @@ def close_active_illness(user_id):
     if active_illness.active:
         response_object['message'] = 'Successfully deactivated active illness'
         active_illness.active = False
+        active_illness.updated_on = datetime.datetime.now()
     else:
         response_object['message'] = 'No active illness found'
     db.session.add(active_illness)
