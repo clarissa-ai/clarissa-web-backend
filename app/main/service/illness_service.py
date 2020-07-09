@@ -174,7 +174,6 @@ def save_symptoms(data, user_id):
             headers=headers,
             json=c_json
         ).json()
-        print(explanation)
         c['supporting_symptoms'] = explanation.get('supporting_evidence') or []
         c['opposing_symptoms'] = (explanation.get('conflicting_evidence') or []) + (explanation.get('unconfirmed_evidence') or [])  # noqa: E501
         # update active_diagnosis with data for condition
@@ -200,6 +199,6 @@ def get_illness_history(user_id):
     response_object = {
         'status': 'success',
         'message': 'Successfully retrieved user\'s illness history',
-        'ilnesses': illnesses
+        'illnesses': illnesses
     }
     return response_object, 200
