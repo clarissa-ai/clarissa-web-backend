@@ -105,7 +105,7 @@ class GetIllnessHistory(Resource):
         return get_illness_history(user_id)
 
 
-@api.route('/export_active_illness')
+@api.route('/export_active_illness/illness.pdf')
 class ExportActiveIllness(Resource):
     @api.doc(responses={
         200: 'Successfully generated report and returned to user'
