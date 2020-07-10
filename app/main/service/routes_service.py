@@ -1,11 +1,9 @@
 import os
 import json
 from ..model.route import Route
-import time
 
 
 def get_routes():
-    time.sleep(1)
     response_object = {}
     routes_list = Route.query.all()
     routes_list = filter(lambda x: x.active, routes_list)
