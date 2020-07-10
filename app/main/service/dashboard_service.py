@@ -27,12 +27,13 @@ def get_dashboard(auth_object):
     }
     response_object['completed_surveys'] = []
     completed_counter = 0
-    for s in Survey.query.all():
+    for s in Survey.query.order_by(-Survey.id).all():
         if Response.query.filter_by(user_id=user_id, survey_id=s.id).first():
-            response_object['completed_surveys'].append({
-                'id': s.id,
-                'title': s.title
-            })
+            if completed_counter < 2:
+                response_object['completed_surveys'].append({
+                    'id': s.id,
+                    'title': s.title
+                })
             completed_counter = completed_counter + 1
     response_object['recent_illnesses'] = [
         {
@@ -43,7 +44,7 @@ def get_dashboard(auth_object):
             'symptom_count': len(i.symptoms)
         } for i in Illness.query.filter_by(
             user_id=user_id
-        ).order_by(-Illness.id).all()
+        ).order_by(-Illness.id).limit(5)
     ]
     return response_object, 200
 
