@@ -6,7 +6,8 @@ from ..service.illness_service import (
     get_active_illness,
     get_illness_history,
     save_symptoms,
-    close_active_illness
+    close_active_illness,
+    export_active_illness_report
 )
 from ..util.dto import IllnessDTO
 from flask import request
@@ -102,3 +103,16 @@ class GetIllnessHistory(Resource):
         """Get user's illness history"""
         user_id = auth_object['auth_object']['data']['user_id']
         return get_illness_history(user_id)
+
+
+@api.route('/export_illness')
+class ExportIllness(Resource):
+    @api.doc(responses={
+        200: 'Successfully generated report and returned to user'
+    })
+    @api.doc('endpoint for generating PDF for report and returning to user')
+    @token_required
+    def get(self, auth_object):
+        """Get report for user's active illness"""
+        user_id = auth_object['auth_object']['data']['user_id']
+        return export_active_illness_report(user_id)

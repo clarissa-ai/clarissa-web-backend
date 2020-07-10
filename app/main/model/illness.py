@@ -22,8 +22,8 @@ class Illness(db.Model):
     def get_json(self):
         return {
             'active': self.active,
-            'created_on': self.created_on.strftime("%m/%d/%Y %I:%M:%S%p"),
-            'updated_on': self.updated_on.strftime("%m/%d/%Y %I:%M:%S%p"),
+            'created_on': self.created_on.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            'updated_on': self.updated_on.strftime("%Y-%m-%dT%H:%M:%SZ"),
             'symptoms': [s.get_json() for s in self.symptoms],
             'diagnosis': self.diagnoses[-1].data[0:3] if self.diagnoses and type(self.diagnoses[-1].data) is list else []  # noqa: E501
         }
@@ -63,8 +63,8 @@ class Symptom(db.Model):
     def get_json(self):
         return {
             'title': self.title,
-            'created_on': self.created_on.strftime("%m/%d/%Y %I:%M:%S%p"),
-            'updated_on': self.updated_on.strftime("%m/%d/%Y %I:%M:%S%p"),
+            'created_on': self.created_on.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            'updated_on': self.updated_on.strftime("%Y-%m-%dT%H:%M:%SZ"),
             'symptom_json': self.data
         }
 
@@ -89,6 +89,6 @@ class Diagnosis(db.Model):
     def get_json(self):
         return {
             'id': self.id,
-            'datetime': self.datetime.strftime("%m/%d/%Y %I:%M:%S%p"),
+            'datetime': self.datetime.strftime("%Y-%m-%dT%H:%M:%SZ"),
             'diagnosis_json': self.data
         }
