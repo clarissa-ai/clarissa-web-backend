@@ -39,8 +39,8 @@ def get_dashboard(auth_object):
         {
             'id': i.id,
             'active': i.active,
-            'created_on': i.created_on.strftime("%m/%d/%Y %I:%M:%S%p"),
-            'updated_on': i.updated_on.strftime("%m/%d/%Y %I:%M:%S%p"),
+            'created_on': i.created_on.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            'updated_on': i.updated_on.strftime("%Y-%m-%dT%H:%M:%SZ"),
             'symptom_count': len(i.symptoms)
         } for i in Illness.query.filter_by(
             user_id=user_id

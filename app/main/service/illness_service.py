@@ -1,9 +1,14 @@
-from app.main.model.illness import Illness, Symptom, Diagnosis
-from app.main.model.user import User
+# python library imports
 import requests
 import os
 import datetime
+# Database imports
+from app.main.model.illness import Illness, Symptom, Diagnosis
+from app.main.model.user import User
 from app.main import db
+# Utility imports
+from flask_weasyprint import HTML, render_pdf
+from flask import render_template
 
 
 def get_illness(id, user_id):
@@ -203,3 +208,17 @@ def get_illness_history(user_id):
         'illnesses': illnesses
     }
     return response_object, 200
+
+
+def export_active_illness_report(user_id):
+    # retrieve user's active illness
+    active_illness = Illness.query.filter_by(
+        user_id=user_id,
+        active=True
+    ).first()
+    # generate html from template and illness data
+    report_html = render_template(
+        '/api/illness/illness_report.html',
+        illness=active_illness
+    )
+    return render_pdf(HTML(string=report_html))
