@@ -46,6 +46,7 @@ def get_dashboard(auth_object):
             user_id=user_id
         ).order_by(-Illness.id).limit(5)
     ]
+    print("response_object-get_dashboard: {}".format(response_object))
     return response_object, 200
 
 
