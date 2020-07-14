@@ -184,10 +184,10 @@ class AddOptionForm(FlaskForm):
         super().__init__(*args, **kwargs)
         self.next_question.choices = [(q.id, q.title) for q in questions]
         self.next_question.choices.insert(
-            0, (-2, 'Use Question\'s Default Next')
+            0, (-1, 'Last Question (Direct to summary)')
         )
         self.next_question.choices.insert(
-            0, (-1, 'Last Question (Direct to summary)')
+            0, (-2, 'Use Question\'s Default Next')
         )
         self.summary.choices = [(s.id, s.title) for s in summaries]
         self.summary.choices.insert(0, (0, "None"))
@@ -205,10 +205,10 @@ class EditOptionForm(FlaskForm):
         super().__init__(*args, **kwargs)
         self.next_question.choices = [(q.id, q.title) for q in questions]
         self.next_question.choices.insert(
-            0, (-2, 'Use Question\'s Default Next')
+            0, (-1, 'Last Question (Direct to summary)')
         )
         self.next_question.choices.insert(
-            0, (-1, 'Last Question (Direct to summary)')
+            0, (-2, 'Use Question\'s Default Next')
         )
         self.summary.choices = [(s.id, s.title) for s in summaries]
         self.summary.choices.insert(0, (0, "None"))
@@ -262,3 +262,9 @@ class EditPasswordForm(FlaskForm):
         validators=[DataRequired()]
     )
     submit = SubmitField('Confirm Changes')
+
+
+class CreateAdminUser(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired()])
+    submit = SubmitField('Create New User')

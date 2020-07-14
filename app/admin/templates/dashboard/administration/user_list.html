@@ -2,20 +2,49 @@
 
 <div class="pusher">
   <div class="main-content">
+
+
     <div class="ui grid stackable padded centered">
 
-      <div class="twelve wide column">
+      <div class="four wide column">
+        <div class="ui segments">
 
+          <div class="ui segment center aligned blue inverted">
+            <h2>User Administration: <br/><u>{{current_user.username}}</u></h2>
+          </div>
 
-        <div class="ui segment yellow inverted">
-          This page is unfinished and will be completed with the V3.0 of the dashboard.
+          <div class="ui segment">
+            <b>Username</b>: {{ current_user.username }}<br/>
+            <b>Email</b>: {{ current_user.email }}
+          </div>
+
+          <div class="ui segment">
+            <div class="ui buttons">
+
+              <a class="ui button yellow" href="{{ url_for('admin.edit_profile', id=current_user.id) }}">
+                <i class="pencil icon"></i>
+                Edit My Settings
+              </a>
+
+              <a class="ui button green" href="{{ url_for('admin.create_admin_user') }}">
+                <i class="plus circle icon"></i>
+                Create Admin User
+              </a>
+
+            </div>
+          </div>
+
         </div>
+      </div>
+
+      <div class="ten wide column">
         
         <table class="ui celled table">
           <thead>
             <tr>
               <th colspan="1" rowspan="2">Username</th>
               <th colspan="1" rowspan="2">Email</th>
+              <th colspan="1" rowspan="2">Role</th>
               <th colspan="1" rowspan="2">Registered on</th>
               <th colspan="1" rowspan="2">Surveys Created</th>
               <th colspan="1" rowspan="2">Actions Completed</th>
@@ -31,6 +60,7 @@
             <tr>
               <td><a href="{{ url_for('admin.profile', id=user.id) }}">{{ user.username }}</a></td>
               <td>{{ user.email }}</td>
+              <td>ROLE</td>
               <td>{{ user.registered_on.strftime("%b %d, %Y %I:%M%p") }}</td>
               <td>{{ user.surveys|count }}</td>
               <td>{{ user.actions|count }}</td>
