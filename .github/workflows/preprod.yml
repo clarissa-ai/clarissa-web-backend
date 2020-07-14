@@ -7,8 +7,8 @@ name: Preprod-Deploy
 # Configuring some global environment variables that we will use in our jobs
 env:
   S3_BUCKET_NAME: "clarissa.preprod"
-  EB_APPLICATION_NAME: "Clarissa-Preproduction"
-  EB_ENVIRONMENT_NAME: "Clarissa-Preproduction-env"
+  EB_APPLICATION_NAME: "Clarissa-Production"
+  EB_ENVIRONMENT_NAME: "Clarissa-Preprod"
   DEPLOY_PACKAGE_NAME: "flask-app-${{ github.sha }}.zip"
   AWS_REGION_NAME: "us-east-2"
 
