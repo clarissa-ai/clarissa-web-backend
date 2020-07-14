@@ -21,6 +21,7 @@ class Illness(db.Model):
 
     def get_json(self):
         return {
+            'id': self.id,
             'active': self.active,
             'created_on': self.created_on.strftime("%Y-%m-%dT%H:%M:%SZ"),
             'updated_on': self.updated_on.strftime("%Y-%m-%dT%H:%M:%SZ"),
