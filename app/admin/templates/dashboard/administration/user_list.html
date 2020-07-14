@@ -14,8 +14,12 @@
           </div>
 
           <div class="ui segment">
-            <b>Username</b>: {{ current_user.username }}<br/>
-            <b>Email</b>: {{ current_user.email }}
+            <b>Username:</b> {{ current_user.username }}<br/>
+            <b>Email:</b> {{ current_user.email }}<br/>
+            <b>Role:</b> {{ current_user.role }}<br/>
+            <b>Registered On:</b> {{ current_user.registered_on.strftime("%b %d, %Y %I:%M%p") }}<br/>
+            <b>Surveys:</b> {{ current_user.surveys|count }}<br/>
+            <b>Actions:</b> {{ current_user.actions|count }}
           </div>
 
           <div class="ui segment">
@@ -60,12 +64,14 @@
             <tr>
               <td><a href="{{ url_for('admin.profile', id=user.id) }}">{{ user.username }}</a></td>
               <td>{{ user.email }}</td>
-              <td>ROLE</td>
+              <td>{{ user.role }}</td>
               <td>{{ user.registered_on.strftime("%b %d, %Y %I:%M%p") }}</td>
               <td>{{ user.surveys|count }}</td>
               <td>{{ user.actions|count }}</td>
               <td>
-                {{ user.most_recent_action.datetime.strftime("%b %d, %Y %I:%M%p") }}
+                {% if user.most_recent_action %}
+                  {{ user.most_recent_action.datetime.strftime("%b %d, %Y %I:%M%p") }}
+                {% endif %}
               </td>
               <td
               class="{% if user.most_recent_action.type == 'create' %} positive {% elif user.most_recent_action.type == 'edit' %} warning {% elif user.most_recent_action.type == 'destroy' %} negative{% endif %}""

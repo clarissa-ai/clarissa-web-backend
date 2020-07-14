@@ -88,10 +88,14 @@ class AdminUser(UserMixin, db.Model):
     __tablename__ = "adminuser"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    actions = db.relationship('Action', backref='user')
-    surveys = db.relationship('Survey', backref='user')
     email = db.Column(db.String(255), unique=True, nullable=False)
     username = db.Column(db.String(255))
+
+    actions = db.relationship('Action', backref='user')
+    surveys = db.relationship('Survey', backref='user')
+
+    role = db.Column(db.String(50), nullable=False, default="regular")
+
     registered_on = db.Column(db.DateTime, nullable=False)
     password_hash = db.Column(db.String(100))
 

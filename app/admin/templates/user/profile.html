@@ -28,7 +28,11 @@
             </tr>
             <tr>
               <td><b>Last Active</b></td>
-              <td>{{ user.last_action.strftime("%b %d, %Y %I:%M %p") }}</td>
+              <td>
+                {% if user.last_action %}
+                  {{ user.last_action.strftime("%b %d, %Y %I:%M %p") }}
+                {% endif %}
+              </td>
             </tr>
             <tr>
               <td><b>Registered</b></td>

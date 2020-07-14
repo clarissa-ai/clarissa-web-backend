@@ -9,7 +9,8 @@ from flask import (
     redirect,
     url_for,
     flash,
-    request
+    request,
+    send_from_directory
 )
 
 from . import admin_bp as bp
@@ -55,8 +56,10 @@ from ..main.model.survey import (
 )
 from ..main.model.action import Action
 from ..main.model.route import Route
-
-from .utilities import get_system_stats
+from .utilities import (
+    get_system_stats,
+    role_required
+)
 
 
 # Force requests to be https if environment is production
@@ -65,6 +68,15 @@ external = True
 scheme = 'http'
 if os.environ.get('DEPLOY_ENV') == 'PRODUCTION':
     scheme = 'https'
+
+
+@bp.route('/favicon.ico')
+def favicon():
+    return send_from_directory(
+        os.path.join(bp.root_path, 'static'),
+        'favicon.ico',
+        mimetype='image/vnd.microsoft.icon'
+    )
 
 
 # ---------------------------------------------------------------- #
@@ -186,7 +198,8 @@ def profile(id):
         ))
     u.last_action = Action.query.filter_by(
         user_id=u.id
-    ).order_by(-Action.id).first().datetime
+    ).order_by(-Action.id).first()
+    u.last_action = u.last_action.datetime if u.last_action else None
     actions = Action.query.filter_by(
         user_id=u.id
     ).order_by(-Action.id).limit(10)
@@ -1625,12 +1638,24 @@ def user_list():
     )
 
 
-@bp.route('/create_admin_user')
+@bp.route('/create_admin_user', methods=['GET', 'POST'])
 @login_required
+@role_required('root')
 def create_admin_user():
     form = CreateAdminUser()
     if form.validate_on_submit():
-        print()
+        new_u = AdminUser(
+            username=form.username.data,
+            email=form.email.data,
+            registered_on=datetime.datetime.utcnow(),
+            password=form.password.data
+        )
+        db.session.add(new_u)
+        db.session.commit()
+        record_action(
+            "Created new admin user: {}".format(new_u.username),
+            "create"
+        )
         return redirect(url_for(
             'admin.user_list',
             _external=external,
