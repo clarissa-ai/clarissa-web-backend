@@ -178,7 +178,11 @@ def profile(id):
     u = AdminUser.query.filter_by(id=id).first()
     if not u:
         flash('Requested user with id {} does not exist.'.format(id))
-        return redirect(url_for('admin.index'))
+        return redirect(url_for(
+            'admin.index',
+            _external=external,
+            _scheme=scheme
+        ))
     u.last_action = Action.query.filter_by(
         user_id=u.id
     ).order_by(-Action.id).first().datetime
@@ -199,10 +203,19 @@ def edit_profile(id):
     u = AdminUser.query.filter_by(id=id).first()
     if not u:
         flash('Requested user with id {} does not exist.'.format(id))
-        return redirect(url_for('admin.index'))
+        return redirect(url_for(
+            'admin.index',
+            _external=external,
+            _scheme=scheme
+        ))
     if u != current_user:
         flash("You are not authenticated to access this user's settings.")
-        return redirect(url_for('admin.profile', id=id))
+        return redirect(url_for(
+            'admin.profile',
+            id=id,
+            _external=external,
+            _scheme=scheme
+        ))
     form = EditProfileForm()
     if form.validate_on_submit():
         u.username = form.username.data
@@ -214,7 +227,12 @@ def edit_profile(id):
             '{} edited their user profile.'.format(u.username),
             'edit'
         )
-        return redirect(url_for('admin.profile', id=u.id))
+        return redirect(url_for(
+            'admin.profile',
+            id=u.id,
+            _external=external,
+            _scheme=scheme
+        ))
     return render_template(
         'user/settings.html',
         title="User Settings",
@@ -229,10 +247,19 @@ def edit_password(id):
     u = AdminUser.query.filter_by(id=id).first()
     if not u:
         flash('Requested user does not exist.')
-        return redirect(url_for('admin.index'))
+        return redirect(url_for(
+            'admin.index',
+            _external=external,
+            _scheme=scheme
+        ))
     if u.id != current_user.id:
         flash('User does not have permissions to access this page.')
-        return redirect(url_for('admin.profile', id))
+        return redirect(url_for(
+            'admin.profile',
+            id,
+            _external=external,
+            _scheme=scheme
+        ))
     form = EditPasswordForm()
     if form.validate_on_submit():
         if u.check_password(form.current_password.data):
@@ -245,13 +272,28 @@ def edit_password(id):
                     '{} edited their User Settings.'.format(u.username),
                     'edit'
                 )
-                return redirect(url_for('admin.profile', id=id))
+                return redirect(url_for(
+                    'admin.profile',
+                    id=id,
+                    _external=external,
+                    _scheme=scheme
+                ))
             else:
                 flash('Passwords did not match')
-                return redirect(url_for('admin.edit_password', id=id))
+                return redirect(url_for(
+                    'admin.edit_password',
+                    id=id,
+                    _external=external,
+                    _scheme=scheme
+                ))
         else:
             flash('Failed to confirm current user password')
-            return redirect(url_for('admin.edit_password', id=id))
+            return redirect(url_for(
+                'admin.edit_password',
+                id=id,
+                _external=external,
+                _scheme=scheme
+            ))
     return render_template(
         'user/edit_password.html',
         title="Editiing Password",
@@ -1458,7 +1500,11 @@ def edit_route(id):
     r = Route.query.filter_by(id=id).first()
     if not r:
         flash('Requested route does not exist.')
-        return redirect(url_for('admin.routes_home'))
+        return redirect(url_for(
+            'admin.routes_home',
+            _external=external,
+            _scheme=scheme
+        ))
     form = EditRouteForm()
     if form.validate_on_submit():
         r.title = form.title.data
@@ -1487,7 +1533,11 @@ def delete_route(id):
     r = Route.query.filter_by(id=id).first()
     if not r:
         flash('Requested route does not exist.')
-        return redirect(url_for('admin.routes_home'))
+        return redirect(url_for(
+            'admin.routes_home',
+            _external=external,
+            _scheme=scheme
+        ))
     db.session.delete(r)
     db.session.commit()
     record_action('Deleted custom route "{}"'.format(r.title), 'destroy')
