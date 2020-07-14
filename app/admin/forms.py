@@ -267,4 +267,5 @@ class EditPasswordForm(FlaskForm):
 class CreateAdminUser(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired()])
+    password = PasswordField('New Password', validators=[DataRequired()])
     submit = SubmitField('Create New User')
