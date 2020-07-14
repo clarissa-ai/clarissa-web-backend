@@ -817,8 +817,10 @@ def question_view(survey_id, question_id):
             _external=external,
             _scheme=scheme
         ) if option_summary else ""
-        option_data[option.id]["summary_title"] = option_summary.title or "No \
-            associated summary exists"
+        if option_summary:
+            option_data[option.id]["summary_title"] = option_summary.title
+        else:
+            option_data[option.id]["summary_title"] = "No associated summary exists"  # noqa: E501
     return render_template(
         'tools/survey/view_question.html',
         title="Question: {}".format(q.title),
