@@ -37,7 +37,8 @@ from .forms import (
     CreateRouteForm,
     EditRouteForm,
     EditProfileForm,
-    EditPasswordForm
+    EditPasswordForm,
+    CreateAdminUser
 )
 
 from ..main import db
@@ -1621,4 +1622,22 @@ def user_list():
         'dashboard/administration/user_list.html',
         title="Admin User List",
         admin_users=admin_users
+    )
+
+
+@bp.route('/create_admin_user')
+@login_required
+def create_admin_user():
+    form = CreateAdminUser()
+    if form.validate_on_submit():
+        print()
+        return redirect(url_for(
+            'admin.user_list',
+            _external=external,
+            _scheme=scheme
+        ))
+    return render_template(
+        'dashboard/administration/create_admin_user.html',
+        title="Create a new Admin User",
+        form=form
     )
