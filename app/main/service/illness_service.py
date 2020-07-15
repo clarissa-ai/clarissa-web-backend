@@ -35,6 +35,29 @@ def get_illness(id, user_id):
     return response_object, 200
 
 
+def edit_illness_title(user_id, illness_id, new_title):
+    illness = Illness.query.filter_by(user_id=user_id, id=illness_id).first()
+    if not illness:
+        return {
+            'status': 'failure',
+            'message': 'Failed to modify illness with given id.'
+        }, 404
+    illness.title = new_title
+    try:
+        db.session.add(illness)
+        db.session.commit()
+        return {
+            'status': 'success',
+            'message': 'Successfully modified illness title.'
+        }
+    except Exception as e:
+        print(e)
+        return {
+            'status': 'failure',
+            'message': 'An error has occurred during this request.'
+        }, 400
+
+
 def check_symptoms(data):
     response_object = {}
     headers = {
