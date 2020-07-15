@@ -231,6 +231,8 @@ def export_active_illness_report(user_id):
         user_id=user_id,
         active=True
     ).first()
+    print(active_illness.symptoms)
+    print(active_illness.diagnoses)
     # generate html from template and illness data
     report_html = render_template(
         '/api/illness/illness_report.html',
