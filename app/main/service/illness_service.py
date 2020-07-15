@@ -165,6 +165,12 @@ def save_symptoms(data, user_id):
     # add explanations for each condition
     conditions = diagnosis['conditions']
     explanation_URL = "https://api.infermedica.com/v2/explain"
+
+    # function to generate condition url based on id from diagnosis
+    def condition_URL(condition_id):
+        return "https://api.infermedica.com/v2/conditions/{}".format(
+            condition_id
+        )
     for idx, c in enumerate(conditions):
         c_json = {
             'sex': user.sex.lower() if user.sex != "None" else 'male',
@@ -182,6 +188,15 @@ def save_symptoms(data, user_id):
         ).json()
         c['supporting_symptoms'] = explanation.get('supporting_evidence') or []
         c['opposing_symptoms'] = (explanation.get('conflicting_evidence') or []) + (explanation.get('unconfirmed_evidence') or [])  # noqa: E501
+        # THE CONDITIONS ENDPOINT IS UNNECESSARY AND CAN BE CACHED LOCALLY
+        condition_info = requests.get(
+            condition_URL(c['id']),
+            headers=headers
+        ).json()
+        c['hint'] = condition_info.get('extras').get('hint')
+        c['categories'] = condition_info.get('categories')
+        c['prevalence'] = condition_info.get('prevalence')
+        c['severity'] = condition_info.get('severity')
         # update active_diagnosis with data for condition
         conditions[idx] = c
     # save diagnosis to db

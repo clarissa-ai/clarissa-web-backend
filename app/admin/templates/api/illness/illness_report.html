@@ -1,3 +1,61 @@
 <!doctype html>
 <title>Illness report</title>
 <link rel=stylesheet href="{{ url_for('static', filename='pdf/export_illness.css') }}" />
+
+<table>
+  <thead>
+    <th>
+      Field
+    </th>
+    <th>
+      Value
+    </th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        User's name:
+      </td>
+      <td>
+        {{ illness.user.first_name }}
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Created on:
+      </td>
+      <td>
+        {{ illness.created_on }}
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Updated on:
+      </td>
+      <td>
+        {{ illness.updated_on }}
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>Symptoms</b>
+      </td>
+      <td></td>
+    </tr>
+    {% for s in illness.symptoms %}
+    <tr>
+      <td>{{ s.id }}</td>
+      <td>{{ s.title }}</td>
+    </tr>
+    {% endfor %}
+    <tr>
+      <td colspan="2">
+        <b>Most Recent Diagnosis</b>
+      </td>
+    </tr>
+    <tr>
+      <td>{{ illness.diagnoses[-1].id }}</td>
+      <td>{{ illness.diagnoses[-1].data[0]['name'] }}</td>
+    </tr>
+  </tbody>
+</table>

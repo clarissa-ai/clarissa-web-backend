@@ -39,6 +39,7 @@ def get_dashboard(auth_object):
         {
             'id': i.id,
             'active': i.active,
+            'title': i.title,
             'created_on': i.created_on.strftime("%Y-%m-%dT%H:%M:%SZ"),
             'updated_on': i.updated_on.strftime("%Y-%m-%dT%H:%M:%SZ"),
             'symptom_count': len(i.symptoms)
@@ -46,7 +47,6 @@ def get_dashboard(auth_object):
             user_id=user_id
         ).order_by(-Illness.id).limit(5)
     ]
-    print("response_object-get_dashboard: {}".format(response_object))
     return response_object, 200
 
 
