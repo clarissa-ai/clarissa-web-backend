@@ -7,6 +7,12 @@ class Illness(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
+    title = db.Column(
+        db.String(200),
+        default="Untitled Illness",
+        nullable=False
+    )
+
     symptoms = db.relationship('Symptom', backref='illness')
     diagnoses = db.relationship('Diagnosis', backref='illness')
 
@@ -22,6 +28,7 @@ class Illness(db.Model):
     def get_json(self):
         return {
             'id': self.id,
+            'title': self.title,
             'active': self.active,
             'created_on': self.created_on.strftime("%Y-%m-%dT%H:%M:%SZ"),
             'updated_on': self.updated_on.strftime("%Y-%m-%dT%H:%M:%SZ"),
