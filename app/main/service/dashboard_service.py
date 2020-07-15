@@ -63,7 +63,7 @@ def create_illness(user_id):
         db.session.add(recent_illness)
         db.session.commit()
         response_object['message'] = (
-            'Deactivated current active illness and'
+            'Deactivated current active illness and '
             'created new illness'
         )
     else:

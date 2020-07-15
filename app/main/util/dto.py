@@ -145,6 +145,18 @@ class IllnessDTO:
             }]
         )
     })
+    edit_illness_title = api.model('edit_illness_title', {
+        'illness_id': fields.Integer(
+            required=True,
+            description='ID of the illness being changed by the user',
+            example=1
+        ),
+        'new_title': fields.String(
+            required=True,
+            description='New title of the illness',
+            example='Post-Thanksgiving Flu'
+        )
+    })
 
 
 class DashboardDTO:

@@ -7,7 +7,8 @@ from ..service.illness_service import (
     get_illness_history,
     save_symptoms,
     close_active_illness,
-    export_active_illness_report
+    export_active_illness_report,
+    edit_illness_title
 )
 from ..util.dto import IllnessDTO
 from flask import request
@@ -17,6 +18,7 @@ api = IllnessDTO.api
 _get_by_id = IllnessDTO.get_by_id
 _check_symptoms = IllnessDTO.check_symptoms
 _save_symptoms = IllnessDTO.save_symptoms
+_edit_illness_title = IllnessDTO.edit_illness_title
 
 
 @api.route('/get_illness_by_id')
@@ -33,6 +35,24 @@ class GetIllness(Resource):
         data = request.json
         user_id = auth_object['auth_object']['data']['user_id']
         return get_illness(data['id'], user_id)
+
+
+@api.route('/edit_illness_title')
+class EditIllnessTitle(Resource):
+    @api.doc(responses={
+        200: 'Successfully edited illness title',
+        401: 'Failed to authenticate.',
+        404: 'Failed to retrieve illness with given id'
+    })
+    @api.expect(_edit_illness_title, validate=True)
+    @token_required
+    def post(self, auth_object):
+        """Edit Illness Title"""
+        data = request.json
+        illness_id = data['illness_id']
+        new_title = data['new_title']
+        user_id = auth_object['auth_object']['data']['user_id']
+        return edit_illness_title(user_id, illness_id, new_title)
 
 
 @api.route('/check_symptoms')
