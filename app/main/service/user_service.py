@@ -103,7 +103,10 @@ def edit_user_settings(json, auth_object):
         if json.get('first_name'):
             user.first_name = json['first_name']
         if json.get('birthdate'):
-            user.birthdate = json['birthdate']
+            user.birthdate = datetime.datetime.strptime(
+                json['birthdate'],
+                "%Y-%m-%dT%H:%M:%S.000Z"
+            )
         if json.get('current_password'):
             if user.check_password(json.get('current_password')) and json.get('password'):  # noqa: E501
                 user.password = json['password']
