@@ -111,7 +111,7 @@ def edit_user_settings(json, auth_object):
                 db.session.commit()
                 return {
                     'status': 'success',
-                    'message': 'Successfully checked current password.'
+                    'message': 'Successfully changed current password.'
                 }, 200
             else:
                 return {
