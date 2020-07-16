@@ -51,9 +51,10 @@ class UserDTO:
             example='Korra'
         ),
         'birthdate': fields.String(
-            description='user date of birth',
-            example='08/26/1992',
-            pattern=r"^\d{2}/\d{2}/\d{4}$"
+            description='user date of birth - UTC JavaScript Date format',
+            example='2000-02-26T05:00:00.000Z',
+            pattern=r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$"
+            # ex: 2000-02-26T05:00:00.000Z
         ),
         'sex': fields.String(
             description='user\'s current sex',
