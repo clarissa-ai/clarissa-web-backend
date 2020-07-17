@@ -5,7 +5,8 @@ from ..model.route import Route
 
 def get_routes():
     response_object = {}
-    routes_list = Route.query.filter_by(active=True).all()
+    routes_list = Route.query.all()
+    routes_list = filter(lambda x: x.active, routes_list)
     if not routes_list:
         path = os.path.abspath(os.path.dirname(__file__))
         json_path = path + '/resources/routes_service/default_routes.json'
@@ -25,5 +26,5 @@ def get_routes():
         response_object["message"] = "Successfully retrieved routes."
         response_object["routes"] = {}
         for r in routes_list:
-            response_object["routes"][r.origin] = [r.target]
+            response_object["routes"][r.origin] = r.target
     return response_object

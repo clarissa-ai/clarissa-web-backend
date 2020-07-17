@@ -9,7 +9,8 @@ from flask import (
     redirect,
     url_for,
     flash,
-    request
+    request,
+    send_from_directory
 )
 
 from . import admin_bp as bp
@@ -33,7 +34,12 @@ from .forms import (
     EditSummaryForm,
     CreateInfoGroupForm,
     AddOptionForm,
-    EditOptionForm
+    EditOptionForm,
+    CreateRouteForm,
+    EditRouteForm,
+    EditProfileForm,
+    EditPasswordForm,
+    CreateAdminUser
 )
 
 from ..main import db
@@ -49,22 +55,14 @@ from ..main.model.survey import (
     Response
 )
 from ..main.model.action import Action
-
-from .utilities import get_system_stats
-
-
-# Utility function for recording admin actions
-def record_action(text, type):
-    a = Action(
-        user_id=current_user.id,
-        datetime=datetime.datetime.utcnow(),
-        text=text,
-        type=type
-    )
-    db.session.add(a)
-    db.session.commit()
+from ..main.model.route import Route
+from .utilities import (
+    get_system_stats,
+    role_required
+)
 
 
+# Force requests to be https if environment is production
 # Setting https redirect patterns based on environment
 external = True
 scheme = 'http'
@@ -72,19 +70,19 @@ if os.environ.get('DEPLOY_ENV') == 'PRODUCTION':
     scheme = 'https'
 
 
-@bp.route('/sys_stats')
-def sys_stats():
-    return get_system_stats()
-
-
-@bp.route('/')
-@login_required
-def index():
-    return render_template(
-        'dashboard/index.html',
-        title="Admin Home",
-        actions=Action.query.order_by(Action.id.desc()).limit(10)
+@bp.route('/favicon.ico')
+def favicon():
+    return send_from_directory(
+        os.path.join(bp.root_path, 'static'),
+        'favicon.ico',
+        mimetype='image/vnd.microsoft.icon'
     )
+
+
+# ---------------------------------------------------------------- #
+#                       AUTHORIZATION ROUTES                       #
+#          Logic to allow admin users to login and logout          #
+# ---------------------------------------------------------------- #
 
 
 @bp.route('/login', methods=['GET', 'POST'])
@@ -131,22 +129,191 @@ def logout():
     ))
 
 
+# ---------------------------------------------------------------- #
+#                      DASHBOARD BASE PAGES                        #
+#           Core set of pages for the admin dashboard              #
+# ---------------------------------------------------------------- #
+
+
+# Utility function for recording admin actions
+def record_action(text, type):
+    a = Action(
+        user_id=current_user.id,
+        datetime=datetime.datetime.utcnow(),
+        text=text,
+        type=type
+    )
+    db.session.add(a)
+    db.session.commit()
+
+
+@bp.route('/sys_stats')
+def sys_stats():
+    return get_system_stats()
+
+
+@bp.route('/')
+@login_required
+def index():
+    return render_template(
+        'dashboard/index.html',
+        title="Admin Home"
+    )
+
+
 @bp.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard/dashboard.html', title="Admin Dashboard")
+    return render_template(
+        'dashboard/dashboard.html',
+        title="Admin Dashboard",
+        actions=Action.query.order_by(Action.id.desc()).limit(10)
+    )
 
 
-@bp.route('/profile')
+@bp.route('/actions')
 @login_required
-def profile():
-    return render_template('user/profile.html')
+def actions():
+    return render_template(
+        'dashboard/actions.html',
+        title='Actions History'
+    )
 
 
-@bp.route('/profile/edit')
+# ------------------------------------------------------------------ #
+#                        USER PROFILE ROUTES                         #
+#   Pages allowing admin users to view profiles and edit settings    #
+# ------------------------------------------------------------------ #
+
+@bp.route('/profile/<id>')
 @login_required
-def edit_profile():
-    return render_template('user/settings.html')
+def profile(id):
+    u = AdminUser.query.filter_by(id=id).first()
+    if not u:
+        flash('Requested user with id {} does not exist.'.format(id))
+        return redirect(url_for(
+            'admin.index',
+            _external=external,
+            _scheme=scheme
+        ))
+    u.last_action = Action.query.filter_by(
+        user_id=u.id
+    ).order_by(-Action.id).first()
+    u.last_action = u.last_action.datetime if u.last_action else None
+    actions = Action.query.filter_by(
+        user_id=u.id
+    ).order_by(-Action.id).limit(10)
+    return render_template(
+        'user/profile.html',
+        title="{}'s profile".format(u.username),
+        user=u,
+        actions=actions
+    )
+
+
+@bp.route('/profile/edit/<id>', methods=['GET', 'POST'])
+@login_required
+def edit_profile(id):
+    u = AdminUser.query.filter_by(id=id).first()
+    if not u:
+        flash('Requested user with id {} does not exist.'.format(id))
+        return redirect(url_for(
+            'admin.index',
+            _external=external,
+            _scheme=scheme
+        ))
+    if u != current_user:
+        flash("You are not authenticated to access this user's settings.")
+        return redirect(url_for(
+            'admin.profile',
+            id=id,
+            _external=external,
+            _scheme=scheme
+        ))
+    form = EditProfileForm()
+    if form.validate_on_submit():
+        u.username = form.username.data
+        u.email = form.email.data
+        db.session.add(u)
+        db.session.commit()
+        flash('Successfully edited user settings!')
+        record_action(
+            '{} edited their user profile.'.format(u.username),
+            'edit'
+        )
+        return redirect(url_for(
+            'admin.profile',
+            id=u.id,
+            _external=external,
+            _scheme=scheme
+        ))
+    return render_template(
+        'user/settings.html',
+        title="User Settings",
+        user=u,
+        form=form
+    )
+
+
+@bp.route('/profile/edit/<id>/password', methods=['GET', 'POST'])
+@login_required
+def edit_password(id):
+    u = AdminUser.query.filter_by(id=id).first()
+    if not u:
+        flash('Requested user does not exist.')
+        return redirect(url_for(
+            'admin.index',
+            _external=external,
+            _scheme=scheme
+        ))
+    if u.id != current_user.id:
+        flash('User does not have permissions to access this page.')
+        return redirect(url_for(
+            'admin.profile',
+            id,
+            _external=external,
+            _scheme=scheme
+        ))
+    form = EditPasswordForm()
+    if form.validate_on_submit():
+        if u.check_password(form.current_password.data):
+            if form.new_password.data == form.confirm_password.data:
+                u.password = form.new_password.data
+                db.session.add(u)
+                db.session.commit()
+                flash('Successfully changed user\'s password')
+                record_action(
+                    '{} edited their User Settings.'.format(u.username),
+                    'edit'
+                )
+                return redirect(url_for(
+                    'admin.profile',
+                    id=id,
+                    _external=external,
+                    _scheme=scheme
+                ))
+            else:
+                flash('Passwords did not match')
+                return redirect(url_for(
+                    'admin.edit_password',
+                    id=id,
+                    _external=external,
+                    _scheme=scheme
+                ))
+        else:
+            flash('Failed to confirm current user password')
+            return redirect(url_for(
+                'admin.edit_password',
+                id=id,
+                _external=external,
+                _scheme=scheme
+            ))
+    return render_template(
+        'user/edit_password.html',
+        title="Editiing Password",
+        form=form,
+        user=u
+    )
 
 
 # ------------------------------------------------------------------ #
@@ -245,11 +412,20 @@ def create_survey():
         )
         db.session.add(s)
         db.session.commit()
+
         # IMAGE UPLOADING LOGIC
         if create_survey_form.image_upload.data:
             f = create_survey_form.image_upload.data
             s.image_file = f.read()
             s.image_type = f.filename.split(".")[-1]
+            db.session.add(s)
+            db.session.commit()
+
+        # COVER IMAGE UPLOADING LOGIC
+        if create_survey_form.cover_image_upload.data:
+            f = create_survey_form.cover_image_upload.data
+            s.cover_image_file = f.read()
+            s.cover_image_type = f.filename.split(".")[-1]
             db.session.add(s)
             db.session.commit()
 
@@ -655,8 +831,10 @@ def question_view(survey_id, question_id):
             _external=external,
             _scheme=scheme
         ) if option_summary else ""
-        option_data[option.id]["summary_title"] = option_summary.title or "No \
-            associated summary exists"
+        if option_summary:
+            option_data[option.id]["summary_title"] = option_summary.title
+        else:
+            option_data[option.id]["summary_title"] = "No associated summary exists"  # noqa: E501
     return render_template(
         'tools/survey/view_question.html',
         title="Question: {}".format(q.title),
@@ -793,6 +971,12 @@ def edit_survey(survey_id):
             f = edit_survey_form.image_upload.data
             s.image_file = f.read()
             s.image_type = f.filename.split(".")[-1]
+
+        # COVER IMAGE UPLOADING LOGIC
+        if edit_survey_form.cover_image_upload.data:
+            f = edit_survey_form.cover_image_upload.data
+            s.cover_image_file = f.read()
+            s.cover_image_type = f.filename.split(".")[-1]
 
         db.session.add(s)
         db.session.commit()
@@ -1288,10 +1472,140 @@ def survey_design_guide(survey_id, survey_title):
 @bp.route('/custom_routes')
 @login_required
 def routes_home():
+    routes = Route.query.all()
     return render_template(
         '/tools/route/home.html',
-        title='Custom Routing'
+        title='Custom Routing',
+        routes=routes
     )
+
+
+@bp.route('/custom_routes/new', methods=['GET', 'POST'])
+@login_required
+def create_route():
+    form = CreateRouteForm()
+    if form.validate_on_submit():
+        r = Route(
+            title=form.title.data,
+            origin=form.origin.data,
+            target=form.target.data,
+            created_on=datetime.datetime.utcnow(),
+            active=form.active.data
+        )
+        db.session.add(r)
+        db.session.commit()
+        record_action(
+            'Created new custom route "{}"'.format(r.title),
+            'create'
+        )
+        return redirect(url_for(
+            'admin.routes_home',
+            _external=external,
+            _scheme=scheme
+        ))
+    return render_template(
+        '/tools/route/new.html',
+        title="Create Route",
+        form=form
+    )
+
+
+@bp.route('/custom_routes/edit/<id>', methods=['GET', 'POST'])
+@login_required
+def edit_route(id):
+    r = Route.query.filter_by(id=id).first()
+    if not r:
+        flash('Requested route does not exist.')
+        return redirect(url_for(
+            'admin.routes_home',
+            _external=external,
+            _scheme=scheme
+        ))
+    form = EditRouteForm()
+    if form.validate_on_submit():
+        r.title = form.title.data
+        r.origin = form.origin.data
+        r.target = form.target.data
+        r.active = form.active.data
+        db.session.add(r)
+        db.session.commit()
+        record_action('Edited custom route "{}"'.format(r.title), 'edit')
+        return redirect(url_for(
+            'admin.routes_home',
+            _external=external,
+            _scheme=scheme
+        ))
+    return render_template(
+        '/tools/route/edit.html',
+        title="Edit Route",
+        form=form,
+        route=r
+    )
+
+
+@bp.route('/custom_routes/delete/<id>')
+@login_required
+def delete_route(id):
+    r = Route.query.filter_by(id=id).first()
+    if not r:
+        flash('Requested route does not exist.')
+        return redirect(url_for(
+            'admin.routes_home',
+            _external=external,
+            _scheme=scheme
+        ))
+    db.session.delete(r)
+    db.session.commit()
+    record_action('Deleted custom route "{}"'.format(r.title), 'destroy')
+    return redirect(url_for(
+        'admin.routes_home',
+        _external=external,
+        _scheme=scheme
+    ))
+
+
+@bp.route('/custom_routes/deactivate/<id>')
+@login_required
+def deactivate_route(id):
+    r = Route.query.filter_by(id=id).first()
+    if r.active:
+        r.active = False
+        db.session.add(r)
+        db.session.commit()
+        record_action(
+            'Deactivated custom route "{}"'.format(r.title),
+            'destroy'
+        )
+        flash('Route "{}" successfully deactivated.'.format(r.title))
+    else:
+        flash('Route "{}" already deactivated.'.format(r.title))
+    return redirect(url_for(
+        'admin.routes_home',
+        _external=external,
+        _scheme=scheme
+    ))
+
+
+@bp.route('/custom_routes/activate/<id>')
+@login_required
+def activate_route(id):
+    r = Route.query.filter_by(id=id).first()
+    if r.active:
+        flash('Route "{}" already active.'.format(r.title))
+    else:
+        r.active = True
+        db.session.add(r)
+        db.session.commit()
+        record_action(
+            'Activated custom route "{}"'.format(r.title),
+            'create'
+        )
+        flash('Route "{}" successfully activated.'.format(r.title))
+    return redirect(url_for(
+        'admin.routes_home',
+        _external=external,
+        _scheme=scheme
+    ))
 
 
 # ---------------------------------------------------------------- #
@@ -1313,7 +1627,42 @@ def development_home():
 @bp.route('/user_list')
 @login_required
 def user_list():
+    admin_users = AdminUser.query.all()
+    for u in admin_users:
+        a = Action.query.filter_by(user_id=u.id).order_by(-Action.id).first()
+        u.most_recent_action = a
     return render_template(
         'dashboard/administration/user_list.html',
-        title="Admin User List"
+        title="Admin User List",
+        admin_users=admin_users
+    )
+
+
+@bp.route('/create_admin_user', methods=['GET', 'POST'])
+@login_required
+@role_required('root')
+def create_admin_user():
+    form = CreateAdminUser()
+    if form.validate_on_submit():
+        new_u = AdminUser(
+            username=form.username.data,
+            email=form.email.data,
+            registered_on=datetime.datetime.utcnow(),
+            password=form.password.data
+        )
+        db.session.add(new_u)
+        db.session.commit()
+        record_action(
+            "Created new admin user: {}".format(new_u.username),
+            "create"
+        )
+        return redirect(url_for(
+            'admin.user_list',
+            _external=external,
+            _scheme=scheme
+        ))
+    return render_template(
+        'dashboard/administration/create_admin_user.html',
+        title="Create a new Admin User",
+        form=form
     )

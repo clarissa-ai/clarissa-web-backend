@@ -10,5 +10,8 @@ class Route(db.Model):
     target = db.Column(db.String(100), nullable=False)
     active = db.Column(db.Boolean, nullable=False, default=True)
 
+    created_on = db.Column(db.DateTime, nullable=False)
+    title = db.Column(db.String(200), nullable=False)
+
     def __repr__(self):
         return "<Route '{}':'{}'>".format(self.origin, self.target)

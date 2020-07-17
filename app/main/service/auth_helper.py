@@ -63,7 +63,12 @@ class Auth:
                     'data': {
                         'user_id': user.id,
                         'email': user.email,
-                        'registered_on': str(user.registered_on)
+                        'first_name': user.first_name,
+                        'birthdate': user.birthdate.strftime("%m/%d/%Y"),
+                        'registered_on': user.registered_on.strftime(
+                            "%m/%d/%Y %I:%M:%S%p"
+                        ),
+                        'sex': user.sex
                     }
                 }
                 return response_object, 200

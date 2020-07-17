@@ -2,22 +2,82 @@
 
 <div class="pusher">
   <div class="main-content">
+
+
     <div class="ui grid stackable padded centered">
 
-      <div class="seven wide column">
+      <div class="four wide column">
+        <div class="ui segments">
 
+          <div class="ui segment center aligned blue inverted">
+            <h2>User Administration: <br/><u>{{current_user.username}}</u></h2>
+          </div>
 
-        <div class="ui segment red inverted">
-          This guide column is still unfinished and will be released with the next version of the dashboard.
+          <div class="ui segment">
+            <b>Username:</b> {{ current_user.username }}<br/>
+            <b>Email:</b> {{ current_user.email }}<br/>
+            <b>Role:</b> {{ current_user.role }}<br/>
+            <b>Registered On:</b> {{ current_user.registered_on.strftime("%b %d, %Y %I:%M%p") }}<br/>
+            <b>Surveys:</b> {{ current_user.surveys|count }}<br/>
+            <b>Actions:</b> {{ current_user.actions|count }}
+          </div>
+
+          <div class="ui segment">
+            <div class="ui buttons">
+
+              <a class="ui button yellow" href="{{ url_for('admin.edit_profile', id=current_user.id) }}">
+                <i class="pencil icon"></i>
+                Edit My Settings
+              </a>
+
+              <a class="ui button green" href="{{ url_for('admin.create_admin_user') }}">
+                <i class="plus circle icon"></i>
+                Create Admin User
+              </a>
+
+            </div>
+          </div>
+
         </div>
+      </div>
+
+      <div class="ten wide column">
         
         <table class="ui celled table">
           <thead>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Created on</th>
+            <tr>
+              <th colspan="1" rowspan="2">Username</th>
+              <th colspan="1" rowspan="2">Email</th>
+              <th colspan="1" rowspan="2">Role</th>
+              <th colspan="1" rowspan="2">Registered on</th>
+              <th colspan="1" rowspan="2">Surveys Created</th>
+              <th colspan="1" rowspan="2">Actions Completed</th>
+              <th colspan="2" rowspan="1">Latest Action</th>
+            </tr>
+            <tr>
+              <th colspan="1" rowspan="1" style="border-left:solid 1px rgba(34, 36, 38, 0.1);">Time</th>
+              <th colspan="1" rowspan="1">Type</th>
+            </tr>
           </thead>
           <tbody>
+            {% for user in admin_users %}
+            <tr>
+              <td><a href="{{ url_for('admin.profile', id=user.id) }}">{{ user.username }}</a></td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.role }}</td>
+              <td>{{ user.registered_on.strftime("%b %d, %Y %I:%M%p") }}</td>
+              <td>{{ user.surveys|count }}</td>
+              <td>{{ user.actions|count }}</td>
+              <td>
+                {% if user.most_recent_action %}
+                  {{ user.most_recent_action.datetime.strftime("%b %d, %Y %I:%M%p") }}
+                {% endif %}
+              </td>
+              <td
+              class="{% if user.most_recent_action.type == 'create' %} positive {% elif user.most_recent_action.type == 'edit' %} warning {% elif user.most_recent_action.type == 'destroy' %} negative{% endif %}""
+              >{{ user.most_recent_action.type }}</td>
+            </tr>
+            {% endfor %}
           </tbody>
         </table>
 

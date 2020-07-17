@@ -11,6 +11,51 @@ ENVIRONMENT_VAR = os.getenv('DEPLOY_ENV') or 'DEV'
 app = create_app(ENVIRONMENT_VAR)
 
 
+def run_migrations(env):
+    ENV_STR = env[0]
+    if ENV_STR == 'PREPROD' or ENV_STR == 'PREPRODUCTION':
+        print('Starting migrations in Preprod environment')
+        SCRIPT_RDS_DB_USER = os.environ.get('PREPROD_RDS_DB_USER')
+        SCRIPT_RDS_DB_URL = os.environ.get('PREPROD_RDS_DB_URL')
+        SCRIPT_RDS_DB_PWD = os.environ.get('PREPROD_RDS_DB_PWD')
+        os.environ['DEPLOY_ENV'] = 'PRODUCTION'
+        os.environ['RDS_DB_USER'] = SCRIPT_RDS_DB_USER
+        os.environ['RDS_DB_URL'] = SCRIPT_RDS_DB_URL
+        os.environ['RDS_DB_PWD'] = SCRIPT_RDS_DB_PWD
+        print('Set environment variables for RDS_DB')
+        stream = os.popen('python manage.py db upgrade')
+        output = stream.read()
+        print(output)
+        print('Ran migrations on variables')
+        os.environ['DEPLOY_ENV'] = 'DEV'
+        os.environ['RDS_DB_USER'] = ' '
+        os.environ['RDS_DB_URL'] = ' '
+        os.environ['RDS_DB_PWD'] = ' '
+        print('Returned environment variables to original state')
+    elif ENV_STR == 'PRODUCTION' or ENV_STR == 'PROD':
+        print('Starting migrations in Prod environment')
+        SCRIPT_RDS_DB_USER = os.environ.get('PROD_RDS_DB_USER')
+        SCRIPT_RDS_DB_URL = os.environ.get('PROD_RDS_DB_URL')
+        SCRIPT_RDS_DB_PWD = os.environ.get('PROD_RDS_DB_PWD')
+        os.environ['DEPLOY_ENV'] = 'PRODUCTION'
+        os.environ['RDS_DB_USER'] = SCRIPT_RDS_DB_USER
+        os.environ['RDS_DB_URL'] = SCRIPT_RDS_DB_URL
+        os.environ['RDS_DB_PWD'] = SCRIPT_RDS_DB_PWD
+        print('Set environment variables for RDS_DB')
+        stream = os.popen('python manage.py db upgrade')
+        output = stream.read()
+        print(output)
+        print('Ran migrations on variables')
+        os.environ['DEPLOY_ENV'] = 'DEV'
+        os.environ['RDS_DB_USER'] = ' '
+        os.environ['RDS_DB_URL'] = ' '
+        os.environ['RDS_DB_PWD'] = ' '
+        print('Returned environment variables to original state')
+    else:
+        print('Requested environment doesn\'t exist')
+        print('Please try again with a different environment name.')
+
+
 def reset_dev():
     """Resets database, adds admin and test users, and any additional data
     (dev environment only)"""

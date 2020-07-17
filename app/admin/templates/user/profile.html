@@ -6,10 +6,105 @@
   <div class="main-content">
     <div class="ui grid stackable padded centered">
 
-      <div class="eight wide column">
-        <div class="ui segment red inverted">
-          This feature is still under development and will be available in the next version of the dashboard.
+      <div class="six wide column">
+        <div class="ui segments">
+
+          <div class="ui segment center aligned blue inverted">
+             <h2>{{ user.username }}'s Profile</h2>
+          </div>
+
         </div>
+
+        <table class="ui celled table">
+  
+          <tbody>
+            <tr>
+              <td><b>Username</b></td>
+              <td>{{ user.username }}</td>
+            </tr>
+            <tr>
+              <td><b>Email</b></td>
+              <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+              <td><b>Last Active</b></td>
+              <td>
+                {% if user.last_action %}
+                  {{ user.last_action.strftime("%b %d, %Y %I:%M %p") }}
+                {% endif %}
+              </td>
+            </tr>
+            <tr>
+              <td><b>Registered</b></td>
+              <td>{{ user.registered_on.strftime("%b %d, %Y %I:%M %p") }}</td>
+            </tr>
+            <tr>
+              <td><b>Actions</b></td>
+              <td>{{ user.actions|count }}</td>
+            </tr>
+            <tr>
+              <td><b>Surveys</b></td>
+              <td>{{ user.surveys|count }}</td>
+            </tr>
+            {% if current_user.id == user.id %}
+            <tr>
+              <td><b>Options</b></td>
+              <td>
+                <a class="ui button yellow" href="{{ url_for('admin.edit_profile', id=user.id) }}">
+                  <i class="pencil icon"></i>
+                  Edit Profile
+                </a>
+                <a class="ui button orange" href="{{ url_for('admin.edit_password', id=user.id) }}">
+                  <i class="key icon"></i>
+                  Change Password
+                </a>
+              </td>
+            </tr>
+            {% endif %}
+          </tbody>
+  
+        </table>
+
+        
+      </div>
+
+      <div class="six wide column">
+        <table class="ui celled table" style="margin-top: 0%;">
+          <thead>
+            <tr>
+              <th class="center aligned" colspan="4" style="background-color:blueviolet; color: white;">
+                <h2>Recent Actions</h2>
+              </th>
+            </tr>
+            <tr>
+              <th>Time</th>
+              <th>User</th>
+              <th>Description</th>
+              <th>Type</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for action in actions %}
+            <tr class="
+                {% if action.type == "create" %}
+                  positive
+                {% elif action.type == "edit" %}
+                  warning
+                {% elif action.type == "destroy" %}
+                  negative
+                {% endif %}
+                ">
+              <td>{{ action.datetime.strftime("%b %d, %Y %I:%M %p") }}</td>
+              <td>{{ action.user.username }}</td>
+              <td>{{ action.text }}</td>
+              <td>{{ action.type }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+
+        </table>
+
       </div>
 
     </div>

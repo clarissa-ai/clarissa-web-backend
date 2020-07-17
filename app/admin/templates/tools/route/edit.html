@@ -26,57 +26,42 @@
           <div class="ui segments stackable">
 
             <div class="ui segment">
-              <h2>Edit survey: {{ survey.title}}</h2>
+              <h2>Edit Route: {{ route.title}}</h2>
             </div>
 
             <div class="ui segment">
               <div class="required field">
                 {{ form.title.label }}
-                {{ form.title(size=32, value=survey.title) }}
+                {{ form.title(size=32, value=route.title) }}
 
               </div>
             </div>
 
             <div class="ui segment">
               <div class="required field">
-                {{ form.description.label }}
-                <textarea id="description" name="description" required="">{{survey.description}}</textarea>
-              </div>
-            </div>
+                {{ form.origin.label }}
+                {{ form.origin(size=32, value=route.origin) }}
 
-            <div class="ui segment field required">
-              {{ form.expiration_date.label}}
-              <div class="ui calendar" id="expiration_date">
-                <div class="ui input left icon">
-                  <i class="calendar icon"></i>
-                  {{ form.expiration_date(placeholder="Date/Time", value=survey.expiration_date, autocomplete="off") }}
-                </div>
               </div>
             </div>
 
             <div class="ui segment">
               <div class="required field">
-                {{ form.image_upload.label }}
-                {{ form.image_upload }}
-              </div>
-            </div>
+                {{ form.target.label }}
+                {{ form.target(size=32, value=route.target) }}
 
-            <div class="ui segment">
-              <div class="required field">
-                {{ form.cover_image_upload.label }}
-                {{ form.cover_image_upload }}
               </div>
             </div>
 
             <div class="ui segment center aligned">
               <div class="inline required field center aligned">
-                {% if survey.active %}
+                {% if route.active %}
                 {{ form.active(class="form-check-input", checked=True) }}
                 {% else %}
                 {{ form.active(class="form-check-input") }}
                 {% endif %}
                 <div class="ui left pointing label">
-                  Active survey (published)
+                  Active Route (published)
                 </div>
               </div>
             </div>
@@ -95,25 +80,4 @@
 </div>
 
 
-{% endblock %}
-{% block post_script%}
-<script>
-  $('#expiration_date').calendar({
-    popupOptions: {
-      position: 'bottom right',
-      lastResort: 'bottom right',
-      prefer: 'opposite',
-      hideOnScroll: false
-    },
-    text: {
-      days: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
-      months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-      monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-      today: 'Today',
-      now: 'Now',
-      am: 'AM',
-      pm: 'PM'
-    },
-  });
-</script>
 {% endblock %}

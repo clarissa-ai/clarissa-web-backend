@@ -7,9 +7,6 @@ from flask_script import Manager
 # Import application factory and database
 from app.main import create_app, db
 
-# Import library to manage CORS
-from flask_cors import CORS
-
 # Import API and Admin blueprints
 from app import blueprint as app_blueprint
 from app.admin import admin_bp as admin_blueprint
@@ -26,13 +23,14 @@ app = create_app(ENVIRONMENT_VAR)
 app.register_blueprint(admin_blueprint)
 app.register_blueprint(app_blueprint)
 
-# Register CORS manager with app instance
-cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
-
 
 @app.after_request
 def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add(
+        'Access-Control-Allow-Origin',
+        app.config['CORS_ALLOW_ORIGIN']
+    )
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
     response.headers.add(
         'Access-Control-Allow-Headers',
         'Content-Type,Authorization'

@@ -1,15 +1,17 @@
 import datetime
+from flask import request
 
 from app.main import db
-from app.main.model.survey import Survey, Response
+from app.main.model.survey import Survey, Response, Question, Summary
 from app.main.model.user import User
+from app.main.service.auth_helper import Auth
 
 from sqlalchemy import exc as exceptions
 
 
 def save_model(data):
     db.session.add(data)
-    db.session.commit(data)
+    db.session.commit()
 
 
 def get_main_survey():
@@ -21,30 +23,51 @@ def get_main_survey():
             'message': 'Failed to retreive main survey, \
                 main survey not published.'
         }
-    response_object = {
-        'status': 'success',
-        'message': 'Successfully retrieved main published survey.',
-        'survey': {
-            'id': s.id,
-            'title': s.title,
-            'description': s.description
+    else:
+        response_object = {
+            'status': 'success',
+            'message': 'Successfully retrieved main published survey.',
+            'survey': {
+                'id': s.id,
+                'title': s.title,
+                'description': s.description,
+                'cover_image_url': s.get_cover_image_url(),
+                'question_count': len(s.questions)
+            }
         }
-    }
+        auth_response, auth_response_code = Auth.get_logged_in_user(request)
+        if auth_response_code == 200:
+            user = auth_response.get('data')
+            response_object['survey']['completed'] = Response.query.filter_by(
+                survey_id=s.id,
+                user_id=user.get('user_id')
+            ).first() != None  # noqa: E711
     return response_object, 200
 
 
 def get_active_surveys():
     surveys = []
     for s in Survey.query.all():
-        if s.expiration_date > datetime.datetime.utcnow() and s.active:
+        if s.expiration_date < datetime.datetime.utcnow() and s.active:
             s.active = False
             save_model(s)
         elif s.active:
             surveys.append({
-                'id': str(s.id),
+                'id': s.id,
                 'title': s.title,
-                'description': s.description
+                'description': s.description,
+                'image_url': s.get_image_url(),
+                'question_count': len(s.questions)
             })
+            auth_response, auth_response_code = Auth.get_logged_in_user(
+                request
+            )
+            if auth_response_code == 200:
+                user = auth_response.get('data')
+                surveys[-1]['completed'] = Response.query.filter_by(
+                    survey_id=s.id,
+                    user_id=user.get('user_id')
+                ).first() != None  # noqa: E711
     response_object = {
         'status': 'success',
         'message': 'Successfully retrieved surveys.',
@@ -60,7 +83,7 @@ def get_survey(id):
             'status': 'failure',
             'message': 'Failed to retrieve survey with id: {}'.format(id)
         }
-        return response_object, 200
+        return response_object, 404
     else:
         response_object = {
             'status': 'success',
@@ -107,3 +130,46 @@ def post_survey_response(data):
         'status': 'success',
         'message': 'Successfully submitted survey response.'
     }, 200
+
+
+def get_survey_results(auth_object):
+    surveys_answers = []
+    auth_response_code = auth_object['resp_code']
+    auth_response = auth_object['auth_object']
+    if auth_response_code == 200:
+        user = auth_response.get('data')
+        for s in Survey.query.all():
+            response_json = Response.query.filter_by(
+                survey_id=s.id,
+                user_id=user.get('user_id')
+            ).order_by(-Response.id).first()
+            if response_json:
+                json_body = response_json.json_response
+                questions = json_body.get('questions')
+                question_responses = []
+                for q in questions or []:
+                    if q['choices'] != []:
+                        question_responses.append({
+                            'title': Question.query.filter_by(
+                                id=q['id']
+                            ).first().title,
+                            'choices': q['choices']
+                        })
+                if json_body.get('summary'):
+                    summary = Summary.query.filter_by(
+                        id=json_body['summary']['id']
+                    ).first()
+                    surveys_answers.append({
+                        'title': s.title,
+                        'description': s.description,
+                        'image_url': s.get_image_url(),
+                        'answered_questions': question_responses,
+                        'summary_title': summary.title,
+                        'summary_description': summary.description
+                    })
+    response_object = {
+        'status': 'success',
+        'message': 'Successfully retrieved surveys results.',
+        'surveys': surveys_answers
+    }
+    return response_object, 200

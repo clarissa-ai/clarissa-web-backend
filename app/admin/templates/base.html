@@ -13,6 +13,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Calendar field -->
     <link rel="stylesheet" href="{{ url_for('admin.static', filename='css/calendar.min.css') }}" />
+    <!-- favicon import  -->
+    <link rel='shortcut icon' href="/admin/favicon.ico" />
   </head>
 
   <body>
@@ -118,6 +120,9 @@
           Dashboard Administration
         </div>
         <div class="menu">
+          <a class="item" href="{{ url_for('admin.actions')}}">
+            <div><i class="clipboard list icon"></i>Actions History</div>
+          </a>
           <a class="item" href="{{ url_for('admin.user_list') }}">
             <div><i class="users icon"></i>Admin Users</div>
           </a>
@@ -145,6 +150,23 @@
         <div class="ui tiny green inverted progress">
           <div class="bar" style="width:0%" id="disk_sidebar"></div>
           <div class="label">Disk Usage</div>
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="header">
+          User Options
+        </div>
+        <div class="menu">
+          <a class="item" href="{{ url_for('admin.profile', id=current_user.id)}}">
+            <div><i class="user alt icon"></i>User Profile</div>
+          </a>
+          <a class="item" href="{{ url_for('admin.edit_profile', id=current_user.id) }}">
+            <div><i class="sliders h icon"></i>Preferences</div>
+          </a>
+          <a class="item" href="{{ url_for('admin.logout') }}">
+            <div><i class="sign out icon"></i>Logout</div>
+          </a>
         </div>
       </div>
 
@@ -177,11 +199,11 @@
             <i class="bell icon"></i>
           </a>
           <div class="ui dropdown item">
-            <i class="user cirlce icon"></i>
+            <i class="user icon"></i>
             <div class="menu">
-              <a href="{{ url_for('admin.profile') }}" class="item">
+              <a href="{{ url_for('admin.profile', id=current_user.id) }}" class="item">
                 <i class="info circle icon"></i> Profile</a>
-              <a href="{{ url_for('admin.edit_profile') }}" class="item">
+              <a href="{{ url_for('admin.edit_profile', id=current_user.id) }}" class="item">
                 <i class="wrench icon"></i>
                 Settings</a>
               <a href="{{ url_for('admin.logout') }}" class="item">

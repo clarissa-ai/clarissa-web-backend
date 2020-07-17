@@ -34,6 +34,10 @@ class CreateSurveyForm(FlaskForm):
         'Title Image',
         validators=[FileAllowed(['jpg', 'png'], 'Images only!')]
     )
+    cover_image_upload = FileField(
+        'Cover Image',
+        validators=[FileAllowed(['jpg', 'png'], 'Images only!')]
+    )
     active = BooleanField('Active')
     main = BooleanField('Main')
     expiration_date = StringField(
@@ -48,6 +52,10 @@ class EditSurveyForm(FlaskForm):
     description = TextAreaField('Description', validators=[DataRequired()])
     image_upload = FileField(
         'Title Image',
+        validators=[FileAllowed(['jpg', 'png'], 'Images only!')]
+    )
+    cover_image_upload = FileField(
+        'Cover Image',
         validators=[FileAllowed(['jpg', 'png'], 'Images only!')]
     )
     active = BooleanField('Active')
@@ -176,10 +184,10 @@ class AddOptionForm(FlaskForm):
         super().__init__(*args, **kwargs)
         self.next_question.choices = [(q.id, q.title) for q in questions]
         self.next_question.choices.insert(
-            0, (-2, 'Use Question\'s Default Next')
+            0, (-1, 'Last Question (Direct to summary)')
         )
         self.next_question.choices.insert(
-            0, (-1, 'Last Question (Direct to summary)')
+            0, (-2, 'Use Question\'s Default Next')
         )
         self.summary.choices = [(s.id, s.title) for s in summaries]
         self.summary.choices.insert(0, (0, "None"))
@@ -197,10 +205,67 @@ class EditOptionForm(FlaskForm):
         super().__init__(*args, **kwargs)
         self.next_question.choices = [(q.id, q.title) for q in questions]
         self.next_question.choices.insert(
-            0, (-2, 'Use Question\'s Default Next')
+            0, (-1, 'Last Question (Direct to summary)')
         )
         self.next_question.choices.insert(
-            0, (-1, 'Last Question (Direct to summary)')
+            0, (-2, 'Use Question\'s Default Next')
         )
         self.summary.choices = [(s.id, s.title) for s in summaries]
         self.summary.choices.insert(0, (0, "None"))
+
+
+class CreateRouteForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    origin = StringField(
+        'Origin (user requested URL)',
+        validators=[DataRequired()]
+    )
+    target = StringField(
+        'Target (redirected URL)',
+        validators=[DataRequired()]
+    )
+    active = BooleanField('Active')
+    submit = SubmitField('Create Route')
+
+
+class EditRouteForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    origin = StringField(
+        'Origin (user requested URL)',
+        validators=[DataRequired()]
+    )
+    target = StringField(
+        'Target (redirected URL)',
+        validators=[DataRequired()]
+    )
+    active = BooleanField('Active')
+    submit = SubmitField('Confirm Changes')
+
+
+class EditProfileForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired()])
+    submit = SubmitField('Confirm Changes')
+
+
+class EditPasswordForm(FlaskForm):
+    current_password = PasswordField(
+        'Enter Current Password',
+        validators=[DataRequired()]
+    )
+    new_password = PasswordField(
+        'Enter New Password',
+        validators=[DataRequired()]
+    )
+    confirm_password = PasswordField(
+        'Confirm New Password',
+        validators=[DataRequired()]
+    )
+    submit = SubmitField('Confirm Changes')
+
+
+class CreateAdminUser(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired()])
+    password = PasswordField('New Password', validators=[DataRequired()])
+    submit = SubmitField('Create New User')

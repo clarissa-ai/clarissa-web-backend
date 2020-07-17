@@ -7,6 +7,7 @@ from ..config import key
 from .. import login_manager
 from flask_login import UserMixin
 from .action import Action  # noqa: F401
+from .illness import Illness, Symptom  # noqa: F401
 
 
 class User(db.Model):
@@ -17,8 +18,13 @@ class User(db.Model):
     email = db.Column(db.String(255), unique=True, nullable=False)
     registered_on = db.Column(db.DateTime, nullable=False)
     admin = db.Column(db.Boolean, nullable=False, default=False)
+    birthdate = db.Column(db.Date, nullable=False)
     first_name = db.Column(db.String(50))
     password_hash = db.Column(db.String(100))
+    symptoms = db.relationship('Symptom', backref='user')
+    illnesses = db.relationship('Illness', backref='user')
+    # sex can be Male, Female or None
+    sex = db.Column(db.String(50), nullable=False, default="None")
 
     @property
     def password(self):
@@ -44,7 +50,7 @@ class User(db.Model):
         try:
             payload = {
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(
-                    days=1,
+                    days=30,
                 ),
                 'iat': datetime.datetime.utcnow(),
                 'sub': user_id
@@ -82,10 +88,14 @@ class AdminUser(UserMixin, db.Model):
     __tablename__ = "adminuser"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    actions = db.relationship('Action', backref='user')
-    surveys = db.relationship('Survey', backref='user')
     email = db.Column(db.String(255), unique=True, nullable=False)
     username = db.Column(db.String(255))
+
+    actions = db.relationship('Action', backref='user')
+    surveys = db.relationship('Survey', backref='user')
+
+    role = db.Column(db.String(50), nullable=False, default="regular")
+
     registered_on = db.Column(db.DateTime, nullable=False)
     password_hash = db.Column(db.String(100))
 

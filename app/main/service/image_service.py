@@ -12,6 +12,8 @@ def get_image(image_class, image_id, image_type):
         return get_survey_link(image_id)
     elif image_class == "survey_summary":
         return get_survey_summary(image_id)
+    elif image_class == "survey_cover":
+        return get_survey_cover(image_id)
     else:
         resp_obj = {
             'status': 'failure',
@@ -29,6 +31,28 @@ def get_survey(id):
             'Content-Disposition',
             'inline',
             filename='{}.{}'.format(s.id, s.image_type)
+        )
+        return response
+    else:
+        resp_obj = {
+            'status': 'failure',
+            'message': 'Failed to fetch requested image.'
+        }
+        return resp_obj, 404
+
+
+def get_survey_cover(id):
+    s = Survey.query.filter_by(id=id).first()
+    if s and s.cover_image_file:
+        response = make_response(s.cover_image_file)
+        response.headers.set(
+            'Content-Type',
+            'image/{}'.format(s.cover_image_type)
+        )
+        response.headers.set(
+            'Content-Disposition',
+            'inline',
+            filename='{}.{}'.format(s.id, s.cover_image_type)
         )
         return response
     else:

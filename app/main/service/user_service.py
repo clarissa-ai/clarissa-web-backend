@@ -15,6 +15,11 @@ def save_new_user(data):
             first_name=data['first_name'],
             password=data['password'],
             registered_on=datetime.datetime.utcnow(),
+            birthdate=datetime.datetime.strptime(
+                data['birthdate'],
+                "%m/%d/%Y"
+            ).date(),
+            sex=data['sex']
         )
         save_changes(new_user)
         return register_user(new_user)
@@ -41,7 +46,7 @@ def set_cookie(response, data):
     return response
 
 
-def get_all_users():
+def get_all_users(auth_object):
     return {
         'users': User.query.all(),
         'status': 'success'
@@ -71,3 +76,64 @@ def register_user(user):
         }
         print(e)
         return response_object, 401
+
+
+def edit_user_settings(json, auth_object):
+    response_object = {}
+    user = User.query.filter_by(
+        id=auth_object['auth_object']['data']['user_id']
+    ).first()
+    if not user:
+        response_object = {
+            'status': 'failure',
+            'message': 'Failed to find user info.'
+        }
+        return response_object, 404
+    try:
+        if json.get('email'):
+            u = User.query.filter_by(email=json['email']).first()
+            if not u:
+                user.email = json['email']
+            else:
+                response_object = {
+                    'status': 'failure',
+                    'message': 'User with email already exists'
+                }
+                return response_object, 409
+        if json.get('first_name'):
+            user.first_name = json['first_name']
+        if json.get('birthdate'):
+            user.birthdate = datetime.datetime.strptime(
+                json['birthdate'],
+                "%Y-%m-%dT%H:%M:%S.000Z"
+            )
+        if json.get('current_password'):
+            if user.check_password(json.get('current_password')) and json.get('password'):  # noqa: E501
+                user.password = json['password']
+                db.session.add(user)
+                db.session.commit()
+                return {
+                    'status': 'success',
+                    'message': 'Successfully changed current password.'
+                }, 200
+            else:
+                return {
+                    'status': 'failure',
+                    'message': 'Incorrect password entered.'
+                }, 401
+        if json.get('sex'):
+            user.sex = json['sex']
+        db.session.add(user)
+        db.session.commit()
+        response_object = {
+            'status': 'success',
+            'message': 'Successfully edited user\'s settings'
+        }
+    except Exception as e:
+        print(e)
+        response_object = {
+            'status': 'fail',
+            'message': 'An error occurred. Please try again.'
+        }
+        return response_object, 400
+    return response_object, 200

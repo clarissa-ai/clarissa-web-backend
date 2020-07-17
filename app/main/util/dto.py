@@ -15,10 +15,50 @@ class UserDTO:
             description='user first name',
             example='Korra'
         ),
+        'birthdate': fields.String(
+            required=True,
+            description='user date of birth',
+            example='08/26/1992',
+            pattern=r"^\d{2}/\d{2}/\d{4}$"
+        ),
         'password': fields.String(
             required=True,
             description='user password',
             example='Bark2020'
+        ),
+        'sex': fields.String(
+            required=True,
+            description='user sex',
+            example='Male'
+        ),
+    })
+    settings = api.model('user_settings', {
+        'current_password': fields.String(
+            description='user\'s current password',
+            example='Bark2020'
+        ),
+        'password': fields.String(
+            description='user\'s new password',
+            example='Bark2020'
+        ),
+        'email': fields.String(
+            description='user email address',
+            example='korra@dogmail.com',
+            pattern=r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
+        ),
+        'first_name': fields.String(
+            description='user first name',
+            example='Korra'
+        ),
+        'birthdate': fields.String(
+            description='user date of birth - UTC JavaScript Date format',
+            example='2000-02-26T05:00:00.000Z',
+            pattern=r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$"
+            # ex: 2000-02-26T05:00:00.000Z
+        ),
+        'sex': fields.String(
+            description='user\'s current sex',
+            example='Female'
         ),
     })
 
@@ -74,3 +114,51 @@ class ImageDTO:
 
 class RouteDTO:
     api = Namespace('route', description='custom route retrieval')
+
+
+class IllnessDTO:
+    api = Namespace('illness', description='illness operations')
+    get_by_id = api.model('get_illness_by_id', {
+        'id': fields.Integer(
+            required=True,
+            description='ID of the illness which is being retrieved',
+            example=1
+        )
+    })
+    check_symptoms = api.model('check_symptoms', {
+        'text': fields.String(
+            required=True,
+            description='The string to by process by NLP entered by the user',
+            example='I have a mild stomach ache'
+        )
+    })
+    save_symptoms = api.model('save_symptoms', {
+        'symptoms': fields.Raw(
+            required=True,
+            description='Symptoms selected by the user to save to the illness',
+            example=[{
+                "id": "s_1782",
+                "name": "Abdominal pain, mild",
+                "common_name": "Mild stomach pain",
+                "orth": "mild stomach ache",
+                "choice_id": "present",
+                "type": "symptom"
+            }]
+        )
+    })
+    edit_illness_title = api.model('edit_illness_title', {
+        'illness_id': fields.Integer(
+            required=True,
+            description='ID of the illness being changed by the user',
+            example=1
+        ),
+        'new_title': fields.String(
+            required=True,
+            description='New title of the illness',
+            example='Post-Thanksgiving Flu'
+        )
+    })
+
+
+class DashboardDTO:
+    api = Namespace('dashboard', description='dashboard operations')

@@ -23,6 +23,8 @@ gevent = "*"
 psycopg2-binary = "*"
 flake8 = "*"
 psutil = "*"
+requests = "*"
+flask-weasyprint = "*"
 
 [requires]
 python_version = "3.7"

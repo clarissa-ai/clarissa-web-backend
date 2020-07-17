@@ -22,7 +22,7 @@
               All Surveys
             </a>
           </div>
-          <div class="five wide column">
+          <div class="six wide column">
             <a class="ui labeled icon button fluid" href="{{ url_for('admin.all_responses') }}">
               <i class="clipboard list icon"></i>
               Responses
@@ -68,6 +68,12 @@
                 <td colspan="1"><b>Responses:</b></td>
                 <td colspan="1">{{ survey.responses|length }}</td>
               </tr>
+              <tr>
+                <td colspan="2"><b>Cover Image:</b></td>
+                <td colspan="6">
+                  <img class="ui small bordered image" src="{{ survey.get_cover_image_url() }}" />
+                </td>
+              </tr>
             </tbody>
           </table>
 
@@ -82,8 +88,6 @@
             </a>
           </div>
         </div>
-
-
 
         <!-- INTRO RESOURCES START -->
         <div class="ui segments stacked">
@@ -152,11 +156,9 @@
 
       <div class="five wide column">
 
-
-
         <div class="ui segments raised">
 
-          <div class="ui segment">
+          <div class="ui segment teal inverted">
             <h2>Configurations</h2>
           </div>
 
@@ -175,16 +177,40 @@
                 <td>
 
                   {% if survey.active %}
-                  <a class="ui fluid labeled icon button orange" href="{{ url_for('admin.deactivate_survey', id=survey.id) }}">
+                  <a class="ui fluid labeled icon button orange" id="survey_activate">
                     <i class="chevron circle down icon"></i>
                     Deactivate Survey
                   </a>
                   {% else %}
-                  <a class="ui fluid labeled icon button green" href="{{ url_for('admin.activate_survey', id=survey.id) }}">
+                  <a class="ui fluid labeled icon button green"  id="survey_activate">
                     <i class="chevron circle up icon"></i>
                     Activate Survey
                   </a>
                   {% endif %}
+
+                  <div class="ui mini modal" id="survey_activate_modal">
+
+                    <div class="header">
+                      Are you sure you want to 
+                      {% if survey.active %}
+                      deactivate
+                      {% else %}
+                      activate
+                      {% endif %}
+                      "{{ survey.title }}"?
+                    </div>
+
+                    <div class="actions">
+                      <div class="ui yellow cancel button"><i class="x icon"></i>Cancel</div>
+                      {% if survey.active %}
+                      <a class="ui green button" href="{{ url_for('admin.deactivate_survey', id=survey.id) }}"><i class="check icon"></i>Yes</a>
+                      {% else %}
+                      <a class="ui green button" href="{{ url_for('admin.activate_survey', id=survey.id) }}"><i class="check icon"></i>Yes</a>
+                      {% endif %}
+                    </div>
+
+                  </div>
+
                 </td>
               </tr>
               <tr>
@@ -199,16 +225,40 @@
                 </td>
                 <td>
                   {% if not survey.main  %}
-                  <a class="ui fluid labeled icon button teal" href="{{ url_for('admin.pub_main_survey', id=survey.id) }}">
+                  <a class="ui fluid labeled icon button teal" id="survey_publish">
                     <i class="star icon"></i>
                     Publish as Main Survey
                   </a>
                   {% else %}
-                  <a class="ui fluid labeled icon button purple" href="{{ url_for('admin.depub_main_survey', id=survey.id) }}">
+                  <a class="ui fluid labeled icon button purple" id="survey_publish">
                     <i class="star outline icon"></i>
                     Remove as Main Survey
                   </a>
                   {% endif %}
+
+                  <div class="ui mini modal" id="survey_publish_modal">
+
+                    <div class="header">
+                      Are you sure you want to 
+                      {% if survey.main %}
+                      unpublish
+                      {% else %}
+                      publish
+                      {% endif %}
+                      "{{ survey.title }}"?
+                    </div>
+
+                    <div class="actions">
+                      <div class="ui yellow cancel button"><i class="x icon"></i>Cancel</div>
+                      {% if survey.main %}
+                      <a class="ui green button" href="{{ url_for('admin.depub_main_survey', id=survey.id) }}"><i class="check icon"></i>Yes</a>
+                      {% else %}
+                      <a class="ui green button" href="{{ url_for('admin.pub_main_survey', id=survey.id) }}"><i class="check icon"></i>Yes</a>
+                      {% endif %}
+                    </div>
+
+                  </div>
+
                 </td>
               </tr>
             </tbody>
@@ -219,18 +269,12 @@
                 <i class="eye icon"></i>
                 Survey Design Guide
               </a>
-
             </div>
-
-
-
-
-
           </div>
         </div>
 
         <!-- ROOT QUESTION SEGMENT START -->
-        <div class="ui segments stacked">
+        <div class="ui segments raised">
 
           <div class="ui segment center aligned">
             <h4>
@@ -261,10 +305,25 @@
                 <i class="pencil alternate icon"></i>
                 Edit
               </a>
-              <a href="{{ url_for('admin.delete_question', survey_id=survey.id, question_id=root.id) }}" class="ui basic button red">
+              <a id="root_question_delete" class="ui basic button red">
                 <i class="trash alternate icon"></i>
                 Delete
               </a>
+              
+              <div class="ui mini modal" id="root_question_delete_modal">
+
+                <div class="header">
+                  Are you sure you want to delete
+                  "{{ root.title }}"?
+                </div>
+
+                <div class="actions">
+                  <div class="ui yellow cancel button"><i class="x icon"></i>Cancel</div>
+                  <a class="ui green button" href="{{ url_for('admin.delete_question', survey_id=survey.id, question_id=root.id) }}"><i class="check icon"></i>Delete question</a>
+                </div>
+
+              </div>
+
             </div>
           </div>
           {% else %}
@@ -339,7 +398,7 @@
       <div class="five wide column">
         <div class="ui segments stacked">
 
-          <div class="ui segment">
+          <div class="ui segment teal inverted">
             <h2>Final Summaries</h2>
           </div>
 
@@ -419,5 +478,29 @@
 <script>
   $('.ui.dropdown')
     .dropdown();
+
+  $('#survey_activate').click(
+    function() {
+      $('#survey_activate_modal')
+        .modal('show')
+      ;
+    }
+  );
+
+  $('#survey_publish').click(
+    function() {
+      $('#survey_publish_modal')
+        .modal('show')
+      ;
+    }
+  );
+  
+  $('#root_question_delete').click(
+    function() {
+      $('#root_question_delete_modal')
+        .modal('show')
+      ;
+    }
+  );
 </script>
 {% endblock %}
