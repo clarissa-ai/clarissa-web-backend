@@ -263,6 +263,10 @@ def export_active_illness_report(user_id):
     return render_pdf(HTML(string=report_html))
 
 
+# -------------------------------------------------- #
+#               SYMPTOMS LOADING LOGIC               #
+# -------------------------------------------------- #
+
 # Retrieving and loading symptoms list
 CURR_PATH = os.path.dirname(os.path.realpath(__file__))
 SYMPTOMS_FILE_PATH = os.path.join(
@@ -287,6 +291,7 @@ def map_symptoms(list_obj):
 LOADED_SYMPTOMS_SMALL = list(map(map_symptoms, LOADED_SYMPTOMS))
 
 
+# Actual API service function
 def get_symptoms_list():
     response_object = {
         'status': 'success',
@@ -315,3 +320,7 @@ def download_symptoms_json():
 
 # Will run whenever the file is loaded (on application start)
 download_symptoms_json()
+
+# -------------------------------------------------- #
+#           END OF SYMPTOMS LOADING LOGIC            #
+# -------------------------------------------------- #
