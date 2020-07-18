@@ -839,7 +839,9 @@ def question_view(survey_id, question_id):
         'tools/survey/view_question.html',
         title="Question: {}".format(q.title),
         question=q,
-        option_data=option_data
+        option_data=option_data,
+        scheme=scheme,
+        external=external
     )
 
 

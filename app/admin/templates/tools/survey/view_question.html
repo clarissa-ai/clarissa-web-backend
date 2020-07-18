@@ -109,7 +109,7 @@
           <div class="ui segment center aligned">
 
             <div class="ui buttons">
-              <a class="ui button yellow labeled icon" href="{{ url_for('admin.edit_question', survey_id=question.survey_id, question_id=question.id, back_link=url_for('admin.question_view', survey_id=question.survey_id, question_id=question.id)) }}">
+              <a class="ui button yellow labeled icon" href="{{ url_for('admin.edit_question', survey_id=question.survey_id, question_id=question.id, back_link=url_for('admin.question_view', survey_id=question.survey_id, question_id=question.id, _scheme=scheme, _external=external)) }}">
                 <i class="pencil icon"></i>
                 Edit Question
               </a>
