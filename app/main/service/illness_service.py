@@ -275,11 +275,23 @@ if os.path.isfile(SYMPTOMS_FILE_PATH):
         LOADED_SYMPTOMS = json.load(symptoms_json)
 
 
+# returns function that can map over the symptoms list
+def map_symptoms(list_obj):
+    new_obj = {
+        'id': list_obj['id'],
+        'common_name': list_obj['common_name']
+    }
+    return new_obj
+
+
+LOADED_SYMPTOMS_SMALL = list(map(map_symptoms, LOADED_SYMPTOMS))
+
+
 def get_symptoms_list():
     response_object = {
         'status': 'success',
         'message': 'Successfully retrieved symptoms list',
-        'symptoms': LOADED_SYMPTOMS
+        'symptoms': LOADED_SYMPTOMS_SMALL
     }
     return response_object, 200
 
