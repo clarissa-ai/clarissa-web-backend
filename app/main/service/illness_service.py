@@ -2,6 +2,7 @@
 import requests
 import os
 import datetime
+import json
 # Database imports
 from app.main.model.illness import Illness, Symptom, Diagnosis
 from app.main.model.user import User
@@ -260,3 +261,45 @@ def export_active_illness_report(user_id):
         illness=active_illness
     )
     return render_pdf(HTML(string=report_html))
+
+
+# Retrieving and loading symptoms list
+CURR_PATH = os.path.dirname(os.path.realpath(__file__))
+SYMPTOMS_FILE_PATH = os.path.join(
+    CURR_PATH,
+    './resources/infermedica_symptoms_list.json'
+)
+LOADED_SYMPTOMS = None
+if os.path.isfile(SYMPTOMS_FILE_PATH):
+    with open(SYMPTOMS_FILE_PATH, 'r') as symptoms_json:
+        LOADED_SYMPTOMS = json.load(symptoms_json)
+
+
+def get_symptoms_list():
+    response_object = {
+        'status': 'success',
+        'message': 'Successfully retrieved symptoms list',
+        'symptoms': LOADED_SYMPTOMS
+    }
+    return response_object, 200
+
+
+def download_symptoms_json():
+    headers = {
+      'App-Id': os.getenv('API_APP_ID'),
+      'App-Key': os.getenv('API_APP_KEY'),
+      'Content-Type': 'application/json'
+    }
+    symptoms_url = "https://api.infermedica.com/v2/symptoms"
+    symptoms_resp = requests.get(
+        symptoms_url,
+        headers=headers
+    )
+    symptoms = symptoms_resp.json()
+    with open(SYMPTOMS_FILE_PATH, 'w+') as output_f:
+        json.dump(symptoms, output_f)
+    print('Successfully loaded symptoms list from Infermedica API')
+
+
+# Will run whenever the file is loaded (on application start)
+download_symptoms_json()
