@@ -271,7 +271,7 @@ def export_active_illness_report(user_id):
 CURR_PATH = os.path.dirname(os.path.realpath(__file__))
 SYMPTOMS_FILE_PATH = os.path.join(
     CURR_PATH,
-    './resources/infermedica_symptoms_list.json'
+    'resources/illness_service/infermedica_symptoms_list.json'
 )
 LOADED_SYMPTOMS = None
 if os.path.isfile(SYMPTOMS_FILE_PATH):
