@@ -32,11 +32,17 @@ class CreateSurveyForm(FlaskForm):
     description = TextAreaField('Description', validators=[DataRequired()])
     image_upload = FileField(
         'Title Image',
-        validators=[FileAllowed(['jpg', 'png'], 'Images only!')]
+        validators=[
+            FileAllowed(['jpg', 'png'], 'Images only!'),
+            DataRequired()
+        ]
     )
     cover_image_upload = FileField(
         'Cover Image',
-        validators=[FileAllowed(['jpg', 'png'], 'Images only!')]
+        validators=[
+            FileAllowed(['jpg', 'png'], 'Images only!'),
+            DataRequired()
+        ]
     )
     active = BooleanField('Active')
     main = BooleanField('Main')
@@ -122,7 +128,10 @@ class CreateLinkForm(FlaskForm):
     link = StringField('Link URL', validators=[DataRequired()])
     image_upload = FileField(
         'Link Image',
-        validators=[FileAllowed(['jpg', 'png'], 'Images only!')]
+        validators=[
+            FileAllowed(['jpg', 'png'], 'Images only!'),
+            DataRequired()
+        ]
     )
     submit = SubmitField('Add Link to Survey')
 
@@ -143,7 +152,10 @@ class CreateSummaryForm(FlaskForm):
     description = TextAreaField('Description', validators=[DataRequired()])
     image_upload = FileField(
         'Link Image',
-        validators=[FileAllowed(['jpg', 'png'], 'Images only!')]
+        validators=[
+            FileAllowed(['jpg', 'png'], 'Images only!'),
+            DataRequired()
+        ]
     )
     submit = SubmitField('Add Summary to Survey')
 
