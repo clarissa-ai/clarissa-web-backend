@@ -296,6 +296,7 @@ def download_symptoms_json():
 # Will run whenever the file is loaded (on application start)
 download_symptoms_json()
 
+
 LOADED_SYMPTOMS = None
 if os.path.isfile(SYMPTOMS_FILE_PATH):
     with open(SYMPTOMS_FILE_PATH, 'r') as symptoms_json:
