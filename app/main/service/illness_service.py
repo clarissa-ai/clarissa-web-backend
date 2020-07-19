@@ -305,8 +305,8 @@ if os.path.isfile(SYMPTOMS_FILE_PATH):
 # returns function that can map over the symptoms list
 def map_symptoms(list_obj: dict):
     new_obj = {
-        'id': list_obj['id'],
-        'common_name': list_obj['common_name']
+        'id': list_obj.get('id'),
+        'common_name': list_obj.get('common_name')
     }
     return new_obj
 
