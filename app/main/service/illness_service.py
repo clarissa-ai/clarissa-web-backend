@@ -296,16 +296,12 @@ def download_symptoms_json():
 # Will run whenever the file is loaded (on application start)
 download_symptoms_json()
 
+
 LOADED_SYMPTOMS = None
 if os.path.isfile(SYMPTOMS_FILE_PATH):
     with open(SYMPTOMS_FILE_PATH, 'r') as symptoms_json:
-        # symptoms_string = symptoms_json.read()
-        # LOADED_SYMPTOMS = json.loads(symptoms_string)
-        LOADED_SYMPTOMS = json.load(symptoms_json)
-        # if type(LOADED_SYMPTOMS) is list and type(LOADED_SYMPTOMS[0]) is str:
-        #     LOADED_SYMPTOMS = map(lambda x: json.loads(x), LOADED_SYMPTOMS)
-        if type(LOADED_SYMPTOMS) == str:
-            LOADED_SYMPTOMS = json.loads(LOADED_SYMPTOMS)
+        symptoms_string = symptoms_json.read()
+        LOADED_SYMPTOMS = json.loads(symptoms_string)
 
 
 # returns function that can map over the symptoms list
@@ -317,7 +313,8 @@ def map_symptoms(list_obj: dict):
     return new_obj
 
 
-LOADED_SYMPTOMS_SMALL = list(map(map_symptoms, LOADED_SYMPTOMS))
+if type(LOADED_SYMPTOMS) is list:
+    LOADED_SYMPTOMS_SMALL = list(map(map_symptoms, LOADED_SYMPTOMS))
 
 
 # Actual API service function
