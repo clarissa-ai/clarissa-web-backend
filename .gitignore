@@ -5,3 +5,6 @@
 /app/resources/images
 
 .DS_Store
+
+# ignore json download
+/app/main/service/resources/illness_service/infermedica_symptoms_list.json
