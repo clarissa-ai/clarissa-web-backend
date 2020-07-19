@@ -299,9 +299,9 @@ download_symptoms_json()
 LOADED_SYMPTOMS = None
 if os.path.isfile(SYMPTOMS_FILE_PATH):
     with open(SYMPTOMS_FILE_PATH, 'r') as symptoms_json:
-        # symptoms_string = symptoms_json.read()
-        # LOADED_SYMPTOMS = json.loads(symptoms_string)
-        LOADED_SYMPTOMS = json.load(symptoms_json)
+        symptoms_string = symptoms_json.read()
+        LOADED_SYMPTOMS = json.loads(symptoms_string)
+        # LOADED_SYMPTOMS = json.load(symptoms_json)
         # if type(LOADED_SYMPTOMS) is list and type(LOADED_SYMPTOMS[0]) is str:
         #     LOADED_SYMPTOMS = map(lambda x: json.loads(x), LOADED_SYMPTOMS)
         if type(LOADED_SYMPTOMS) == str:
