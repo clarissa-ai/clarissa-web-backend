@@ -297,24 +297,30 @@ def download_symptoms_json():
 download_symptoms_json()
 
 
-LOADED_SYMPTOMS = None
-if os.path.isfile(SYMPTOMS_FILE_PATH):
-    with open(SYMPTOMS_FILE_PATH, 'r') as symptoms_json:
-        symptoms_string = symptoms_json.read()
-        LOADED_SYMPTOMS = json.loads(symptoms_string)
+# function to filter out symptoms that aren't children
+def minify_symptoms():
+    loaded_symptoms = []
+    if os.path.isfile(SYMPTOMS_FILE_PATH):
+        with open(SYMPTOMS_FILE_PATH, 'r') as symptoms_json:
+            symptoms_string = symptoms_json.read()
+            loaded_symptoms = json.loads(symptoms_string)
+
+    # returns function that can map over the symptoms list
+    def map_symptoms(list_obj: dict):
+        new_obj = {
+            'id': list_obj.get('id'),
+            'common_name': list_obj.get('common_name')
+        }
+        return new_obj
+
+    loaded_symptoms_min = []
+    # loaded_symptoms_min = list(filter(lambda x: not x['parent_id'], loaded_symptoms)). # noqa: E501
+    if type(loaded_symptoms) is list:
+        loaded_symptoms_min = list(map(map_symptoms, loaded_symptoms))
+    return loaded_symptoms, loaded_symptoms_min
 
 
-# returns function that can map over the symptoms list
-def map_symptoms(list_obj: dict):
-    new_obj = {
-        'id': list_obj.get('id'),
-        'common_name': list_obj.get('common_name')
-    }
-    return new_obj
-
-
-if type(LOADED_SYMPTOMS) is list:
-    LOADED_SYMPTOMS_MIN = list(map(map_symptoms, LOADED_SYMPTOMS))
+LEADED_SYMPTOMS, LOADED_SYMPTOMS_MIN = minify_symptoms()
 
 
 # Actual API service function

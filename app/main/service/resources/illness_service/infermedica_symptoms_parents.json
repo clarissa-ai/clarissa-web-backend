@@ -1,0 +1,2770 @@
+[
+  {
+    "id": "s_1558",
+    "common_name": "Abdominal guarding"
+  },
+  {
+    "id": "s_299",
+    "common_name": "Lump in abdomen"
+  },
+  {
+    "id": "s_13",
+    "common_name": "Stomach pain"
+  },
+  {
+    "id": "s_1854",
+    "common_name": "Pain in left part of abdomen"
+  },
+  {
+    "id": "s_1855",
+    "common_name": "Pain in right part of abdomen"
+  },
+  {
+    "id": "s_1514",
+    "common_name": "Pain when pressing abdomen"
+  },
+  {
+    "id": "s_1419",
+    "common_name": "Abnormal foveal avascular zone"
+  },
+  {
+    "id": "s_328",
+    "common_name": "Abnormal vaginal discharge"
+  },
+  {
+    "id": "s_1072",
+    "common_name": "Absence of deep reflexes"
+  },
+  {
+    "id": "s_2121",
+    "common_name": "Acidic taste in mouth"
+  },
+  {
+    "id": "s_3",
+    "common_name": "Activity related to sex despite negative consequences"
+  },
+  {
+    "id": "s_1111",
+    "common_name": "Adenoid face"
+  },
+  {
+    "id": "s_145",
+    "common_name": "Agitation"
+  },
+  {
+    "id": "s_884",
+    "common_name": "Fear of certain environments where escape or getting help might be difficult"
+  },
+  {
+    "id": "s_1012",
+    "common_name": "Loss of writing ability"
+  },
+  {
+    "id": "s_817",
+    "common_name": "Constant urge to drink alcohol"
+  },
+  {
+    "id": "s_588",
+    "common_name": "Need of higher alcohol quantities to get drunk"
+  },
+  {
+    "id": "s_818",
+    "common_name": "Ailments occurring when reducing alcohol consumption"
+  },
+  {
+    "id": "s_1019",
+    "common_name": "Allelomimetic behavior, allomimetic behavior"
+  },
+  {
+    "id": "s_1272",
+    "common_name": "Allen-Cleckley sign"
+  },
+  {
+    "id": "s_1728",
+    "common_name": "Change in bowel habits"
+  },
+  {
+    "id": "s_1457",
+    "common_name": "Absence of menstrual period"
+  },
+  {
+    "id": "s_1458",
+    "common_name": "Absence of first menstrual period at age 16"
+  },
+  {
+    "id": "s_147",
+    "common_name": "Anemia"
+  },
+  {
+    "id": "s_508",
+    "common_name": "Inability to enjoy life"
+  },
+  {
+    "id": "s_1123",
+    "common_name": "Lack of sweating"
+  },
+  {
+    "id": "s_2170",
+    "common_name": "Anicteric presentation"
+  },
+  {
+    "id": "s_497",
+    "common_name": "Asymmetric pupils"
+  },
+  {
+    "id": "s_436",
+    "common_name": "Anorectal pain"
+  },
+  {
+    "id": "s_120",
+    "common_name": "Anxiety"
+  },
+  {
+    "id": "s_4",
+    "common_name": "Loss of interest in everyday matters"
+  },
+  {
+    "id": "s_969",
+    "common_name": "Inability to comprehend and formulate speech"
+  },
+  {
+    "id": "s_477",
+    "common_name": "Loss of voice"
+  },
+  {
+    "id": "s_1269",
+    "common_name": "Aponeurotic reflex"
+  },
+  {
+    "id": "s_6",
+    "common_name": "Appetite for salty foods"
+  },
+  {
+    "id": "s_1010",
+    "common_name": "Apraxia"
+  },
+  {
+    "id": "s_1116",
+    "common_name": "Ascites"
+  },
+  {
+    "id": "s_651",
+    "common_name": "Problems with movements coordination"
+  },
+  {
+    "id": "s_1120",
+    "common_name": "Atonic bladder"
+  },
+  {
+    "id": "s_1117",
+    "common_name": "Diminished testicles"
+  },
+  {
+    "id": "s_857",
+    "common_name": "Auscultative fine crackles over the thorax"
+  },
+  {
+    "id": "s_1316",
+    "common_name": "Auscultative rhonchi over the thorax"
+  },
+  {
+    "id": "s_856",
+    "common_name": "Auscultative wheezes over the thorax"
+  },
+  {
+    "id": "s_710",
+    "common_name": "Avoiding actions, places, or people that bring back memories of trauma"
+  },
+  {
+    "id": "s_718",
+    "common_name": "Avoiding eating and drinking in public"
+  },
+  {
+    "id": "s_719",
+    "common_name": "Avoiding eating in someone's presence"
+  },
+  {
+    "id": "s_717",
+    "common_name": "Avoiding public appearances"
+  },
+  {
+    "id": "s_720",
+    "common_name": "Avoiding talking to authority figures"
+  },
+  {
+    "id": "s_709",
+    "common_name": "Avoiding thoughts, feelings, conversations related to traumatic experience"
+  },
+  {
+    "id": "s_1322",
+    "common_name": "Freckles under the armpits and groin"
+  },
+  {
+    "id": "s_1023",
+    "common_name": "Babinski sign"
+  },
+  {
+    "id": "s_1190",
+    "common_name": "Back pain"
+  },
+  {
+    "id": "s_842",
+    "common_name": "Behavioral changes, ignoring consequences and social norms"
+  },
+  {
+    "id": "s_348",
+    "common_name": "Change in personality"
+  },
+  {
+    "id": "s_561",
+    "common_name": "Belching"
+  },
+  {
+    "id": "s_1291",
+    "common_name": "Bilateral muscle paralysis"
+  },
+  {
+    "id": "s_1257",
+    "common_name": "Bing sign"
+  },
+  {
+    "id": "s_137",
+    "common_name": "Binge-eating attacks"
+  },
+  {
+    "id": "s_71",
+    "common_name": "Black stools"
+  },
+  {
+    "id": "s_435",
+    "common_name": "Bladder not emptying completely"
+  },
+  {
+    "id": "s_1119",
+    "common_name": "Bladder sphincter dysfunction"
+  },
+  {
+    "id": "s_152",
+    "common_name": "Bleeding after intercourse"
+  },
+  {
+    "id": "s_115",
+    "common_name": "Bleeding from anus"
+  },
+  {
+    "id": "s_111",
+    "common_name": "Bleeding gums"
+  },
+  {
+    "id": "s_1386",
+    "common_name": "Bleeding into muscles"
+  },
+  {
+    "id": "s_192",
+    "common_name": "Drooping eyelids"
+  },
+  {
+    "id": "s_309",
+    "common_name": "Bloating"
+  },
+  {
+    "id": "s_112",
+    "common_name": "Blood in stool"
+  },
+  {
+    "id": "s_113",
+    "common_name": "Blood in urine"
+  },
+  {
+    "id": "s_771",
+    "common_name": "Blunted affect"
+  },
+  {
+    "id": "s_1835",
+    "common_name": "Body aches"
+  },
+  {
+    "id": "s_2180",
+    "common_name": "Bone deformation not associated with a recent trauma"
+  },
+  {
+    "id": "s_2181",
+    "common_name": "Bone deformation after recent injury"
+  },
+  {
+    "id": "s_612",
+    "common_name": "Bone pain"
+  },
+  {
+    "id": "s_641",
+    "common_name": "Loss of bowel control"
+  },
+  {
+    "id": "s_1553",
+    "common_name": "Decreased bowel sounds"
+  },
+  {
+    "id": "s_1552",
+    "common_name": "Excessive bowel sounds"
+  },
+  {
+    "id": "s_534",
+    "common_name": "Slow heart rate"
+  },
+  {
+    "id": "s_1480",
+    "common_name": "Breast pain or tenderness, bilateral"
+  },
+  {
+    "id": "s_609",
+    "common_name": "Breast pain or tenderness, unilateral"
+  },
+  {
+    "id": "s_1310",
+    "common_name": "Brown nail discoloration"
+  },
+  {
+    "id": "s_1690",
+    "common_name": "Brudzinski sign"
+  },
+  {
+    "id": "s_1960",
+    "common_name": "Bruise after trauma"
+  },
+  {
+    "id": "s_2040",
+    "common_name": "Burn involving face, hands, feet, genitalia, or major joints"
+  },
+  {
+    "id": "s_1165",
+    "common_name": "Burning skin"
+  },
+  {
+    "id": "s_200",
+    "common_name": "Burning tongue"
+  },
+  {
+    "id": "s_1918",
+    "common_name": "Buttocks pain"
+  },
+  {
+    "id": "s_1168",
+    "common_name": "Calcification of the tympanic membrane"
+  },
+  {
+    "id": "s_1720",
+    "common_name": "Cardiac murmurs"
+  },
+  {
+    "id": "s_811",
+    "common_name": "Heart enlargement"
+  },
+  {
+    "id": "s_1576",
+    "common_name": "Cervical artery murmur"
+  },
+  {
+    "id": "s_996",
+    "common_name": "Cervical dystonia"
+  },
+  {
+    "id": "s_1258",
+    "common_name": "Chaddock sign"
+  },
+  {
+    "id": "s_346",
+    "common_name": "Change in color of a tooth"
+  },
+  {
+    "id": "s_345",
+    "common_name": "Change in handwriting"
+  },
+  {
+    "id": "s_2214",
+    "common_name": "Chemical burn"
+  },
+  {
+    "id": "s_1091",
+    "common_name": "Chemosis"
+  },
+  {
+    "id": "s_50",
+    "common_name": "Chest pain"
+  },
+  {
+    "id": "s_1546",
+    "common_name": "Cheyne-Stokes respiration"
+  },
+  {
+    "id": "s_81",
+    "common_name": "Chills"
+  },
+  {
+    "id": "s_1456",
+    "common_name": "Chorea"
+  },
+  {
+    "id": "s_867",
+    "common_name": "Chvostek sign"
+  },
+  {
+    "id": "s_734",
+    "common_name": "Acute thigh or buttock pain appearing during exertion and relieving after short rest"
+  },
+  {
+    "id": "s_1094",
+    "common_name": "Hawking"
+  },
+  {
+    "id": "s_429",
+    "common_name": "Clicking sounds in the jaw joint when opening or closing the mouth"
+  },
+  {
+    "id": "s_276",
+    "common_name": "Clogged ear"
+  },
+  {
+    "id": "s_288",
+    "common_name": "Close family or friends pointing out excessive drinking"
+  },
+  {
+    "id": "s_869",
+    "common_name": "Club-foot"
+  },
+  {
+    "id": "s_610",
+    "common_name": "White spots on tonsils"
+  },
+  {
+    "id": "s_1184",
+    "common_name": "Coating on tongue"
+  },
+  {
+    "id": "s_2108",
+    "common_name": "Cognitive disturbances"
+  },
+  {
+    "id": "s_1926",
+    "common_name": "Cold and clammy skin"
+  },
+  {
+    "id": "s_408",
+    "common_name": "Cold feet and toes"
+  },
+  {
+    "id": "s_556",
+    "common_name": "Cold hands or fingers"
+  },
+  {
+    "id": "s_118",
+    "common_name": "Cold sensitivity"
+  },
+  {
+    "id": "s_2109",
+    "common_name": "Coma"
+  },
+  {
+    "id": "s_303",
+    "common_name": "Performing certain actions repeatedly to ease anxiety"
+  },
+  {
+    "id": "s_831",
+    "common_name": "Confabulation"
+  },
+  {
+    "id": "s_1345",
+    "common_name": "Confusion after injury"
+  },
+  {
+    "id": "s_1212",
+    "common_name": "Pale conjunctiva"
+  },
+  {
+    "id": "s_2034",
+    "common_name": "Confusion or disorientation"
+  },
+  {
+    "id": "s_181",
+    "common_name": "Constant need for sex"
+  },
+  {
+    "id": "s_329",
+    "common_name": "Constipation"
+  },
+  {
+    "id": "s_2164",
+    "common_name": "Spoiled food or drink consumption"
+  },
+  {
+    "id": "s_635",
+    "common_name": "Contentiousness"
+  },
+  {
+    "id": "s_1228",
+    "common_name": "Crossed eyes"
+  },
+  {
+    "id": "s_1268",
+    "common_name": "Corneal reflex weak or absent"
+  },
+  {
+    "id": "s_1273",
+    "common_name": "Cornell's sign"
+  },
+  {
+    "id": "s_102",
+    "common_name": "Cough"
+  },
+  {
+    "id": "s_270",
+    "common_name": "Creaking of joint during movement"
+  },
+  {
+    "id": "s_242",
+    "common_name": "Crowded teeth"
+  },
+  {
+    "id": "s_195",
+    "common_name": "Current cigarette smoking"
+  },
+  {
+    "id": "s_437",
+    "common_name": "Bluish-gray colored skin"
+  },
+  {
+    "id": "s_1105",
+    "common_name": "Dark circles under eyes"
+  },
+  {
+    "id": "s_553",
+    "common_name": "Pale or grayish-blue fingers"
+  },
+  {
+    "id": "s_1413",
+    "common_name": "Cystoid macular edema"
+  },
+  {
+    "id": "s_1338",
+    "common_name": "Damage to 2 separate areas of innervation"
+  },
+  {
+    "id": "s_1555",
+    "common_name": "Dance's sign"
+  },
+  {
+    "id": "s_1616",
+    "common_name": "Dandruff"
+  },
+  {
+    "id": "s_611",
+    "common_name": "Dark urine"
+  },
+  {
+    "id": "s_1417",
+    "common_name": "Dark-red spots in optic disc vessels"
+  },
+  {
+    "id": "s_357",
+    "common_name": "Decreased breast size"
+  },
+  {
+    "id": "s_208",
+    "common_name": "Decreased hearing"
+  },
+  {
+    "id": "s_1693",
+    "common_name": "Decreased intensity of breath sounds"
+  },
+  {
+    "id": "s_236",
+    "common_name": "Loss of interest in sex"
+  },
+  {
+    "id": "s_661",
+    "common_name": "Decreased motivation"
+  },
+  {
+    "id": "s_535",
+    "common_name": "Decreased pupillary light reflex"
+  },
+  {
+    "id": "s_697",
+    "common_name": "Decreased skin elasticity"
+  },
+  {
+    "id": "s_1277",
+    "common_name": "Difficulty moving tongue"
+  },
+  {
+    "id": "s_97",
+    "common_name": "Deep filling of treated tooth"
+  },
+  {
+    "id": "s_652",
+    "common_name": "Decreased deep tendon reflexes"
+  },
+  {
+    "id": "s_878",
+    "common_name": "Increased deep tendon reflexes"
+  },
+  {
+    "id": "s_108",
+    "common_name": "Deepened spaces between the gums and the teeth"
+  },
+  {
+    "id": "s_422",
+    "common_name": "Deepened voice"
+  },
+  {
+    "id": "s_2098",
+    "common_name": "Delusions"
+  },
+  {
+    "id": "s_1409",
+    "common_name": "Demarcation of retinal detachment (pigmented or nonpigmented)"
+  },
+  {
+    "id": "s_1106",
+    "common_name": "Dennie-Morgan fold"
+  },
+  {
+    "id": "s_203",
+    "common_name": "Dental plaque"
+  },
+  {
+    "id": "s_169",
+    "common_name": "Depressed mood"
+  },
+  {
+    "id": "s_514",
+    "common_name": "Feeling unreal"
+  },
+  {
+    "id": "s_241",
+    "common_name": "Skin changes"
+  },
+  {
+    "id": "s_1957",
+    "common_name": "Destructive thoughts towards other people or things"
+  },
+  {
+    "id": "s_8",
+    "common_name": "Diarrhea"
+  },
+  {
+    "id": "s_1798",
+    "common_name": "Difference in size of testicles"
+  },
+  {
+    "id": "s_1574",
+    "common_name": "Difficulty achieving orgasm"
+  },
+  {
+    "id": "s_266",
+    "common_name": "Difficulty biting and chewing"
+  },
+  {
+    "id": "s_727",
+    "common_name": "Difficulty bonding with infant"
+  },
+  {
+    "id": "s_284",
+    "common_name": "Diminished appetite"
+  },
+  {
+    "id": "s_968",
+    "common_name": "Diminished eye motility in the same direction"
+  },
+  {
+    "id": "s_1035",
+    "common_name": "Diminished fear responses"
+  },
+  {
+    "id": "s_1021",
+    "common_name": "Diminished superficial reflexes"
+  },
+  {
+    "id": "s_207",
+    "common_name": "Double vision"
+  },
+  {
+    "id": "s_297",
+    "common_name": "Discharge from ear"
+  },
+  {
+    "id": "s_302",
+    "common_name": "Discharge from spaces between the gums and the teeth"
+  },
+  {
+    "id": "s_369",
+    "common_name": "Discharge from urethra"
+  },
+  {
+    "id": "s_1109",
+    "common_name": "Discharge in tympanic cavity"
+  },
+  {
+    "id": "s_301",
+    "common_name": "Discharge under foreskin"
+  },
+  {
+    "id": "s_1007",
+    "common_name": "Disinhibition"
+  },
+  {
+    "id": "s_731",
+    "common_name": "Disorganized behavior"
+  },
+  {
+    "id": "s_1265",
+    "common_name": "Dissociated sensory loss"
+  },
+  {
+    "id": "s_501",
+    "common_name": "Problems judging distances"
+  },
+  {
+    "id": "s_1236",
+    "common_name": "Squint with one or two eyes turning outward"
+  },
+  {
+    "id": "s_1731",
+    "common_name": "Dix-Hallpike maneuver, rotatory nystagmus"
+  },
+  {
+    "id": "s_370",
+    "common_name": "Dizzy"
+  },
+  {
+    "id": "s_827",
+    "common_name": "Drinking alcohol at work"
+  },
+  {
+    "id": "s_819",
+    "common_name": "Drinking alcohol despite awareness of harmful effects"
+  },
+  {
+    "id": "s_828",
+    "common_name": "Drinking alone"
+  },
+  {
+    "id": "s_198",
+    "common_name": "Drinking large quantities of alcohol"
+  },
+  {
+    "id": "s_109",
+    "common_name": "Drinking to ease hangover"
+  },
+  {
+    "id": "s_432",
+    "common_name": "Drooping mouth corner"
+  },
+  {
+    "id": "s_974",
+    "common_name": "Drop attack"
+  },
+  {
+    "id": "s_823",
+    "common_name": "Drunk driving"
+  },
+  {
+    "id": "s_489",
+    "common_name": "Dry discharge on eyelids"
+  },
+  {
+    "id": "s_2094",
+    "common_name": "Dry eye"
+  },
+  {
+    "id": "s_247",
+    "common_name": "Dry mouth"
+  },
+  {
+    "id": "s_542",
+    "common_name": "Dry skin"
+  },
+  {
+    "id": "s_315",
+    "common_name": "Difficulty with speech"
+  },
+  {
+    "id": "s_59",
+    "common_name": "Painful menstrual periods"
+  },
+  {
+    "id": "s_1432",
+    "common_name": "Indigestion"
+  },
+  {
+    "id": "s_962",
+    "common_name": "Difficulty swallowing"
+  },
+  {
+    "id": "s_68",
+    "common_name": "Hoarse voice"
+  },
+  {
+    "id": "s_88",
+    "common_name": "Shortness of breath"
+  },
+  {
+    "id": "s_2075",
+    "common_name": "Sudden breathing problems after injury"
+  },
+  {
+    "id": "s_1298",
+    "common_name": "Dystonia"
+  },
+  {
+    "id": "s_291",
+    "common_name": "Swelling inside the ear"
+  },
+  {
+    "id": "s_47",
+    "common_name": "Earache"
+  },
+  {
+    "id": "s_234",
+    "common_name": "Easy bruising"
+  },
+  {
+    "id": "s_700",
+    "common_name": "Swelling"
+  },
+  {
+    "id": "s_1581",
+    "common_name": "Swelling in the middle of the chest"
+  },
+  {
+    "id": "s_616",
+    "common_name": "Face swelling"
+  },
+  {
+    "id": "s_363",
+    "common_name": "Swollen neck"
+  },
+  {
+    "id": "s_2207",
+    "common_name": "Swollen penis"
+  },
+  {
+    "id": "s_176",
+    "common_name": "Swollen scrotum"
+  },
+  {
+    "id": "s_1989",
+    "common_name": "Electrical burn"
+  },
+  {
+    "id": "s_633",
+    "common_name": "Elevated mood"
+  },
+  {
+    "id": "s_1166",
+    "common_name": "Enamel hypoplasia"
+  },
+  {
+    "id": "s_272",
+    "common_name": "Cavities"
+  },
+  {
+    "id": "s_219",
+    "common_name": "Enlarged breasts"
+  },
+  {
+    "id": "s_1052",
+    "common_name": "Enlarged kidneys"
+  },
+  {
+    "id": "s_220",
+    "common_name": "Enlarged lymph nodes"
+  },
+  {
+    "id": "s_1057",
+    "common_name": "Enlarged salivary glands"
+  },
+  {
+    "id": "s_480",
+    "common_name": "Enlargement of hands, feet, or face"
+  },
+  {
+    "id": "s_1103",
+    "common_name": "Enlargement of the lymphoid tissue in the pharynx"
+  },
+  {
+    "id": "s_1071",
+    "common_name": "Epicritic sensation loss or impairment in fingertips"
+  },
+  {
+    "id": "s_733",
+    "common_name": "Erectile dysfunction"
+  },
+  {
+    "id": "s_1955",
+    "common_name": "Redness around eyes"
+  },
+  {
+    "id": "s_1498",
+    "common_name": "Unusually red tonsils"
+  },
+  {
+    "id": "s_132",
+    "common_name": "Excess of hair"
+  },
+  {
+    "id": "s_1304",
+    "common_name": "Excessive salivation"
+  },
+  {
+    "id": "s_216",
+    "common_name": "Excessive sweating"
+  },
+  {
+    "id": "s_122",
+    "common_name": "Watery eyes"
+  },
+  {
+    "id": "s_1290",
+    "common_name": "Excessive uterine enlargement in comparison to assumed duration of pregnancy"
+  },
+  {
+    "id": "s_725",
+    "common_name": "Excessive worry about the health of a child"
+  },
+  {
+    "id": "s_1163",
+    "common_name": "Protruding eye or eyes"
+  },
+  {
+    "id": "s_493",
+    "common_name": "Eye pain"
+  },
+  {
+    "id": "s_591",
+    "common_name": "Trembling eyelids"
+  },
+  {
+    "id": "s_488",
+    "common_name": "Eyes sensitive to light"
+  },
+  {
+    "id": "s_1156",
+    "common_name": "Facial muscle weakness"
+  },
+  {
+    "id": "s_1425",
+    "common_name": "Facial muscle spasms"
+  },
+  {
+    "id": "s_478",
+    "common_name": "Facial pain"
+  },
+  {
+    "id": "s_2100",
+    "common_name": "Fatigue"
+  },
+  {
+    "id": "s_1088",
+    "common_name": "Fear of losing control"
+  },
+  {
+    "id": "s_157",
+    "common_name": "Fear of obesity"
+  },
+  {
+    "id": "s_244",
+    "common_name": "Specific fear"
+  },
+  {
+    "id": "s_721",
+    "common_name": "Fear of public appearances"
+  },
+  {
+    "id": "s_1587",
+    "common_name": "Feeling detached from your body"
+  },
+  {
+    "id": "s_274",
+    "common_name": "Feeling hot"
+  },
+  {
+    "id": "s_205",
+    "common_name": "Feeling of guilt"
+  },
+  {
+    "id": "s_206",
+    "common_name": "Feeling of guilt or shame after drinking alcohol"
+  },
+  {
+    "id": "s_629",
+    "common_name": "Feeling of helplessness"
+  },
+  {
+    "id": "s_632",
+    "common_name": "Feeling of hopelessness"
+  },
+  {
+    "id": "s_1565",
+    "common_name": "Feeling of rectal fullness"
+  },
+  {
+    "id": "s_507",
+    "common_name": "Lost will to live"
+  },
+  {
+    "id": "s_1175",
+    "common_name": "Feeling of weight in scrotum"
+  },
+  {
+    "id": "s_419",
+    "common_name": "Feeling overweight despite low weight"
+  },
+  {
+    "id": "s_279",
+    "common_name": "Feeling pressure or pulsation inside the tooth"
+  },
+  {
+    "id": "s_2186",
+    "common_name": "Female genital burn"
+  },
+  {
+    "id": "s_7",
+    "common_name": "Female infertility"
+  },
+  {
+    "id": "s_2010",
+    "common_name": "Water breaking"
+  },
+  {
+    "id": "s_98",
+    "common_name": "Fever"
+  },
+  {
+    "id": "s_636",
+    "common_name": "Financial recklessness"
+  },
+  {
+    "id": "s_77",
+    "common_name": "Fine downy hair"
+  },
+  {
+    "id": "s_660",
+    "common_name": "Fits of anger"
+  },
+  {
+    "id": "s_2182",
+    "common_name": "Flank pain"
+  },
+  {
+    "id": "s_772",
+    "common_name": "Flat affect"
+  },
+  {
+    "id": "s_504",
+    "common_name": "Foamy urine"
+  },
+  {
+    "id": "s_1909",
+    "common_name": "Dropping of the forefoot"
+  },
+  {
+    "id": "s_204",
+    "common_name": "Forward-leaning posture"
+  },
+  {
+    "id": "s_525",
+    "common_name": "Foul-smelling stools"
+  },
+  {
+    "id": "s_505",
+    "common_name": "Frequent infections"
+  },
+  {
+    "id": "s_215",
+    "common_name": "Frequent urination"
+  },
+  {
+    "id": "s_990",
+    "common_name": "Frontal release signs"
+  },
+  {
+    "id": "s_547",
+    "common_name": "Milky discharge from the nipple outside of breastfeeding period"
+  },
+  {
+    "id": "s_2032",
+    "common_name": "Gambling"
+  },
+  {
+    "id": "s_1570",
+    "common_name": "Gastric symptoms after eating or drinking foods containing lactose"
+  },
+  {
+    "id": "s_1767",
+    "common_name": "Stress-related gastrointestinal complaints"
+  },
+  {
+    "id": "s_1226",
+    "common_name": "Bowlegs"
+  },
+  {
+    "id": "s_1090",
+    "common_name": "Glassy eyes"
+  },
+  {
+    "id": "s_513",
+    "common_name": "Feeling of lump in throat"
+  },
+  {
+    "id": "s_1302",
+    "common_name": "Goldflam sign"
+  },
+  {
+    "id": "s_1263",
+    "common_name": "Gonda-Allen sign"
+  },
+  {
+    "id": "s_1254",
+    "common_name": "Gordon sign"
+  },
+  {
+    "id": "s_639",
+    "common_name": "Grandiosity"
+  },
+  {
+    "id": "s_322",
+    "common_name": "Red gums"
+  },
+  {
+    "id": "s_19",
+    "common_name": "Gum pain"
+  },
+  {
+    "id": "s_586",
+    "common_name": "Gynecomastia"
+  },
+  {
+    "id": "s_121",
+    "common_name": "Hair loss"
+  },
+  {
+    "id": "s_618",
+    "common_name": "Hairy leukoplakia"
+  },
+  {
+    "id": "s_65",
+    "common_name": "Bad breath"
+  },
+  {
+    "id": "s_686",
+    "common_name": "Hallucinations"
+  },
+  {
+    "id": "s_2041",
+    "common_name": "Halos around lights"
+  },
+  {
+    "id": "s_1346",
+    "common_name": "Hard retinal exudates"
+  },
+  {
+    "id": "s_191",
+    "common_name": "Head drop"
+  },
+  {
+    "id": "s_85",
+    "common_name": "Head tremors"
+  },
+  {
+    "id": "s_21",
+    "common_name": "Headache"
+  },
+  {
+    "id": "s_338",
+    "common_name": "Heartburn"
+  },
+  {
+    "id": "s_273",
+    "common_name": "Heavy legs at the end of the day"
+  },
+  {
+    "id": "s_158",
+    "common_name": "Heavy or prolonged menstrual periods"
+  },
+  {
+    "id": "s_1922",
+    "common_name": "Heel drop test"
+  },
+  {
+    "id": "s_1170",
+    "common_name": "Bleeding into joints"
+  },
+  {
+    "id": "s_1005",
+    "common_name": "Weakness of one side of the body"
+  },
+  {
+    "id": "s_116",
+    "common_name": "Coughing up blood"
+  },
+  {
+    "id": "s_1051",
+    "common_name": "Hepatomegaly"
+  },
+  {
+    "id": "s_1295",
+    "common_name": "Hiccups"
+  },
+  {
+    "id": "s_1108",
+    "common_name": "High-arched palate"
+  },
+  {
+    "id": "s_280",
+    "common_name": "Hot flashes"
+  },
+  {
+    "id": "s_1481",
+    "common_name": "Hyperalgesia"
+  },
+  {
+    "id": "s_760",
+    "common_name": "Thickened and cracked skin on hands"
+  },
+  {
+    "id": "s_1891",
+    "common_name": "Oversensitivity to smells"
+  },
+  {
+    "id": "s_1150",
+    "common_name": "Oversensitivity to sound"
+  },
+  {
+    "id": "s_543",
+    "common_name": "Hypertension, over 140 mmHg"
+  },
+  {
+    "id": "s_1876",
+    "common_name": "Scanty menstruation"
+  },
+  {
+    "id": "s_570",
+    "common_name": "Collection of pus in the front of the eye"
+  },
+  {
+    "id": "s_533",
+    "common_name": "Low blood pressure"
+  },
+  {
+    "id": "s_341",
+    "common_name": "Illusion of surroundings being bigger or smaller than they actually are"
+  },
+  {
+    "id": "s_317",
+    "common_name": "Impaired balance while walking"
+  },
+  {
+    "id": "s_1241",
+    "common_name": "Impaired downward eye motion"
+  },
+  {
+    "id": "s_1227",
+    "common_name": "Impaired lateral eye motion"
+  },
+  {
+    "id": "s_1240",
+    "common_name": "Impaired medial eye motion"
+  },
+  {
+    "id": "s_1095",
+    "common_name": "Impaired smell"
+  },
+  {
+    "id": "s_716",
+    "common_name": "Worse functioning at home, work, or school"
+  },
+  {
+    "id": "s_1239",
+    "common_name": "Impaired upward eye motion"
+  },
+  {
+    "id": "s_320",
+    "common_name": "Impaired vision"
+  },
+  {
+    "id": "s_1384",
+    "common_name": "Impulsive behavior"
+  },
+  {
+    "id": "s_2086",
+    "common_name": "Inability to stand on one or both feet"
+  },
+  {
+    "id": "s_1385",
+    "common_name": "Inability to complete tasks"
+  },
+  {
+    "id": "s_1300",
+    "common_name": "Inability to move mandible sideways"
+  },
+  {
+    "id": "s_1551",
+    "common_name": "Inability to pass gas"
+  },
+  {
+    "id": "s_711",
+    "common_name": "Inability to remember important aspects of a traumatic experience"
+  },
+  {
+    "id": "s_150",
+    "common_name": "Inability to stop drinking alcohol"
+  },
+  {
+    "id": "s_223",
+    "common_name": "Inability to stop flow of urine"
+  },
+  {
+    "id": "s_361",
+    "common_name": "Increase in sexual experiences or sensations needed to attain desired effect"
+  },
+  {
+    "id": "s_277",
+    "common_name": "Increased abdominal size"
+  },
+  {
+    "id": "s_311",
+    "common_name": "Increased appetite"
+  },
+  {
+    "id": "s_1488",
+    "common_name": "Increased expiratory phase"
+  },
+  {
+    "id": "s_421",
+    "common_name": "Increased libido"
+  },
+  {
+    "id": "s_991",
+    "common_name": "Jaw jerk"
+  },
+  {
+    "id": "s_1278",
+    "common_name": "Increased palatine reflex"
+  },
+  {
+    "id": "s_1279",
+    "common_name": "Increased pharyngeal reflex"
+  },
+  {
+    "id": "s_310",
+    "common_name": "Increased thirst"
+  },
+  {
+    "id": "s_1745",
+    "common_name": "Unstable knee"
+  },
+  {
+    "id": "s_1383",
+    "common_name": "Intense, non-committal relationships"
+  },
+  {
+    "id": "s_358",
+    "common_name": "Intermittent urine flow"
+  },
+  {
+    "id": "s_1416",
+    "common_name": "Intraretinal microvascular abnormalities"
+  },
+  {
+    "id": "s_1411",
+    "common_name": "Iris neovascularization"
+  },
+  {
+    "id": "s_1440",
+    "common_name": "Irregular menstruations"
+  },
+  {
+    "id": "s_540",
+    "common_name": "Irritability"
+  },
+  {
+    "id": "s_80",
+    "common_name": "Irritability when unable to engage in activity related to sex"
+  },
+  {
+    "id": "s_614",
+    "common_name": "Itching after a hot shower or bath"
+  },
+  {
+    "id": "s_249",
+    "common_name": "Itching around anus"
+  },
+  {
+    "id": "s_255",
+    "common_name": "Itching in ear"
+  },
+  {
+    "id": "s_1563",
+    "common_name": "Itching of eyes"
+  },
+  {
+    "id": "s_252",
+    "common_name": "Itchy throat or nose"
+  },
+  {
+    "id": "s_1271",
+    "common_name": "Finger flexion when tapping distal base of radius bone"
+  },
+  {
+    "id": "s_332",
+    "common_name": "Yellowed skin"
+  },
+  {
+    "id": "s_1961",
+    "common_name": "Jaw pain"
+  },
+  {
+    "id": "s_359",
+    "common_name": "Joint deformation not associated with recent trauma"
+  },
+  {
+    "id": "s_2087",
+    "common_name": "Deformed joints after injury"
+  },
+  {
+    "id": "s_44",
+    "common_name": "Joint pain"
+  },
+  {
+    "id": "s_575",
+    "common_name": "Stiff joints"
+  },
+  {
+    "id": "s_1472",
+    "common_name": "Dark rings appearing around the iris of the eye"
+  },
+  {
+    "id": "s_1689",
+    "common_name": "Kernig's sign"
+  },
+  {
+    "id": "s_664",
+    "common_name": "Small white spots with red rims in the mouth, near the molar teeth"
+  },
+  {
+    "id": "s_1451",
+    "common_name": "Abnormally deep, labored and gasping breathing"
+  },
+  {
+    "id": "s_778",
+    "common_name": "Lack of boundaries in relationships"
+  },
+  {
+    "id": "s_1006",
+    "common_name": "Lack of initiative, motivation, or drive"
+  },
+  {
+    "id": "s_964",
+    "common_name": "Falling or losing gait on one side"
+  },
+  {
+    "id": "s_658",
+    "common_name": "Lengthening of reaction time"
+  },
+  {
+    "id": "s_550",
+    "common_name": "Cloudy eye"
+  },
+  {
+    "id": "s_1378",
+    "common_name": "Levine's sign"
+  },
+  {
+    "id": "s_1054",
+    "common_name": "Lhermitte's sign"
+  },
+  {
+    "id": "s_1793",
+    "common_name": "Tiny eggs at the base of the hair shaft"
+  },
+  {
+    "id": "s_1324",
+    "common_name": "Lisch nodules"
+  },
+  {
+    "id": "s_1407",
+    "common_name": "Local dark retinal blood vessels that lie in folds"
+  },
+  {
+    "id": "s_1405",
+    "common_name": "Local elevation of retina"
+  },
+  {
+    "id": "s_1406",
+    "common_name": "Local grey discoloration of retina"
+  },
+  {
+    "id": "s_1408",
+    "common_name": "Local retinal undulation"
+  },
+  {
+    "id": "s_228",
+    "common_name": "Loose teeth"
+  },
+  {
+    "id": "s_1115",
+    "common_name": "Loss of body hair"
+  },
+  {
+    "id": "s_1543",
+    "common_name": "Loss of consciousness"
+  },
+  {
+    "id": "s_287",
+    "common_name": "Loss of interest"
+  },
+  {
+    "id": "s_622",
+    "common_name": "Loss of muscles"
+  },
+  {
+    "id": "s_1070",
+    "common_name": "Loss of sense of vibration in distal parts of extremities"
+  },
+  {
+    "id": "s_747",
+    "common_name": "Loss of temperature sensation"
+  },
+  {
+    "id": "s_1394",
+    "common_name": "Loss of taste buds"
+  },
+  {
+    "id": "s_746",
+    "common_name": "Loss or impairment of proprioception"
+  },
+  {
+    "id": "s_155",
+    "common_name": "Low sense of self-worth"
+  },
+  {
+    "id": "s_1404",
+    "common_name": "Lower intraocular pressure (> 4-5mmHg) in affected eye compared to unaffected eye"
+  },
+  {
+    "id": "s_1725",
+    "common_name": "Pale leg"
+  },
+  {
+    "id": "s_1173",
+    "common_name": "Lump in scrotum"
+  },
+  {
+    "id": "s_420",
+    "common_name": "Lying about eating, hiding food"
+  },
+  {
+    "id": "s_1733",
+    "common_name": "Painful lymph nodes"
+  },
+  {
+    "id": "s_2077",
+    "common_name": "Major bleeding"
+  },
+  {
+    "id": "s_779",
+    "common_name": "Making rash or impulsive decisions"
+  },
+  {
+    "id": "s_2187",
+    "common_name": "Male genital burn"
+  },
+  {
+    "id": "s_2052",
+    "common_name": "Male infertility"
+  },
+  {
+    "id": "s_289",
+    "common_name": "Malocclusions"
+  },
+  {
+    "id": "s_1403",
+    "common_name": "Marcus Gunn pupil"
+  },
+  {
+    "id": "s_1261",
+    "common_name": "Mendel-Bechterev sign"
+  },
+  {
+    "id": "s_415",
+    "common_name": "Menstrual period more than three weeks late"
+  },
+  {
+    "id": "s_1768",
+    "common_name": "Mental disturbances exacerbated by stress"
+  },
+  {
+    "id": "s_360",
+    "common_name": "Narrow mouth, difficulty opening mouth"
+  },
+  {
+    "id": "s_2078",
+    "common_name": "Minor uncontrollable bleeding"
+  },
+  {
+    "id": "s_537",
+    "common_name": "Constriction of the pupil"
+  },
+  {
+    "id": "s_212",
+    "common_name": "Miscarriage"
+  },
+  {
+    "id": "s_1274",
+    "common_name": "Moniz sign"
+  },
+  {
+    "id": "s_646",
+    "common_name": "Mood swings"
+  },
+  {
+    "id": "s_1297",
+    "common_name": "Slowed movements"
+  },
+  {
+    "id": "s_1104",
+    "common_name": "Mouth breathing"
+  },
+  {
+    "id": "s_1210",
+    "common_name": "Mucosal pallor"
+  },
+  {
+    "id": "s_642",
+    "common_name": "Mucous secretion in stool"
+  },
+  {
+    "id": "s_503",
+    "common_name": "Muscle cramps"
+  },
+  {
+    "id": "s_650",
+    "common_name": "Muscle weakness"
+  },
+  {
+    "id": "s_1142",
+    "common_name": "Muscle pain"
+  },
+  {
+    "id": "s_536",
+    "common_name": "Dilated pupils"
+  },
+  {
+    "id": "s_1476",
+    "common_name": "Myringitis"
+  },
+  {
+    "id": "s_603",
+    "common_name": "Enlarged finger tips"
+  },
+  {
+    "id": "s_1167",
+    "common_name": "Nail deformation"
+  },
+  {
+    "id": "s_2005",
+    "common_name": "Sore nail"
+  },
+  {
+    "id": "s_107",
+    "common_name": "Runny nose"
+  },
+  {
+    "id": "s_331",
+    "common_name": "Stuffy nose"
+  },
+  {
+    "id": "s_524",
+    "common_name": "Polyps in nose"
+  },
+  {
+    "id": "s_1303",
+    "common_name": "Nasal voice"
+  },
+  {
+    "id": "s_156",
+    "common_name": "Feeling sick"
+  },
+  {
+    "id": "s_1388",
+    "common_name": "Asymmetrical neck"
+  },
+  {
+    "id": "s_1483",
+    "common_name": "Neck pain"
+  },
+  {
+    "id": "s_671",
+    "common_name": "Widened neck veins"
+  },
+  {
+    "id": "s_820",
+    "common_name": "Neglecting other duties and activities due to drinking"
+  },
+  {
+    "id": "s_326",
+    "common_name": "Neglecting other duties to pursue sex"
+  },
+  {
+    "id": "s_143",
+    "common_name": "Nervousness"
+  },
+  {
+    "id": "s_1086",
+    "common_name": "Neural tenderness"
+  },
+  {
+    "id": "s_2080",
+    "common_name": "New neurological changes, since less than 24 hours"
+  },
+  {
+    "id": "s_2083",
+    "common_name": "New neurological changes, lasting over 24 hours"
+  },
+  {
+    "id": "s_1422",
+    "common_name": "Leaking from the nipple"
+  },
+  {
+    "id": "s_2172",
+    "common_name": "No signs of upper respiratory infection"
+  },
+  {
+    "id": "s_182",
+    "common_name": "Urinating at night"
+  },
+  {
+    "id": "s_300",
+    "common_name": "Lump in the breast"
+  },
+  {
+    "id": "s_822",
+    "common_name": "Nonstop drinking for several days"
+  },
+  {
+    "id": "s_2168",
+    "common_name": "Normal body temperature"
+  },
+  {
+    "id": "s_2169",
+    "common_name": "Normal pulse"
+  },
+  {
+    "id": "s_2171",
+    "common_name": "Normal lung sounds on auscultation"
+  },
+  {
+    "id": "s_2174",
+    "common_name": "Normal vital signs"
+  },
+  {
+    "id": "s_1605",
+    "common_name": "Nose pain"
+  },
+  {
+    "id": "s_1429",
+    "common_name": "Bleeding from nose"
+  },
+  {
+    "id": "s_1305",
+    "common_name": "Loss of feeling in part of ear"
+  },
+  {
+    "id": "s_1148",
+    "common_name": "Loss of feeling in tongue"
+  },
+  {
+    "id": "s_377",
+    "common_name": "Many birthmarks"
+  },
+  {
+    "id": "s_479",
+    "common_name": "Nystagmus"
+  },
+  {
+    "id": "s_127",
+    "common_name": "Obsessive thoughts"
+  },
+  {
+    "id": "s_750",
+    "common_name": "Difficulty moving eyes"
+  },
+  {
+    "id": "s_1147",
+    "common_name": "Oculomotor nerve palsy"
+  },
+  {
+    "id": "s_509",
+    "common_name": "Painful swallowing"
+  },
+  {
+    "id": "s_362",
+    "common_name": "Oily skin"
+  },
+  {
+    "id": "s_1877",
+    "common_name": "Menstrual periods more than 35 days apart"
+  },
+  {
+    "id": "s_185",
+    "common_name": "Low urine output"
+  },
+  {
+    "id": "s_1107",
+    "common_name": "Opacified tympanic membrane"
+  },
+  {
+    "id": "s_389",
+    "common_name": "Blackheads"
+  },
+  {
+    "id": "s_1256",
+    "common_name": "Oppenheim sign"
+  },
+  {
+    "id": "s_1410",
+    "common_name": "Optic disc neovascularization"
+  },
+  {
+    "id": "s_1329",
+    "common_name": "Optic nerve disc pallor"
+  },
+  {
+    "id": "s_868",
+    "common_name": "Orbicularis oris muscle spasm"
+  },
+  {
+    "id": "s_844",
+    "common_name": "Organic cause"
+  },
+  {
+    "id": "s_541",
+    "common_name": "Feeling dizzy or faint after standing up quickly"
+  },
+  {
+    "id": "s_1289",
+    "common_name": "Ovarian enlargement"
+  },
+  {
+    "id": "s_371",
+    "common_name": "Working too much"
+  },
+  {
+    "id": "s_1180",
+    "common_name": "Pain behind ear"
+  },
+  {
+    "id": "s_1382",
+    "common_name": "Pain caused by firm pressure on tibia"
+  },
+  {
+    "id": "s_1453",
+    "common_name": "Pain in both lower limbs"
+  },
+  {
+    "id": "s_28",
+    "common_name": "Pain in crotch"
+  },
+  {
+    "id": "s_1250",
+    "common_name": "Pain in groin during coughing, sneezing, laughing or physical exercises"
+  },
+  {
+    "id": "s_579",
+    "common_name": "Pain in lower limb"
+  },
+  {
+    "id": "s_580",
+    "common_name": "Pain in upper limb"
+  },
+  {
+    "id": "s_54",
+    "common_name": "Pain near eye socket"
+  },
+  {
+    "id": "s_39",
+    "common_name": "Pain while urinating"
+  },
+  {
+    "id": "s_1393",
+    "common_name": "Painful bowel movements"
+  },
+  {
+    "id": "s_33",
+    "common_name": "Painful ejaculation"
+  },
+  {
+    "id": "s_32",
+    "common_name": "Painful sex"
+  },
+  {
+    "id": "s_10",
+    "common_name": "Pale and brittle nails"
+  },
+  {
+    "id": "s_569",
+    "common_name": "Pale or clay-colored stools"
+  },
+  {
+    "id": "s_9",
+    "common_name": "Pale skin"
+  },
+  {
+    "id": "s_298",
+    "common_name": "Palpable neck mass"
+  },
+  {
+    "id": "s_110",
+    "common_name": "Palpitations"
+  },
+  {
+    "id": "s_722",
+    "common_name": "Panic attacks in public appearances"
+  },
+  {
+    "id": "s_803",
+    "common_name": "Papilledema"
+  },
+  {
+    "id": "s_838",
+    "common_name": "Paralogical thinking"
+  },
+  {
+    "id": "s_1296",
+    "common_name": "Limb paralysis"
+  },
+  {
+    "id": "s_2206",
+    "common_name": "Retracted foreskin"
+  },
+  {
+    "id": "s_1486",
+    "common_name": "Paraspinal muscle tenderness"
+  },
+  {
+    "id": "s_148",
+    "common_name": "Partial limbs paralysis"
+  },
+  {
+    "id": "s_518",
+    "common_name": "Body tingling"
+  },
+  {
+    "id": "s_1800",
+    "common_name": "Appendix removal in the past"
+  },
+  {
+    "id": "s_1801",
+    "common_name": "Gallbladder removal in the past"
+  },
+  {
+    "id": "s_1715",
+    "common_name": "Broken bone without having had an accident"
+  },
+  {
+    "id": "s_795",
+    "common_name": "Pencil-thin stools"
+  },
+  {
+    "id": "s_1380",
+    "common_name": "Pericardial friction rub"
+  },
+  {
+    "id": "s_1312",
+    "common_name": "Pain of the skin around the nail"
+  },
+  {
+    "id": "s_2084",
+    "common_name": "Bruising around the eyes"
+  },
+  {
+    "id": "s_1018",
+    "common_name": "Perseveration"
+  },
+  {
+    "id": "s_1367",
+    "common_name": "Red throat"
+  },
+  {
+    "id": "s_20",
+    "common_name": "Sore throat"
+  },
+  {
+    "id": "s_1102",
+    "common_name": "Swelling on both sides of throat"
+  },
+  {
+    "id": "s_1390",
+    "common_name": "One-sided throat swelling"
+  },
+  {
+    "id": "s_263",
+    "common_name": "Difficulty retracting foreskin"
+  },
+  {
+    "id": "s_2088",
+    "common_name": "Injury"
+  },
+  {
+    "id": "s_281",
+    "common_name": "Physical trauma (to self or others) after drinking alcohol"
+  },
+  {
+    "id": "s_1437",
+    "common_name": "Pleural effusion"
+  },
+  {
+    "id": "s_1396",
+    "common_name": "Pleural friction rub"
+  },
+  {
+    "id": "s_2112",
+    "common_name": "Sudden and sharp chest pain after an injury"
+  },
+  {
+    "id": "s_770",
+    "common_name": "Poor personal hygiene"
+  },
+  {
+    "id": "s_1093",
+    "common_name": "Positive allergy challenge"
+  },
+  {
+    "id": "s_1092",
+    "common_name": "Positive skin allergy (prick or patch) test"
+  },
+  {
+    "id": "s_2175",
+    "common_name": "Animal bite"
+  },
+  {
+    "id": "s_1471",
+    "common_name": "Mucus dripping at the back of the throat"
+  },
+  {
+    "id": "s_225",
+    "common_name": "Premature graying"
+  },
+  {
+    "id": "s_69",
+    "common_name": "Preoccupation with food"
+  },
+  {
+    "id": "s_1323",
+    "common_name": "Presence of neurofibromas"
+  },
+  {
+    "id": "s_1397",
+    "common_name": "Prolonged erection"
+  },
+  {
+    "id": "s_123",
+    "common_name": "Problems with everyday tasks such as washing, eating, dressing"
+  },
+  {
+    "id": "s_593",
+    "common_name": "Prolonged bleeding time"
+  },
+  {
+    "id": "s_1089",
+    "common_name": "Prostate enlargement"
+  },
+  {
+    "id": "s_254",
+    "common_name": "Itching of skin"
+  },
+  {
+    "id": "s_1548",
+    "common_name": "Gray layer in throat"
+  },
+  {
+    "id": "s_649",
+    "common_name": "Psychomotor retardation"
+  },
+  {
+    "id": "s_653",
+    "common_name": "Pupil dilation variation"
+  },
+  {
+    "id": "s_1238",
+    "common_name": "Pupil or pupils unreactive to accomodation"
+  },
+  {
+    "id": "s_1315",
+    "common_name": "Pus under the skin of the finger"
+  },
+  {
+    "id": "s_989",
+    "common_name": "Pyramidal signs"
+  },
+  {
+    "id": "s_637",
+    "common_name": "Quickening of thoughts and speech"
+  },
+  {
+    "id": "s_706",
+    "common_name": "Re-experiencing the traumatic event in nightmares"
+  },
+  {
+    "id": "s_705",
+    "common_name": "Re-experiencing the traumatic event in recurring distressing memories"
+  },
+  {
+    "id": "s_708",
+    "common_name": "Strong physiological reactions while re-experiencing the traumatic event"
+  },
+  {
+    "id": "s_707",
+    "common_name": "Re-experiencing traumatic event"
+  },
+  {
+    "id": "s_1494",
+    "common_name": "Rebound tenderness"
+  },
+  {
+    "id": "s_528",
+    "common_name": "Recent alcohol consumption"
+  },
+  {
+    "id": "s_2079",
+    "common_name": "Recent injury without bleeding"
+  },
+  {
+    "id": "s_142",
+    "common_name": "Recurrent gastric ulcers"
+  },
+  {
+    "id": "s_139",
+    "common_name": "Recurrent tonsils inflammation"
+  },
+  {
+    "id": "s_692",
+    "common_name": "Red and swollen oral mucosa"
+  },
+  {
+    "id": "s_492",
+    "common_name": "Bloodshot eye"
+  },
+  {
+    "id": "s_1181",
+    "common_name": "Redness behind the ear"
+  },
+  {
+    "id": "s_1145",
+    "common_name": "Redness around the temple"
+  },
+  {
+    "id": "s_410",
+    "common_name": "Reduced body temperature"
+  },
+  {
+    "id": "s_572",
+    "common_name": "Face lacking expression or animation"
+  },
+  {
+    "id": "s_2008",
+    "common_name": "Regular uterine contractions"
+  },
+  {
+    "id": "s_2076",
+    "common_name": "Breathing problems after injury"
+  },
+  {
+    "id": "s_186",
+    "common_name": "Difficulty bending down"
+  },
+  {
+    "id": "s_1713",
+    "common_name": "Restricted range of joint motion"
+  },
+  {
+    "id": "s_1418",
+    "common_name": "Retinal artery occlusions"
+  },
+  {
+    "id": "s_1344",
+    "common_name": "Retinal hemorrhage"
+  },
+  {
+    "id": "s_1412",
+    "common_name": "Retinal microaneurysms"
+  },
+  {
+    "id": "s_1415",
+    "common_name": "Retinal neovascularization elsewhere"
+  },
+  {
+    "id": "s_1414",
+    "common_name": "Retinal swelling"
+  },
+  {
+    "id": "s_343",
+    "common_name": "Change in the nipple"
+  },
+  {
+    "id": "s_1055",
+    "common_name": "Retrobulbar neuritis"
+  },
+  {
+    "id": "s_1533",
+    "common_name": "Runny or stuffed nose triggered by environment"
+  },
+  {
+    "id": "s_1682",
+    "common_name": "Ruddy, bulbous nose"
+  },
+  {
+    "id": "s_816",
+    "common_name": "Risky drinking"
+  },
+  {
+    "id": "s_1738",
+    "common_name": "Romberg's sign"
+  },
+  {
+    "id": "s_1255",
+    "common_name": "Rossolimo's sign"
+  },
+  {
+    "id": "s_1732",
+    "common_name": "Rovsing's sign"
+  },
+  {
+    "id": "s_1141",
+    "common_name": "Russell's sign"
+  },
+  {
+    "id": "s_1285",
+    "common_name": "Sagging of the palate ipsilateral to suspected nerve damage"
+  },
+  {
+    "id": "s_1259",
+    "common_name": "Schaeffer's sign"
+  },
+  {
+    "id": "s_836",
+    "common_name": "Schizophasia"
+  },
+  {
+    "id": "s_1492",
+    "common_name": "Yellow eyes"
+  },
+  {
+    "id": "s_124",
+    "common_name": "Black spots in vision"
+  },
+  {
+    "id": "s_1342",
+    "common_name": "Scrotal transillumination"
+  },
+  {
+    "id": "s_829",
+    "common_name": "Secret drinking"
+  },
+  {
+    "id": "s_2045",
+    "common_name": "Seizures"
+  },
+  {
+    "id": "s_2213",
+    "common_name": "Self-injurious thoughts or behaviors"
+  },
+  {
+    "id": "s_423",
+    "common_name": "Sense of self-worth dependent on weight"
+  },
+  {
+    "id": "s_972",
+    "common_name": "Loss of feeling in both arms"
+  },
+  {
+    "id": "s_313",
+    "common_name": "Loss of feeling in only one arm or leg"
+  },
+  {
+    "id": "s_959",
+    "common_name": "Loss of feeling in face"
+  },
+  {
+    "id": "s_2089",
+    "common_name": "Serious injury, respiratory difficulty, severe bleeding, new neurological problem"
+  },
+  {
+    "id": "s_2081",
+    "common_name": "Severe pain after injury"
+  },
+  {
+    "id": "s_2",
+    "common_name": "Sexual activity in recent months"
+  },
+  {
+    "id": "s_74",
+    "common_name": "Sexual activity more often or with more partners than intended"
+  },
+  {
+    "id": "s_1399",
+    "common_name": "Shafer's sign"
+  },
+  {
+    "id": "s_648",
+    "common_name": "Simple auditory paradelusions"
+  },
+  {
+    "id": "s_647",
+    "common_name": "Simple visual paradelusions"
+  },
+  {
+    "id": "s_1496",
+    "common_name": "Sinuses tender to palpation"
+  },
+  {
+    "id": "s_654",
+    "common_name": "Skin and blood vessel inflammation"
+  },
+  {
+    "id": "s_1674",
+    "common_name": "Skin pain"
+  },
+  {
+    "id": "s_376",
+    "common_name": "Light or fair skin that easily burns"
+  },
+  {
+    "id": "s_1474",
+    "common_name": "Skull lesions"
+  },
+  {
+    "id": "s_319",
+    "common_name": "Sleep disorder"
+  },
+  {
+    "id": "s_238",
+    "common_name": "Slower walk"
+  },
+  {
+    "id": "s_271",
+    "common_name": "Smooth face without wrinkles"
+  },
+  {
+    "id": "s_715",
+    "common_name": "Sneeze"
+  },
+  {
+    "id": "s_67",
+    "common_name": "Snoring"
+  },
+  {
+    "id": "s_659",
+    "common_name": "Social isolation"
+  },
+  {
+    "id": "s_773",
+    "common_name": "Social maladjustment"
+  },
+  {
+    "id": "s_1347",
+    "common_name": "Soft retinal exudates"
+  },
+  {
+    "id": "s_1426",
+    "common_name": "Spasms in upper extremities"
+  },
+  {
+    "id": "s_571",
+    "common_name": "Increased muscle tension"
+  },
+  {
+    "id": "s_213",
+    "common_name": "Spending a lot of time on sex-related activity"
+  },
+  {
+    "id": "s_1536",
+    "common_name": "Spine asymmetry"
+  },
+  {
+    "id": "s_1169",
+    "common_name": "Splenic agenesis"
+  },
+  {
+    "id": "s_1045",
+    "common_name": "Enlarged spleen"
+  },
+  {
+    "id": "s_1270",
+    "common_name": "Sterling's sign"
+  },
+  {
+    "id": "s_1381",
+    "common_name": "Sternal rub"
+  },
+  {
+    "id": "s_418",
+    "common_name": "Stiff neck"
+  },
+  {
+    "id": "s_257",
+    "common_name": "Stiffness of spine in the morning"
+  },
+  {
+    "id": "s_880",
+    "common_name": "Stimulants use (amphetamine, cocaine)"
+  },
+  {
+    "id": "s_1260",
+    "common_name": "Stransky's sign"
+  },
+  {
+    "id": "s_1275",
+    "common_name": "Strumpell's sign"
+  },
+  {
+    "id": "s_1067",
+    "common_name": "Sudden face flushing"
+  },
+  {
+    "id": "s_698",
+    "common_name": "Sunken eyeballs"
+  },
+  {
+    "id": "s_214",
+    "common_name": "Sweating on forehead on painful side"
+  },
+  {
+    "id": "s_1182",
+    "common_name": "Swelling behind ear"
+  },
+  {
+    "id": "s_1099",
+    "common_name": "Swelling of nasal concha"
+  },
+  {
+    "id": "s_1097",
+    "common_name": "Swelling of nasal mucosa"
+  },
+  {
+    "id": "s_1144",
+    "common_name": "Swelling of temporal artery"
+  },
+  {
+    "id": "s_172",
+    "common_name": "Swollen gums"
+  },
+  {
+    "id": "s_162",
+    "common_name": "Symptoms appear after taking painkillers, change in diet"
+  },
+  {
+    "id": "s_602",
+    "common_name": "Symptoms do not occur during sleep"
+  },
+  {
+    "id": "s_558",
+    "common_name": "Symptoms exacerbated by cold temperature"
+  },
+  {
+    "id": "s_160",
+    "common_name": "Symptoms increase in evening"
+  },
+  {
+    "id": "s_161",
+    "common_name": "Symptoms regularly appear a few days before menstrual period"
+  },
+  {
+    "id": "s_261",
+    "common_name": "Fast heartbeat"
+  },
+  {
+    "id": "s_227",
+    "common_name": "Accelerated breathing"
+  },
+  {
+    "id": "s_1096",
+    "common_name": "Abnormal or loss of taste"
+  },
+  {
+    "id": "s_640",
+    "common_name": "Feeling of incomplete defecation"
+  },
+  {
+    "id": "s_1114",
+    "common_name": "Terry's nails"
+  },
+  {
+    "id": "s_487",
+    "common_name": "Thick eye discharge"
+  },
+  {
+    "id": "s_1790",
+    "common_name": "Thickened nails"
+  },
+  {
+    "id": "s_2039",
+    "common_name": "Full-thickness skin burn"
+  },
+  {
+    "id": "s_728",
+    "common_name": "Thoughts of harming your child"
+  },
+  {
+    "id": "s_1276",
+    "common_name": "Throckmorton's sign"
+  },
+  {
+    "id": "s_555",
+    "common_name": "Tingling fingers"
+  },
+  {
+    "id": "s_407",
+    "common_name": "Ringing in ears"
+  },
+  {
+    "id": "s_1833",
+    "common_name": "Toe pain"
+  },
+  {
+    "id": "s_1085",
+    "common_name": "Degeneration of toenail"
+  },
+  {
+    "id": "s_673",
+    "common_name": "Tongue enlargement"
+  },
+  {
+    "id": "s_607",
+    "common_name": "Unusually red tongue"
+  },
+  {
+    "id": "s_1534",
+    "common_name": "White or yellow formations in tonsils"
+  },
+  {
+    "id": "s_1050",
+    "common_name": "Tooth loss"
+  },
+  {
+    "id": "s_551",
+    "common_name": "Toothache"
+  },
+  {
+    "id": "s_1100",
+    "common_name": "Transverse furrow on the nose"
+  },
+  {
+    "id": "s_538",
+    "common_name": "Muscle trembling"
+  },
+  {
+    "id": "s_1056",
+    "common_name": "Trigeminal neuralgia"
+  },
+  {
+    "id": "s_256",
+    "common_name": "Difficulty with mouth opening"
+  },
+  {
+    "id": "s_1262",
+    "common_name": "Tromner's sign"
+  },
+  {
+    "id": "s_1074",
+    "common_name": "Trophic changes"
+  },
+  {
+    "id": "s_1076",
+    "common_name": "Trophic ulcer"
+  },
+  {
+    "id": "s_691",
+    "common_name": "Trouble beginning urination"
+  },
+  {
+    "id": "s_644",
+    "common_name": "Trouble planning the future"
+  },
+  {
+    "id": "s_866",
+    "common_name": "Trousseau sign of latent tetany"
+  },
+  {
+    "id": "s_2163",
+    "common_name": "Twisted neck"
+  },
+  {
+    "id": "s_1366",
+    "common_name": "Tympanic membrane light reflex distortion"
+  },
+  {
+    "id": "s_194",
+    "common_name": "Ulceration on nipple"
+  },
+  {
+    "id": "s_351",
+    "common_name": "Ulcerations or abscesses near the anus"
+  },
+  {
+    "id": "s_668",
+    "common_name": "Sunken eye"
+  },
+  {
+    "id": "s_1586",
+    "common_name": "Labial swelling on one side"
+  },
+  {
+    "id": "s_2068",
+    "common_name": "Pale arm"
+  },
+  {
+    "id": "s_153",
+    "common_name": "Urinary incontinence"
+  },
+  {
+    "id": "s_696",
+    "common_name": "Unable to urinate"
+  },
+  {
+    "id": "s_690",
+    "common_name": "Urgent need to urinate"
+  },
+  {
+    "id": "s_689",
+    "common_name": "Urination in small amounts"
+  },
+  {
+    "id": "s_183",
+    "common_name": "Urination while coughing or laughing or during physical exertion"
+  },
+  {
+    "id": "s_243",
+    "common_name": "Using methods to lose weight: vomiting, starvation diets"
+  },
+  {
+    "id": "s_1287",
+    "common_name": "Uvula deviation towards unaffected side"
+  },
+  {
+    "id": "s_2115",
+    "common_name": "Vaginal bleeding during pregnancy"
+  },
+  {
+    "id": "s_2130",
+    "common_name": "Vaginal bleeding in nonpregnant woman"
+  },
+  {
+    "id": "s_1811",
+    "common_name": "Vaginal dryness"
+  },
+  {
+    "id": "s_2082",
+    "common_name": "Limited blood supply past the injury site"
+  },
+  {
+    "id": "s_1031",
+    "common_name": "Verbal learning disability"
+  },
+  {
+    "id": "s_824",
+    "common_name": "Violating social norms after drinking alcohol"
+  },
+  {
+    "id": "s_290",
+    "common_name": "Visible and palpable enlarged vein of limb, chest or abdomen"
+  },
+  {
+    "id": "s_1792",
+    "common_name": "Visible head lice on scalp"
+  },
+  {
+    "id": "s_1398",
+    "common_name": "Vitreous hemorrhage"
+  },
+  {
+    "id": "s_305",
+    "common_name": "Vomiting"
+  },
+  {
+    "id": "s_1875",
+    "common_name": "Vulvovaginal burning"
+  },
+  {
+    "id": "s_1219",
+    "common_name": "Waist-hip ratio (WHR) over 0.85 in women"
+  },
+  {
+    "id": "s_1218",
+    "common_name": "Waist-hip ratio (WHR) over 1.0 in men"
+  },
+  {
+    "id": "s_1155",
+    "common_name": "Weak eye clenching"
+  },
+  {
+    "id": "s_1280",
+    "common_name": "Weak or absent pharyngeal reflex"
+  },
+  {
+    "id": "s_1348",
+    "common_name": "Weak peripheral pulses"
+  },
+  {
+    "id": "s_226",
+    "common_name": "Weight gain"
+  },
+  {
+    "id": "s_285",
+    "common_name": "Weight reduction"
+  },
+  {
+    "id": "s_1402",
+    "common_name": "Weiss ring"
+  },
+  {
+    "id": "s_1340",
+    "common_name": "Westphal's sign"
+  },
+  {
+    "id": "s_474",
+    "common_name": "Whistling sound made while breathing"
+  },
+  {
+    "id": "s_1788",
+    "common_name": "White nail discoloration"
+  },
+  {
+    "id": "s_1796",
+    "common_name": "White patch on cornea"
+  },
+  {
+    "id": "s_1183",
+    "common_name": "Winterbottom's sign"
+  },
+  {
+    "id": "s_1937",
+    "common_name": "Worms in stool"
+  },
+  {
+    "id": "s_1980",
+    "common_name": "Wound"
+  },
+  {
+    "id": "s_342",
+    "common_name": "Wrinkling or dimpling of skin on breast"
+  },
+  {
+    "id": "s_1910",
+    "common_name": "Wrist drop"
+  },
+  {
+    "id": "s_1789",
+    "common_name": "Yellow nails"
+  }
+]
