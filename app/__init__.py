@@ -21,14 +21,20 @@ if os.environ.get('DEPLOY_ENV') == 'PRODUCTION':
         return url_for(self.endpoint('specs'), _external=True, _scheme='https')
     Api.specs_url = specs_url
 
+# variable for disabling Swagger UI in production
+UI_BOOL = os.getenv('DEPLOY_ENV') != 'PRODUCTION'
+
+if UI_BOOL:
+    UI_BOOL = '/'
+
 api = Api(
     blueprint,
     title='CLARISSA API REFERENCE',
     version='1.0',
     description='''Documentation for Clarissa.ai API:
-                    A flask restplus web service'''
+                    A flask restplus web service''',
+    doc=UI_BOOL
 )
-
 
 api.add_namespace(user_ns, path='/api/user')
 api.add_namespace(auth_ns, path='/api')
