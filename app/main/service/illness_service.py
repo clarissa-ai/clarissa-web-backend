@@ -314,7 +314,7 @@ def map_symptoms(list_obj: dict):
 
 
 if type(LOADED_SYMPTOMS) is list:
-    LOADED_SYMPTOMS_SMALL = list(map(map_symptoms, LOADED_SYMPTOMS))
+    LOADED_SYMPTOMS_MIN = list(map(map_symptoms, LOADED_SYMPTOMS))
 
 
 # Actual API service function
@@ -322,7 +322,7 @@ def get_symptoms_list():
     response_object = {
         'status': 'success',
         'message': 'Successfully retrieved symptoms list',
-        'symptoms': LOADED_SYMPTOMS_SMALL
+        'symptoms': LOADED_SYMPTOMS_MIN
     }
     return response_object, 200
 
