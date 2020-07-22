@@ -54,8 +54,10 @@
       </td>
     </tr>
     <tr>
+      {% if illness.diagnoses %}
       <td>{{ illness.diagnoses[-1].id }}</td>
       <td>{{ illness.diagnoses[-1].data[0]['name'] }}</td>
+      {% endif %}
     </tr>
   </tbody>
 </table>

@@ -40,7 +40,8 @@ def set_cookie(response, data):
         response.set_cookie(
             'auth_token', value=token,
             secure=cookie_secure,
-            httponly=True
+            httponly=True,
+            samesite=None
         )
         return response
     return response

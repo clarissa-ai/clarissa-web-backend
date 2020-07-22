@@ -21,12 +21,13 @@ if os.environ.get('DEPLOY_ENV') == 'PRODUCTION':
         return url_for(self.endpoint('specs'), _external=True, _scheme='https')
     Api.specs_url = specs_url
 
-# variable for disabling Swagger UI in production
+# variable for disabling Swagger UI in productionN
 UI_BOOL = os.getenv('DEPLOY_ENV') != 'PRODUCTION'
 
 if UI_BOOL:
     UI_BOOL = '/'
 
+# initialize Flask restplus API instance
 api = Api(
     blueprint,
     title='CLARISSA API REFERENCE',
