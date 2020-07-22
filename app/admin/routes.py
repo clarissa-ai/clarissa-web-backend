@@ -371,15 +371,15 @@ def all_surveys():
 def all_responses():
     page = request.args.get('page', 1, type=int)
     response_query = Response.query
-    responses = response_query.paginate(page, 20)
+    responses = response_query.paginate(page, 10)
     next_url = url_for(
-        'all_surveys',
+        'admin.all_responses',
         page=responses.next_num,
         _external=external,
         _scheme=scheme
     ) if responses.has_next else None
     prev_url = url_for(
-        'all_surveys',
+        'admin.all_responses',
         page=responses.prev_num,
         _external=external,
         _scheme=scheme
@@ -389,7 +389,8 @@ def all_responses():
         title="Survey Responses",
         responses=responses.items,
         next_url=next_url,
-        prev_url=prev_url
+        prev_url=prev_url,
+        page=page
     )
 
 
