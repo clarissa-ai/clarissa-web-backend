@@ -8,7 +8,8 @@ from ..service.illness_service import (
     save_symptoms,
     close_active_illness,
     export_active_illness_report,
-    edit_illness_title
+    edit_illness_title,
+    get_symptoms_list
 )
 from ..util.dto import IllnessDTO
 from flask import request
@@ -136,3 +137,14 @@ class ExportActiveIllness(Resource):
         """Get report for user's active illness"""
         user_id = auth_object['auth_object']['data']['user_id']
         return export_active_illness_report(user_id)
+
+
+@api.route('/get_symptoms_list')
+class GetSymptomsList(Resource):
+    @api.doc(responses={
+        200: 'Successfully retrieved symptoms list'
+    })
+    @api.doc('endpoint for retrieving list of existing symptoms')
+    def get(self):
+        """Return list of infermedica symptoms"""
+        return get_symptoms_list()

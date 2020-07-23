@@ -2,6 +2,7 @@
 import requests
 import os
 import datetime
+import json
 # Database imports
 from app.main.model.illness import Illness, Symptom, Diagnosis
 from app.main.model.user import User
@@ -260,3 +261,77 @@ def export_active_illness_report(user_id):
         illness=active_illness
     )
     return render_pdf(HTML(string=report_html))
+
+
+# -------------------------------------------------- #
+#               SYMPTOMS LOADING LOGIC               #
+# -------------------------------------------------- #
+
+# Determing JSON file path
+CURR_PATH = os.path.dirname(os.path.realpath(__file__))
+SYMPTOMS_FILE_PATH = os.path.join(
+    CURR_PATH,
+    'resources/illness_service/infermedica_symptoms_list.json'
+)
+
+
+# function to update symptoms file
+def download_symptoms_json():
+    headers = {
+      'App-Id': os.getenv('API_APP_ID'),
+      'App-Key': os.getenv('API_APP_KEY'),
+      'Content-Type': 'application/json'
+    }
+    symptoms_url = "https://api.infermedica.com/v2/symptoms"
+    symptoms_resp = requests.get(
+        symptoms_url,
+        headers=headers
+    )
+    symptoms = symptoms_resp.json()
+    with open(SYMPTOMS_FILE_PATH, 'w+') as output_f:
+        json.dump(symptoms, output_f)
+    print('Successfully loaded symptoms list from Infermedica API')
+
+
+# Will run whenever the file is loaded (on application start)
+download_symptoms_json()
+
+
+# function to filter out symptoms that aren't children
+def minify_symptoms():
+    loaded_symptoms = []
+    if os.path.isfile(SYMPTOMS_FILE_PATH):
+        with open(SYMPTOMS_FILE_PATH, 'r') as symptoms_json:
+            symptoms_string = symptoms_json.read()
+            loaded_symptoms = json.loads(symptoms_string)
+
+    # returns function that can map over the symptoms list
+    def map_symptoms(list_obj: dict):
+        new_obj = {
+            'id': list_obj.get('id'),
+            'common_name': list_obj.get('common_name')
+        }
+        return new_obj
+
+    loaded_symptoms_min = []
+    # loaded_symptoms_min = list(filter(lambda x: not x['parent_id'], loaded_symptoms)). # noqa: E501
+    if type(loaded_symptoms) is list:
+        loaded_symptoms_min = list(map(map_symptoms, loaded_symptoms))
+    return loaded_symptoms, loaded_symptoms_min
+
+
+LEADED_SYMPTOMS, LOADED_SYMPTOMS_MIN = minify_symptoms()
+
+
+# Actual API service function
+def get_symptoms_list():
+    response_object = {
+        'status': 'success',
+        'message': 'Successfully retrieved symptoms list',
+        'symptoms': LOADED_SYMPTOMS_MIN
+    }
+    return response_object, 200
+
+# -------------------------------------------------- #
+#           END OF SYMPTOMS LOADING LOGIC            #
+# -------------------------------------------------- #
