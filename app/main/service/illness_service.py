@@ -11,7 +11,6 @@ from app.main import db
 from flask_weasyprint import HTML, render_pdf
 from flask import render_template
 
-
 def get_illness(id, user_id):
     response_object = {}
     try:
@@ -171,77 +170,7 @@ def save_symptoms(data, user_id):
         db.session.commit()
     active_illness.updated_on = datetime.datetime.now()
     db.session.add(active_illness)
-    db.session.commit()
-    # Symptoms are saved to illness, starting diagnosis
-    headers = {
-      'App-Id': os.getenv('API_APP_ID'),
-      'App-Key': os.getenv('API_APP_KEY'),
-      'Content-Type': 'application/json'
-    }
-    diagnosis_url = "https://api.infermedica.com/v2/diagnosis"
-    diagnosis_json = {
-        'evidence': [],
-    }
-    diagnosis_json['sex'] = user.sex.lower() if user.sex != "None" else 'male'
-    diagnosis_json['age'] = calculate_age(user.birthdate)
-    for s in Symptom.query.filter_by(
-        user_id=user_id,
-        illness_id=active_illness.id
-    ).order_by(-Symptom.id).all():
-        diagnosis_json['evidence'].append({
-            'id': s.data['id'],
-            'choice_id': 'present'
-        })
-    diagnosis = requests.post(
-        diagnosis_url,
-        headers=headers,
-        json=diagnosis_json
-    ).json()
-    # add explanations for each condition
-    conditions = diagnosis['conditions']
-    explanation_URL = "https://api.infermedica.com/v2/explain"
-
-    # function to generate condition url based on id from diagnosis
-    def condition_URL(condition_id):
-        return "https://api.infermedica.com/v2/conditions/{}".format(
-            condition_id
-        )
-    for idx, c in enumerate(conditions):
-        c_json = {
-            'sex': user.sex.lower() if user.sex != "None" else 'male',
-            'age': calculate_age(user.birthdate),
-            'target': c['id'],
-            'evidence': [{
-                'id': s.data['id'],
-                'choice_id': 'present'
-            } for s in active_illness.symptoms]
-        }
-        explanation = requests.post(
-            explanation_URL,
-            headers=headers,
-            json=c_json
-        ).json()
-        c['supporting_symptoms'] = explanation.get('supporting_evidence') or []
-        c['opposing_symptoms'] = (explanation.get('conflicting_evidence') or []) + (explanation.get('unconfirmed_evidence') or [])  # noqa: E501
-        # THE CONDITIONS ENDPOINT IS UNNECESSARY AND CAN BE CACHED LOCALLY
-        condition_info = requests.get(
-            condition_URL(c['id']),
-            headers=headers
-        ).json()
-        c['hint'] = condition_info.get('extras').get('hint')
-        c['categories'] = condition_info.get('categories')
-        c['prevalence'] = condition_info.get('prevalence')
-        c['severity'] = condition_info.get('severity')
-        # update active_diagnosis with data for condition
-        conditions[idx] = c
-    # save diagnosis to db
-    d = Diagnosis(
-        user_id=user_id,
-        illness_id=active_illness.id,
-        data=conditions
-    )
-    db.session.add(d)
-    db.session.commit()
+    perform_diagnosis(user, user_id, active_illness)
     return response_object, 200
 
 
@@ -273,6 +202,47 @@ def export_active_illness_report(user_id):
     )
     return render_pdf(HTML(string=report_html))
 
+def edit_symptoms(symptom_id, new_date, user_id):
+    response_object = {
+        'status': 'success',
+        'message': 'Symptom ID not found'
+    }
+    user = User.query.filter_by(id=user_id).first()
+    active_illness = Illness.query.filter_by(
+        user_id=user_id,
+        active=True
+    ).first()
+    symptom = Symptom.query.filter_by(id=symptom_id).first()
+    if symptom:
+        response_object['message'] = 'Edited Symptom'
+        active_illness.updated_on = datetime.datetime.now()
+        symptom.updated_on = datetime.datetime.now()
+        symptom.created_on = new_date
+        db.session.add(active_illness)
+        db.session.add(symptom)
+        db.session.commit()
+    return response_object, 200
+    
+
+def delete_symptoms(symptom_id, user_id):
+    response_object = {
+        'status': 'success',
+        'message': 'Symptom ID not found'
+    }
+    user = User.query.filter_by(id=user_id).first()
+    active_illness = Illness.query.filter_by(
+        user_id=user_id,
+        active=True
+    ).first()
+    symptom = Symptom.query.filter_by(id=symptom_id).first()
+    if symptom:
+        response_object['message'] = 'Deleted Symptom'
+        active_illness.updated_on = datetime.datetime.now()
+        db.session.add(active_illness)
+        db.session.delete(symptom)
+        db.session.commit()
+        perform_diagnosis(user, user_id, active_illness)
+    return response_object, 200
 
 def reopen_illness(user_id, illness_id):
     illness = Illness.query.filter_by(user_id=user_id, id=illness_id).first()
@@ -377,3 +347,78 @@ def get_symptoms_list():
 # -------------------------------------------------- #
 #           END OF SYMPTOMS LOADING LOGIC            #
 # -------------------------------------------------- #
+
+
+# -------------------------------------------------- #
+#                DIAGNOSIS FUNCTION                  #
+# -------------------------------------------------- #
+def perform_diagnosis(user, user_id, active_illness):
+    headers = {
+      'App-Id': os.getenv('API_APP_ID'),
+      'App-Key': os.getenv('API_APP_KEY'),
+      'Content-Type': 'application/json'
+    }
+    diagnosis_url = "https://api.infermedica.com/v2/diagnosis"
+    diagnosis_json = {
+        'evidence': [],
+    }
+    diagnosis_json['sex'] = user.sex.lower() if user.sex != "None" else 'male'
+    diagnosis_json['age'] = calculate_age(user.birthdate)
+    for s in Symptom.query.filter_by(
+        user_id=user_id,
+        illness_id=active_illness.id
+    ).order_by(-Symptom.id).all():
+        diagnosis_json['evidence'].append({
+            'id': s.data['id'],
+            'choice_id': 'present'
+        })
+    diagnosis = requests.post(
+        diagnosis_url,
+        headers=headers,
+        json=diagnosis_json
+    ).json()
+    # add explanations for each condition
+    conditions = diagnosis['conditions']
+    explanation_URL = "https://api.infermedica.com/v2/explain"
+
+    # function to generate condition url based on id from diagnosis
+    def condition_URL(condition_id):
+        return "https://api.infermedica.com/v2/conditions/{}".format(
+            condition_id
+        )
+    for idx, c in enumerate(conditions):
+        c_json = {
+            'sex': user.sex.lower() if user.sex != "None" else 'male',
+            'age': calculate_age(user.birthdate),
+            'target': c['id'],
+            'evidence': [{
+                'id': s.data['id'],
+                'choice_id': 'present'
+            } for s in active_illness.symptoms]
+        }
+        explanation = requests.post(
+            explanation_URL,
+            headers=headers,
+            json=c_json
+        ).json()
+        c['supporting_symptoms'] = explanation.get('supporting_evidence') or []
+        c['opposing_symptoms'] = (explanation.get('conflicting_evidence') or []) + (explanation.get('unconfirmed_evidence') or [])  # noqa: E501
+        # THE CONDITIONS ENDPOINT IS UNNECESSARY AND CAN BE CACHED LOCALLY
+        condition_info = requests.get(
+            condition_URL(c['id']),
+            headers=headers
+        ).json()
+        c['hint'] = condition_info.get('extras').get('hint')
+        c['categories'] = condition_info.get('categories')
+        c['prevalence'] = condition_info.get('prevalence')
+        c['severity'] = condition_info.get('severity')
+        # update active_diagnosis with data for condition
+        conditions[idx] = c
+    # save diagnosis to db
+    d = Diagnosis(
+        user_id=user_id,
+        illness_id=active_illness.id,
+        data=conditions
+    )
+    db.session.add(d)
+    db.session.commit()

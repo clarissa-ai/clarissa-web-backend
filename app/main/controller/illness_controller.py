@@ -10,7 +10,9 @@ from ..service.illness_service import (
     export_active_illness_report,
     edit_illness,
     get_symptoms_list,
-    reopen_illness
+    reopen_illness,
+    edit_symptoms,
+    delete_symptoms
 )
 from ..util.dto import IllnessDTO
 from flask import request
@@ -20,6 +22,8 @@ api = IllnessDTO.api
 _get_by_id = IllnessDTO.get_by_id
 _check_symptoms = IllnessDTO.check_symptoms
 _save_symptoms = IllnessDTO.save_symptoms
+_edit_symptoms = IllnessDTO.edit_symptoms
+_delete_symptoms = IllnessDTO.delete_symptoms
 _edit_illness = IllnessDTO.edit_illness
 _reopen_illness = IllnessDTO.reopen_illness
 
@@ -160,6 +164,43 @@ class GetSymptomsList(Resource):
         return get_symptoms_list()
 
 
+@api.route('/edit_symptoms')
+class EditSymptoms(Resource):
+    @api.doc(responses={
+        200: 'Successfully edited illness title',
+        401: 'Failed to authenticate.',
+        404: 'Failed to retrieve illness with given id'
+    })
+    @api.expect(_edit_symptoms, validate=True)
+    @api.doc('endpoint for editing symptoms')
+    @token_required
+    def post(self, auth_object):
+        """Edit Symptoms"""
+        data = request.json
+        symptom_id = data['symptom_id']
+        new_date = data['new_date']
+        user_id = auth_object['auth_object']['data']['user_id']
+        return edit_symptoms(symptom_id, new_date, user_id)
+
+
+@api.route('/delete_symptoms')
+class DeleteSymptoms(Resource):
+    @api.doc(responses={
+        200: 'Successfully edited illness title',
+        401: 'Failed to authenticate.',
+        404: 'Failed to retrieve illness with given id'
+    })
+    @api.expect(_delete_symptoms, validate=True)
+    @api.doc('endpoint for deleting symptoms')
+    @token_required
+    def post(self, auth_object):
+        """Edit Symptoms"""
+        data = request.json
+        symptom_id = data['symptom_id']
+        user_id = auth_object['auth_object']['data']['user_id']
+        return delete_symptoms(symptom_id, user_id)
+
+      
 @api.route('/reopen_illness')
 class ReopenIllness(Resource):
     @api.doc(responses={

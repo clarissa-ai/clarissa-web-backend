@@ -70,6 +70,7 @@ class Symptom(db.Model):
 
     def get_json(self):
         return {
+            'id': self.id,
             'title': self.title,
             'created_on': self.created_on.strftime("%Y-%m-%dT%H:%M:%SZ"),
             'updated_on': self.updated_on.strftime("%Y-%m-%dT%H:%M:%SZ"),
