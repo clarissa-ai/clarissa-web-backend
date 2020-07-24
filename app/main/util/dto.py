@@ -158,7 +158,26 @@ class IllnessDTO:
             example='Post-Thanksgiving Flu'
         )
     })
-
+    edit_symptoms = api.model('edit_symptoms', {
+        'symptom_id': fields.Integer(
+            required=True,
+            description='ID of the illness being changed by the user',
+            example=1
+        ),
+        'new_date': fields.String(
+            description='date of start of symptom - UTC JavaScript Date format',
+            example='2000-02-26T05:00:00.000Z',
+            pattern=r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$"
+            # ex: 2000-02-26T05:00:00.000Z
+        ),
+    })
+    delete_symptoms = api.model('delete_symptoms', {
+        'symptom_id': fields.Integer(
+            required=True,
+            description='ID of the illness being deleted by the user',
+            example=1
+        ),
+    })
 
 class DashboardDTO:
     api = Namespace('dashboard', description='dashboard operations')
