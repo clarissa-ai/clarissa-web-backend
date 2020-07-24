@@ -54,7 +54,6 @@ class UserDTO:
             description='user date of birth - UTC JavaScript Date format',
             example='2000-02-26T05:00:00.000Z',
             pattern=r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$"
-            # ex: 2000-02-26T05:00:00.000Z
         ),
         'sex': fields.String(
             description='user\'s current sex',
@@ -146,7 +145,7 @@ class IllnessDTO:
             }]
         )
     })
-    edit_illness_title = api.model('edit_illness_title', {
+    edit_illness = api.model('edit_illness', {
         'illness_id': fields.Integer(
             required=True,
             description='ID of the illness being changed by the user',
@@ -156,6 +155,25 @@ class IllnessDTO:
             required=True,
             description='New title of the illness',
             example='Post-Thanksgiving Flu'
+        ),
+        'start_date': fields.String(
+            required=False,
+            description='The date the illness started',
+            example='2017-02-26T05:00:00.000Z',
+            pattern=r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$"
+        ),
+        'end_date': fields.String(
+            required=False,
+            description='The date the illness ended',
+            example='2017-02-26T05:00:00.000Z',
+            pattern=r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$"
+        )
+    })
+    reopen_illness = api.model('reopen_illness', {
+        'illness_id': fields.Integer(
+            required=True,
+            description='the id of the illness to be reopened',
+            example=1
         )
     })
     edit_symptoms = api.model('edit_symptoms', {

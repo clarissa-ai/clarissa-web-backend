@@ -8,8 +8,9 @@ from ..service.illness_service import (
     save_symptoms,
     close_active_illness,
     export_active_illness_report,
-    edit_illness_title,
+    edit_illness,
     get_symptoms_list,
+    reopen_illness,
     edit_symptoms,
     delete_symptoms
 )
@@ -21,9 +22,10 @@ api = IllnessDTO.api
 _get_by_id = IllnessDTO.get_by_id
 _check_symptoms = IllnessDTO.check_symptoms
 _save_symptoms = IllnessDTO.save_symptoms
-_edit_illness_title = IllnessDTO.edit_illness_title
 _edit_symptoms = IllnessDTO.edit_symptoms
 _delete_symptoms = IllnessDTO.delete_symptoms
+_edit_illness = IllnessDTO.edit_illness
+_reopen_illness = IllnessDTO.reopen_illness
 
 
 @api.route('/get_illness_by_id')
@@ -42,22 +44,30 @@ class GetIllness(Resource):
         return get_illness(data['id'], user_id)
 
 
-@api.route('/edit_illness_title')
-class EditIllnessTitle(Resource):
+@api.route('/edit_illness')
+class EditIllness(Resource):
     @api.doc(responses={
-        200: 'Successfully edited illness title',
+        200: 'Successfully edited illness details',
         401: 'Failed to authenticate.',
         404: 'Failed to retrieve illness with given id'
     })
-    @api.expect(_edit_illness_title, validate=True)
+    @api.expect(_edit_illness, validate=True)
     @token_required
     def post(self, auth_object):
-        """Edit Illness Title"""
+        """Edit Illness Details"""
         data = request.json
         illness_id = data['illness_id']
         new_title = data['new_title']
+        start_date = data.get('start_date')
+        end_date = data.get('end_date')
         user_id = auth_object['auth_object']['data']['user_id']
-        return edit_illness_title(user_id, illness_id, new_title)
+        return edit_illness(
+            user_id,
+            illness_id,
+            new_title,
+            start_date=start_date,
+            end_date=end_date
+        )
 
 
 @api.route('/check_symptoms')
@@ -189,3 +199,20 @@ class DeleteSymptoms(Resource):
         symptom_id = data['symptom_id']
         user_id = auth_object['auth_object']['data']['user_id']
         return delete_symptoms(symptom_id, user_id)
+
+      
+@api.route('/reopen_illness')
+class ReopenIllness(Resource):
+    @api.doc(responses={
+        401: 'Failed to Authenticate',
+        200: 'Successfully processed request'
+    })
+    @api.doc('endpoint for reopening a past illness')
+    @api.expect(_reopen_illness)
+    @token_required
+    def post(self, auth_object):
+        """Reopen Illness by ID"""
+        user_id = auth_object['auth_object']['data']['user_id']
+        data = request.json
+        illness_id = data['illness_id']
+        return reopen_illness(user_id, illness_id)

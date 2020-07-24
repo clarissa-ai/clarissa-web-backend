@@ -35,7 +35,8 @@ def get_illness(id, user_id):
     return response_object, 200
 
 
-def edit_illness_title(user_id, illness_id, new_title):
+def edit_illness(user_id, illness_id, new_title, start_date=None,
+                 end_date=None):
     illness = Illness.query.filter_by(user_id=user_id, id=illness_id).first()
     if not illness:
         return {
@@ -43,12 +44,22 @@ def edit_illness_title(user_id, illness_id, new_title):
             'message': 'Failed to modify illness with given id.'
         }, 404
     illness.title = new_title
+    if start_date:
+        illness.created_on = datetime.datetime.strptime(
+                start_date,
+                "%Y-%m-%dT%H:%M:%S.000Z"
+        )
+    if end_date:
+        illness.updated_on = datetime.datetime.strptime(
+                end_date,
+                "%Y-%m-%dT%H:%M:%S.000Z"
+        )
     try:
         db.session.add(illness)
         db.session.commit()
         return {
             'status': 'success',
-            'message': 'Successfully modified illness title.'
+            'message': 'Successfully modified illness information.'
         }
     except Exception as e:
         print(e)
@@ -232,6 +243,37 @@ def delete_symptoms(symptom_id, user_id):
         db.session.commit()
         perform_diagnosis(user, user_id, active_illness)
     return response_object, 200
+
+def reopen_illness(user_id, illness_id):
+    illness = Illness.query.filter_by(user_id=user_id, id=illness_id).first()
+    if not illness:
+        return {
+            'status': 'failure',
+            'message': 'Failed to modify illness with given id.'
+        }, 404
+    if illness.active:
+        return {
+            'status': 'failure',
+            'message': 'Requested illness is already the active illness'
+        }, 200
+    else:
+        active_illness = Illness.query.filter_by(
+            user_id=user_id,
+            active=True
+        ).first()
+        active_illness.active = False
+        illness.active = True
+        illness.updated_on = datetime.datetime.utcnow()
+        db.session.add(active_illness)
+        db.session.add(illness)
+        db.session.commit()
+        return {
+            'status': 'success',
+            'message': 'Successfully reopened illness: {}'.format(
+                illness.title
+            )
+        }, 200
+
 
 # -------------------------------------------------- #
 #               SYMPTOMS LOADING LOGIC               #

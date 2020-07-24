@@ -75,4 +75,5 @@ def create_illness(user_id):
     )
     db.session.add(new_illness)
     db.session.commit()
+    response_object['illness_id'] = new_illness.id
     return response_object, 200
