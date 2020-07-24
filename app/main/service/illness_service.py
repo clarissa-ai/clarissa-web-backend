@@ -11,9 +11,6 @@ from app.main import db
 from flask_weasyprint import HTML, render_pdf
 from flask import render_template
 
-API_APP_ID='bdc52fd6'
-API_APP_KEY='c74d2f5d9ed5f8d81f887bb446bc9934'
-
 def get_illness(id, user_id):
     response_object = {}
     try:
