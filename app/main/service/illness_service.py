@@ -11,6 +11,7 @@ from app.main import db
 from flask_weasyprint import HTML, render_pdf
 from flask import render_template
 
+
 def get_illness(id, user_id):
     response_object = {}
     try:
@@ -202,17 +203,17 @@ def export_active_illness_report(user_id):
     )
     return render_pdf(HTML(string=report_html))
 
+
 def edit_symptoms(symptom_id, new_date, user_id):
     response_object = {
         'status': 'success',
         'message': 'Symptom ID not found'
     }
-    user = User.query.filter_by(id=user_id).first()
     active_illness = Illness.query.filter_by(
         user_id=user_id,
         active=True
     ).first()
-    symptom = Symptom.query.filter_by(id=symptom_id).first()
+    symptom = Symptom.query.filter_by(id=symptom_id, user_id=user_id).first()
     if symptom:
         response_object['message'] = 'Edited Symptom'
         active_illness.updated_on = datetime.datetime.now()
@@ -222,7 +223,7 @@ def edit_symptoms(symptom_id, new_date, user_id):
         db.session.add(symptom)
         db.session.commit()
     return response_object, 200
-    
+
 
 def delete_symptoms(symptom_id, user_id):
     response_object = {
@@ -234,7 +235,7 @@ def delete_symptoms(symptom_id, user_id):
         user_id=user_id,
         active=True
     ).first()
-    symptom = Symptom.query.filter_by(id=symptom_id).first()
+    symptom = Symptom.query.filter_by(id=symptom_id, user_id=user_id).first()
     if symptom:
         response_object['message'] = 'Deleted Symptom'
         active_illness.updated_on = datetime.datetime.now()
@@ -243,6 +244,7 @@ def delete_symptoms(symptom_id, user_id):
         db.session.commit()
         perform_diagnosis(user, user_id, active_illness)
     return response_object, 200
+
 
 def reopen_illness(user_id, illness_id):
     illness = Illness.query.filter_by(user_id=user_id, id=illness_id).first()
@@ -378,7 +380,7 @@ def perform_diagnosis(user, user_id, active_illness):
         json=diagnosis_json
     ).json()
     # add explanations for each condition
-    conditions = diagnosis['conditions']
+    conditions = diagnosis.get('conditions')
     explanation_URL = "https://api.infermedica.com/v2/explain"
 
     # function to generate condition url based on id from diagnosis
