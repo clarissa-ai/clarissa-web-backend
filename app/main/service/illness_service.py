@@ -206,12 +206,11 @@ def edit_symptoms(symptom_id, new_date, user_id):
         'status': 'success',
         'message': 'Symptom ID not found'
     }
-    user = User.query.filter_by(id=user_id).first()
     active_illness = Illness.query.filter_by(
         user_id=user_id,
         active=True
     ).first()
-    symptom = Symptom.query.filter_by(id=symptom_id).first()
+    symptom = Symptom.query.filter_by(id=symptom_id, user_id=user_id).first()
     if symptom:
         response_object['message'] = 'Edited Symptom'
         active_illness.updated_on = datetime.datetime.now()
@@ -233,7 +232,7 @@ def delete_symptoms(symptom_id, user_id):
         user_id=user_id,
         active=True
     ).first()
-    symptom = Symptom.query.filter_by(id=symptom_id).first()
+    symptom = Symptom.query.filter_by(id=symptom_id, user_id=user_id).first()
     if symptom:
         response_object['message'] = 'Deleted Symptom'
         active_illness.updated_on = datetime.datetime.now()
@@ -378,7 +377,7 @@ def perform_diagnosis(user, user_id, active_illness):
         json=diagnosis_json
     ).json()
     # add explanations for each condition
-    conditions = diagnosis['conditions']
+    conditions = diagnosis.get('conditions')
     explanation_URL = "https://api.infermedica.com/v2/explain"
 
     # function to generate condition url based on id from diagnosis

@@ -200,7 +200,7 @@ class DeleteSymptoms(Resource):
         user_id = auth_object['auth_object']['data']['user_id']
         return delete_symptoms(symptom_id, user_id)
 
-      
+
 @api.route('/reopen_illness')
 class ReopenIllness(Resource):
     @api.doc(responses={
