@@ -11,6 +11,7 @@ from app.main import db
 from flask_weasyprint import HTML, render_pdf
 from flask import render_template
 
+
 def get_illness(id, user_id):
     response_object = {}
     try:
@@ -100,10 +101,7 @@ def get_active_illness(user_id):
     response_object = {
         'status': 'success',
         'message': 'Successfully retrieved active illness',
-        'illness': Illness.query.filter_by(
-            user_id=user_id,
-            active=True
-        ).first().get_json()
+        'illness': active_illness.get_json()
     }
     response_object['illness']['analysis'] = response_object['illness'].pop(
         'diagnosis'
@@ -175,12 +173,12 @@ def save_symptoms(data, user_id):
 
 
 def get_illness_history(user_id):
-    illnesses = []
-    for i in Illness.query.filter_by(
+    illnesses = None
+    illnesses_query = Illness.query.filter_by(
         user_id=user_id,
         active=False
-    ).order_by(-Illness.id).all():
-        illnesses.append(i.get_json())
+    ).order_by(-Illness.id).limit(20)
+    illnesses = [i.get_json() for i in illnesses_query]
     response_object = {
         'status': 'success',
         'message': 'Successfully retrieved user\'s illness history',
@@ -202,6 +200,7 @@ def export_active_illness_report(user_id):
     )
     return render_pdf(HTML(string=report_html))
 
+
 def edit_symptoms(symptom_id, new_date, user_id):
     response_object = {
         'status': 'success',
@@ -222,7 +221,7 @@ def edit_symptoms(symptom_id, new_date, user_id):
         db.session.add(symptom)
         db.session.commit()
     return response_object, 200
-    
+
 
 def delete_symptoms(symptom_id, user_id):
     response_object = {
@@ -243,6 +242,7 @@ def delete_symptoms(symptom_id, user_id):
         db.session.commit()
         perform_diagnosis(user, user_id, active_illness)
     return response_object, 200
+
 
 def reopen_illness(user_id, illness_id):
     illness = Illness.query.filter_by(user_id=user_id, id=illness_id).first()
