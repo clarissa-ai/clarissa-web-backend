@@ -68,7 +68,8 @@ class Auth:
                         'registered_on': user.registered_on.strftime(
                             "%m/%d/%Y %I:%M:%S%p"
                         ),
-                        'sex': user.sex
+                        'sex': user.sex,
+                        'status': user.status if user.status is not None else False  # noqa: E501
                     }
                 }
                 return response_object, 200

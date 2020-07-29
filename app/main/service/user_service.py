@@ -7,6 +7,18 @@ curr_env = os.environ.get('DEPLOY_ENV', 'DEV')
 cookie_secure = curr_env == 'PRODUCTION'
 
 
+def set_status(user_id, status):
+    response_object = {
+        'status': 'success',
+        'message': 'Successfully set user status'
+    }
+    u = User.query.filter_by(id=user_id).first()
+    u.status = status
+    db.session.add(u)
+    db.session.commit()
+    return response_object, 200
+
+
 def save_new_user(data):
     user = User.query.filter_by(email=data['email']).first()
     if not user:

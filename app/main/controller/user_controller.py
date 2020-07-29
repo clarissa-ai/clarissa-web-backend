@@ -7,7 +7,8 @@ from ..service.user_service import (
     save_new_user,
     get_all_users,
     set_cookie,
-    edit_user_settings
+    edit_user_settings,
+    set_status
 )
 from ..service.auth_helper import Auth
 from ..util.decorator import token_required
@@ -15,6 +16,7 @@ from ..util.decorator import token_required
 api = UserDTO.api
 _user = UserDTO.user
 _settings = UserDTO.settings
+_status = UserDTO.status
 
 # Only allow this route in development
 if not os.environ.get('DEPLOY_ENV') == 'PRODUCTION':
@@ -72,3 +74,18 @@ class GetEditSettings(Resource):
     def post(self, auth_object):
         """Submit new user settings"""
         return edit_user_settings(request.json, auth_object)
+
+
+@api.route('/set_status')
+class SetStatus(Resource):
+    @api.doc(responses={
+        200: 'Successfully set status',
+        401: 'Authentication failure'
+    })
+    @api.expect(_status)
+    @token_required
+    def post(self, auth_object):
+        """Set a user's status"""
+        data = request.json
+        user_id = auth_object['auth_object']['data']['user_id']
+        return set_status(user_id, data['status'])

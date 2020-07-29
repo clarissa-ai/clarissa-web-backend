@@ -3,6 +3,13 @@ from flask_restplus import Namespace, fields
 
 class UserDTO:
     api = Namespace('user', description='user related operations')
+    status = api.model('status', {
+        'status': fields.Boolean(
+            required=True,
+            description='users new status',
+            example=True
+        )
+    })
     user = api.model('user', {
         'email': fields.String(
             required=True,
@@ -200,3 +207,20 @@ class IllnessDTO:
 
 class DashboardDTO:
     api = Namespace('dashboard', description='dashboard operations')
+
+
+class LocationDTO:
+    api = Namespace('locations', description='location operations')
+    add_location = api.model('add_location', {
+        'name': fields.String(
+            required=True,
+            description='Name of building to add to location history',
+            example='12-16 Waverly Place'
+        ),
+        'date_visited': fields.String(
+            description='start date of symptom - UTC JavaScript Date format',
+            example='2000-02-26T05:00:00.000Z',
+            pattern=r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$"
+            # ex: 2000-02-26T05:00:00.000Z
+        )
+    })

@@ -1,0 +1,86 @@
+[
+    {
+        "name": "12-16 Waverly Place",
+        "address": "12-16 Waverly Place - New York, NY 10003"
+    },
+    {
+        "name": "IFA - Chan House",
+        "address": "14 East 78th Street, New York, New York 10075"
+    },    
+    {
+        "name": "Forbes",
+        "address": "60 5th Avenue, New York, NY 10011"
+    },    
+    {
+        "name": "137 East 25th Street",
+        "address": "137 East 25th Street - New York, NY 10010"
+    },    
+    {
+        "name": "2 Metrotech",
+        "address": "2 Metrotech Center - Brooklyn, NY 11201"
+    },    
+    {
+        "name": "Rufus Smith",
+        "address": "25 Waverly Place - New York, NY 10003"
+    },    
+    {
+        "name": "325 Gold Street",
+        "address": "325 Gold St, Brooklyn, NY 11201"
+    },    
+    {
+        "name": "370 Jay Street",
+        "address": "370 Jay Street - Brooklyn, NY 11201"
+    },    
+    {
+        "name": "665 Broadway",
+        "address": "665 Broadway - New York, NY 10012"
+    },    
+    {
+        "name": "627 Broadway",
+        "address": "627 Broadway (194/196 Mercer St), New York, NY 10012"
+    },    
+    {
+        "name": "726 Broadway",
+        "address": "726 Broadway - New York, NY 10003"
+    },    
+    {
+        "name": "Basic Science",
+        "address": "433 1st Avenue - New York, NY 10010"
+    },    
+    {
+        "name": "Brown",
+        "address": "29 Washington Place - New York, NY 10003"
+    },
+    {
+        "name": "Dibner Library",
+        "address": "5 Metrotech Center - Brooklyn, NY 11201"
+    },
+    {
+        "name": "Meyer",
+        "address": "2-6 Washington Place - New York, NY 10003"
+    },
+    {
+        "name": "Rogers Hall",
+        "address": "6 Metrotech Center - Brooklyn, NY 11201"
+    },
+    {
+        "name": "Schwartz",
+        "address": "345 East 24th Street - New York, NY 10010"
+    },
+    {
+        "name": "Silver Main",
+        "address": "100 Washington Square East - New York, NY 10003"
+    },
+    {
+        "name": "Warren Weaver",
+        "address": "251 Mercer St, New York, NY 10012"
+    },
+    {
+        "name": "Waverly",
+        "address": "24 Waverly Place - New York, NY 10003"
+    },
+    {
+        "name": "Weissman",
+        "address": "421 1st Avenue - New York, NY 10010"
+    }
+]

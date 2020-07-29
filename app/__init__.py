@@ -10,7 +10,7 @@ from .main.controller.image_controller import api as image_ns
 from .main.controller.routes_controller import api as route_ns
 from .main.controller.dashboard_controller import api as dashboard_ns
 from .main.controller.illness_controller import api as illness_ns
-
+from .main.controller.locations_controller import api as location_ns
 
 blueprint = Blueprint('api', __name__)
 
@@ -44,3 +44,4 @@ api.add_namespace(image_ns, path='/api/images')
 api.add_namespace(route_ns, path='/api')
 api.add_namespace(dashboard_ns, path='/api/dashboard')
 api.add_namespace(illness_ns, path='/api/illness')
+api.add_namespace(location_ns, path='/api/locations')
