@@ -20,15 +20,15 @@ class DevelopmentConfig(Config):
     DEBUG = True
     ENV = 'development'
     # UNCOMMENT THE LINE BELOW TO SWITCH BACK TO LOCAL SQLITE DB
-    # SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(
-    #     basedir,
-    #     'clarissa_dev_main.db'
-    # )
-    SQLALCHEMY_DATABASE_URI = 'postgresql://{}:{}@{}:5432/postgres'.format(
-        os.getenv('DEV_DB_USER'),
-        os.getenv('DEV_DB_PWD'),
-        os.getenv('DEV_DB_URL')
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(
+         basedir,
+         'clarissa_dev_main.db'
     )
+    # SQLALCHEMY_DATABASE_URI = 'postgresql://{}:{}@{}:5432/postgres'.format(
+    #    os.getenv('DEV_DB_USER'),
+    #    os.getenv('DEV_DB_PWD'),
+    #    os.getenv('DEV_DB_URL')
+    #)
     CORS_ALLOW_ORIGIN = 'http://localhost:3000'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 

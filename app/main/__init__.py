@@ -10,6 +10,8 @@ db = SQLAlchemy()
 flask_bcrypt = Bcrypt()
 login_manager = LoginManager()
 
+from .tasks import celery
+
 
 @login_manager.unauthorized_handler
 def unauthorized_callback():
@@ -20,12 +22,31 @@ def unauthorized_callback():
         _scheme='https' if curr_env == 'PRODUCTION' else 'http'
     ))
 
+#def make_celery(app):
+#    celery = Celery(
+#        app.import_name,
+#        backend=app.config['CELERY_RESULT_BACKEND'],
+#        broker=app.config['CELERY_BROKER_URL']
+#    )
+#    celery.conf.update(app.config)
+
+#    class ContextTask(celery.Task):
+#        def __call__(self, *args, **kwargs):
+#            with app.app_context():
+#                return self.run(*args, **kwargs)
+
+#    celery.Task = ContextTask
+#    return celery
 
 def create_app(config_name):
     # initialize flask application
     app = Flask(__name__)
     # initialize configuratinos from config object based on environment
     app.config.from_object(config_by_name[config_name])
+
+    app.config['CELERY_BROKER_URL'] = 'redis://localhost:6379/0'
+    app.config['CELERY_RESULT_BACKEND'] = 'redis://localhost:6379/0'
+    celery.conf.update(app.config)
     # initialize app managers
     db.init_app(app)
     # initialize encryption manager

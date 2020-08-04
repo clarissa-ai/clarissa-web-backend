@@ -10,6 +10,8 @@ from app.main import db
 # Utility imports
 from flask_weasyprint import HTML, render_pdf
 from flask import render_template
+# Celery Task Imports
+from app.main.tasks import perform_diagnosis_task
 
 
 def get_illness(id, user_id):
@@ -168,7 +170,7 @@ def save_symptoms(data, user_id):
         db.session.commit()
     active_illness.updated_on = datetime.datetime.now()
     db.session.add(active_illness)
-    perform_diagnosis(user, user_id, active_illness)
+    perform_diagnosis_task(user, user_id, active_illness).delay()
     return response_object, 200
 
 
