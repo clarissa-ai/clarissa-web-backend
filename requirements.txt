@@ -5,7 +5,7 @@ attrs==19.3.0
 bcrypt==3.1.7
 cffi==1.14.0
 click==7.1.2
-cryptography==2.9.2
+cryptography==39.0.1
 flake8==3.8.3
 flask-bcrypt==0.7.1
 flask-cors==3.0.8
